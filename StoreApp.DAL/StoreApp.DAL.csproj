@@ -58,14 +58,16 @@
     <Compile Include="Entities\OrderDetail.cs" />
     <Compile Include="Entities\Producer.cs" />
     <Compile Include="Entities\Product.cs" />
-    <Compile Include="Entities\Purchase.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Intefaces\IRepository.cs" />
     <Compile Include="Intefaces\IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\BrandRepository.cs" />
+    <Compile Include="Repositories\CategoryRepository.cs" />
     <Compile Include="Repositories\EFUnitOfWork.cs" />
     <Compile Include="Repositories\OrderDetailRepository.cs" />
     <Compile Include="Repositories\OrderRepository.cs" />
+    <Compile Include="Repositories\ProducerRepository.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
   </ItemGroup>

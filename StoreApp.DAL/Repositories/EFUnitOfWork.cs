@@ -7,11 +7,14 @@ namespace StoreApp.DAL.Repositories
 {
     public class EFUnitOfWork : IUnitOfWork
     {
-        private StoreContext            db;
-        private ProductRepository       productRepository;
-        private OrderRepository         orderRepository;
-        private OrderDetailRepository   orderDetailRepository;
-        private UserRepository          userRepository;
+        private StoreContext db;
+        private ProductRepository productRepository;
+        private OrderRepository orderRepository;
+        private OrderDetailRepository orderDetailRepository;
+        private UserRepository userRepository;
+        private CategoryRepository categoryRepository;
+        private BrandRepository brandRepository;
+        private ProducerRepository producerRepository;
 
         public EFUnitOfWork(string connectionString)
         {
@@ -62,6 +65,40 @@ namespace StoreApp.DAL.Repositories
                 return userRepository;
             }
         }
+        public IRepository<Category> Categories
+        {
+            get
+            {
+                if (categoryRepository == null)
+                {
+                    categoryRepository = new CategoryRepository(db);
+                }
+                return categoryRepository;
+            }
+        }
+        public IRepository<Brand> Brands
+        {
+            get
+            {
+                if (brandRepository == null)
+                {
+                    brandRepository = new BrandRepository(db);
+                }
+                return brandRepository;
+            }
+        }
+        public IRepository<Producer> Producers
+        {
+            get
+            {
+                if (producerRepository == null)
+                {
+                    producerRepository = new ProducerRepository(db);
+                }
+                return producerRepository;
+            }
+        }
+
         public void Save()
         {
             db.SaveChanges();

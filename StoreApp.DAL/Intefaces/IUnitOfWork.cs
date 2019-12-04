@@ -9,6 +9,9 @@ namespace StoreApp.DAL.Intefaces
         IRepository<OrderDetail> OrderDetails { get; }
         IRepository<Order> Orders { get; }
         IRepository<User> Users { get; }
+        IRepository<Category> Categories { get; }
+        IRepository<Brand> Brands { get; }
+        IRepository<Producer> Producers { get; }
 
         void Save();
     }
