@@ -31,10 +31,7 @@ namespace StoreApp.DAL.Repositories
 
         public IEnumerable<OrderDetail> Find(Func<OrderDetail, bool> predicate)
         {
-            return db.OrderDetails.Include("Product")
-                                  .Include("Order")
-                                  .Where(predicate)
-                                  .ToList();
+            return db.OrderDetails.Where(predicate).ToList();
         }
 
         public OrderDetail Get(int id)
@@ -44,7 +41,7 @@ namespace StoreApp.DAL.Repositories
 
         public IEnumerable<OrderDetail> GetAll()
         {
-            return db.OrderDetails.Include("Product").Include("Order");
+            return db.OrderDetails.ToList();
         }
 
         public void Update(OrderDetail item)

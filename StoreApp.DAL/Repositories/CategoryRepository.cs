@@ -3,9 +3,6 @@ using StoreApp.DAL.Entities;
 using StoreApp.DAL.Intefaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StoreApp.DAL.Repositories
 {
@@ -42,7 +39,7 @@ namespace StoreApp.DAL.Repositories
 
         public IEnumerable<Category> GetAll()
         {
-            throw new NotImplementedException();
+            return db.Categories;
         }
 
         public void Update(Category item)
