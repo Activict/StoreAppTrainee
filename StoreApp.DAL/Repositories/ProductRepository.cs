@@ -31,23 +31,32 @@ namespace StoreApp.DAL.Repositories
 
         public IEnumerable<Product> Find(Func<Product, bool> predicate)
         {
-            return db.Products.Include("Category")
-                              .Include("Brand")
-                              .Include("Producer")
-                              .Where(predicate)
-                              .ToList();
+            return db.Products.Where(predicate).ToList();
         }
 
         public Product Get(int id)
         {
-            return db.Products.Find(id);
+            // Explicit Loading 
+            // Reference
+            var getProd = db.Products.Find(id);
+            db.Entry(getProd).Reference("Category").Load();
+            db.Entry(getProd).Reference("Brand").Load();
+            db.Entry(getProd).Reference("Producer").Load();
+            // Collection
+            db.Entry(getProd).Collection("OrderDetails").Load();
+            return getProd;
+            // Lazy loading
+            //return db.Products.Find(id);
         }
 
         public IEnumerable<Product> GetAll()
         {
-            return db.Products.Include("Category")
-                              .Include("Brand")
-                              .Include("Producer");
+            // Lazy loading
+            var getAll = db.Products.ToList();      
+
+            //Eager loading
+            //var getAll = db.Products.Include(p => p.Category).ToList();
+            return getAll;
         }
 
         public void Update(Product item)
