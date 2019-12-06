@@ -18,10 +18,12 @@ namespace StoreApp.DAL.EF
             Database.SetInitializer<StoreContext>(new StoreDbInitializer());
         }
         public StoreContext(string connectionString): base(connectionString)
-        {  }   
+        {  }
+        public StoreContext() : base("DefaultConnection")
+        {  }
     }
 
-    public class StoreDbInitializer : DropCreateDatabaseIfModelChanges<StoreContext>
+    public class StoreDbInitializer : CreateDatabaseIfNotExists<StoreContext>
     {
         protected override void Seed(StoreContext db)
         {
