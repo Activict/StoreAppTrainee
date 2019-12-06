@@ -13,18 +13,14 @@ namespace StoreApp.DAL.Entities
         public string Quality { get; set; }
         public bool Enable { get; set; }
 
-        public int? CategoryId { get; set; }
-        public int? BrandId { get; set; }
-        public int? ProducerId { get; set; }
+        public int CategoryId { get; set; }
+        public int BrandId { get; set; }
+        public int ProducerId { get; set; }
 
         public virtual Category Category { get; set; }
         public virtual Brand Brand { get; set; }
         public virtual Producer Producer { get; set; }
 
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
-        public Product()
-        {
-            OrderDetails = new List<OrderDetail>();
-        }
     }
 }

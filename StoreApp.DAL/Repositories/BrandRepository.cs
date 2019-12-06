@@ -11,7 +11,7 @@ namespace StoreApp.DAL.Repositories
         private StoreContext db;
         public BrandRepository(StoreContext context)
         {
-            this.db = context;
+            db = context;
         }
 
         public void Create(Brand item)

@@ -8,9 +8,5 @@ namespace StoreApp.DAL.Entities
         public string Name { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }
-        public Brand()
-        {
-            Products = new List<Product>();
-        }
     }
 }

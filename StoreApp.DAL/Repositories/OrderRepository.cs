@@ -12,7 +12,7 @@ namespace StoreApp.DAL.Repositories
         private StoreContext db;
         public OrderRepository(StoreContext context)
         {
-            this.db = context;
+            db = context;
         }
 
         public void Create(Order item)
