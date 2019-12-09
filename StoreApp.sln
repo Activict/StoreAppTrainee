@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreApp", "StoreApp\StoreA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreApp.DAL", "StoreApp.DAL\StoreApp.DAL.csproj", "{DB1FE33F-273C-4CD3-BE1C-8AE0CADBBAFE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreApp.BLL", "StoreApp.BLL\StoreApp.BLL.csproj", "{FB8106D7-F0B5-456D-B13F-6F3C5461C991}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{DB1FE33F-273C-4CD3-BE1C-8AE0CADBBAFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB1FE33F-273C-4CD3-BE1C-8AE0CADBBAFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB1FE33F-273C-4CD3-BE1C-8AE0CADBBAFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB8106D7-F0B5-456D-B13F-6F3C5461C991}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB8106D7-F0B5-456D-B13F-6F3C5461C991}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB8106D7-F0B5-456D-B13F-6F3C5461C991}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB8106D7-F0B5-456D-B13F-6F3C5461C991}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
