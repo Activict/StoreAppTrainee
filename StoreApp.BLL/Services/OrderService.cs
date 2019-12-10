@@ -3,20 +3,31 @@ using StoreApp.BLL.DTO;
 using StoreApp.BLL.Interfaces;
 using StoreApp.DAL.Entities;
 using StoreApp.DAL.Intefaces;
+using StoreApp.DAL.Repositories;
 using System.Collections.Generic;
 
 namespace StoreApp.BLL.Services
 {
-    class OrderService : IOrderService
+    public class OrderService : IOrderService
     {
-        IUnitOfWork DataBase;
+        private IUnitOfWork DataBase { get; set; }
+
+        private IMapper config;
+
         public OrderService(IUnitOfWork eof)
         {
+            config = new MapperConfiguration(cfg => cfg.CreateMap<OrderDTO, Order>()).CreateMapper();
             DataBase = eof;
         }
+
+        public OrderService()
+        {
+            config = new MapperConfiguration(cfg => cfg.CreateMap<OrderDTO, Order>()).CreateMapper();
+            DataBase = new EFUnitOfWork("DefaultConnection");
+        }
+
         public void Create(OrderDTO order)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<OrderDTO, Order>()).CreateMapper();
             Order orderDAL = config.Map<OrderDTO, Order>(order);
             DataBase.Orders.Create(orderDAL);
             DataBase.Save();
@@ -30,7 +41,6 @@ namespace StoreApp.BLL.Services
 
         public void Edit(OrderDTO order)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<OrderDTO, Order>()).CreateMapper();
             Order orderDAL = config.Map<OrderDTO, Order>(order);
             DataBase.Orders.Update(orderDAL);
             DataBase.Save();
@@ -38,15 +48,14 @@ namespace StoreApp.BLL.Services
 
         public OrderDTO Get(int id)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<Order, OrderDTO>()).CreateMapper();
             return config.Map<Order, OrderDTO>(DataBase.Orders.Get(id));
         }
 
         public IEnumerable<OrderDTO> GetAll()
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<OrderDTO, Order>()).CreateMapper();
             return config.Map<IEnumerable<Order>, IEnumerable<OrderDTO>>(DataBase.Orders.GetAll());
         }
+
         public void Dispose()
         {
             DataBase.Dispose();

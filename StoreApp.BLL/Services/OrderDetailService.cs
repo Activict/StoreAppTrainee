@@ -3,53 +3,62 @@ using StoreApp.BLL.DTO;
 using StoreApp.BLL.Interfaces;
 using StoreApp.DAL.Entities;
 using StoreApp.DAL.Intefaces;
+using StoreApp.DAL.Repositories;
 using System.Collections.Generic;
 
 namespace StoreApp.BLL.Services
 {
-    class OrderDetailService : IOrderDetailService
+    public class OrderDetailService : IOrderDetailService
     {
-        IUnitOfWork Database;
+        private IUnitOfWork DataBase { get; set; }
+
+        private IMapper config;
+
         public OrderDetailService(IUnitOfWork eof)
         {
-            Database = eof;
+            config = new MapperConfiguration(cfg => cfg.CreateMap<OrderDetailDTO, OrderDetail>()).CreateMapper();
+            DataBase = eof;
         }
+
+        public OrderDetailService()
+        {
+            config = new MapperConfiguration(cfg => cfg.CreateMap<OrderDetailDTO, OrderDetail>()).CreateMapper();
+            DataBase = new EFUnitOfWork("DefaultConnection");
+        }
+
         public void Create(OrderDetailDTO orderDetail)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<OrderDetailDTO, OrderDetail>()).CreateMapper();
             OrderDetail orderDetailDAL = config.Map<OrderDetailDTO, OrderDetail>(orderDetail);
-            Database.OrderDetails.Create(orderDetailDAL);
-            Database.Save();
+            DataBase.OrderDetails.Create(orderDetailDAL);
+            DataBase.Save();
         }
 
         public void Delete(int id)
         {
-            Database.OrderDetails.Delete(id);
-            Database.Save();
+            DataBase.OrderDetails.Delete(id);
+            DataBase.Save();
         }
 
         public void Edit(OrderDetailDTO orderDetail)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<OrderDetailDTO, OrderDetail>()).CreateMapper();
             OrderDetail orderDetailDAL = config.Map<OrderDetailDTO, OrderDetail>(orderDetail);
-            Database.OrderDetails.Update(orderDetailDAL);
-            Database.Save();
+            DataBase.OrderDetails.Update(orderDetailDAL);
+            DataBase.Save();
         }
 
         public OrderDetailDTO Get(int id)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<OrderDetailDTO, OrderDetail>()).CreateMapper();
-            return config.Map<OrderDetail, OrderDetailDTO>(Database.OrderDetails.Get(id));
+            return config.Map<OrderDetail, OrderDetailDTO>(DataBase.OrderDetails.Get(id));
         }
 
         public IEnumerable<OrderDetailDTO> GetAll()
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<OrderDetail, OrderDetailDTO>()).CreateMapper();
-            return config.Map<IEnumerable<OrderDetail>, IEnumerable<OrderDetailDTO>>(Database.OrderDetails.GetAll());
+            return config.Map<IEnumerable<OrderDetail>, IEnumerable<OrderDetailDTO>>(DataBase.OrderDetails.GetAll());
         }
+
         public void Dispose()
         {
-            Database.Dispose();
+            DataBase.Dispose();
         }
     }
 }

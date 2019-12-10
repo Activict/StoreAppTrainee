@@ -3,20 +3,31 @@ using StoreApp.BLL.DTO;
 using StoreApp.BLL.Interfaces;
 using StoreApp.DAL.Entities;
 using StoreApp.DAL.Intefaces;
+using StoreApp.DAL.Repositories;
 using System.Collections.Generic;
 
 namespace StoreApp.BLL.Services
 {
     public class BrandService : IBrandService
     {
-        IUnitOfWork DataBase { get; set; }
+        private IUnitOfWork DataBase { get; set; }
+
+        private IMapper config;
+
         public BrandService(IUnitOfWork uof)
         {
+            config = new MapperConfiguration(cfg => cfg.CreateMap<BrandDTO, Brand>()).CreateMapper();
             DataBase = uof;
         }
+
+        public BrandService()
+        {
+            config = new MapperConfiguration(cfg => cfg.CreateMap<BrandDTO, Brand>()).CreateMapper();
+            DataBase = new EFUnitOfWork("DefaultConnection");
+        }
+
         public void Create(BrandDTO brand)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<Brand, BrandDTO>()).CreateMapper();
             Brand brandDAL = config.Map<BrandDTO, Brand>(brand);
             DataBase.Brands.Create(brandDAL);
             DataBase.Save();
@@ -30,7 +41,6 @@ namespace StoreApp.BLL.Services
 
         public void Edit(BrandDTO brand)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<Brand, BrandDTO>()).CreateMapper();
             Brand brandDAL = config.Map<BrandDTO, Brand>(brand);
             DataBase.Brands.Update(brandDAL);
             DataBase.Save();
@@ -38,13 +48,11 @@ namespace StoreApp.BLL.Services
 
         public BrandDTO Get(int id)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<Brand, BrandDTO>()).CreateMapper();
             return config.Map<Brand, BrandDTO>(DataBase.Brands.Get(id));
         }
 
         public IEnumerable<BrandDTO> GetAll()
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<Brand, BrandDTO>()).CreateMapper();
             return config.Map<IEnumerable<Brand>, List<BrandDTO>>(DataBase.Brands.GetAll());
         }
 

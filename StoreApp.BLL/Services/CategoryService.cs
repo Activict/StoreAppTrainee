@@ -4,16 +4,28 @@ using System.Collections.Generic;
 using StoreApp.DAL.Intefaces;
 using StoreApp.DAL.Entities;
 using AutoMapper;
+using StoreApp.DAL.Repositories;
 
 namespace StoreApp.BLL.Services
 {
     public class CategoryService : ICategoryService
     {
-        IUnitOfWork DataBase { get; set; }
+        private IUnitOfWork DataBase { get; set; }
+
+        private IMapper config;
+
         public CategoryService(IUnitOfWork uow)
         {
+            config = new MapperConfiguration(cfg => cfg.CreateMap<CategoryDTO, Category>()).CreateMapper();
             DataBase = uow;
         }
+
+        public CategoryService()
+        {
+            config = new MapperConfiguration(cfg => cfg.CreateMap<CategoryDTO, Category>()).CreateMapper();
+            DataBase = new EFUnitOfWork("DefaultConnection");
+        }
+
         public void Create(CategoryDTO category)
         {
             var categoryBL = new Category()
@@ -33,7 +45,6 @@ namespace StoreApp.BLL.Services
 
         public void Edit(CategoryDTO category)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<CategoryDTO, Category>()).CreateMapper();
             Category categoryDAL = config.Map<Category>(category);
             DataBase.Categories.Update(categoryDAL);
             DataBase.Save();
@@ -46,9 +57,9 @@ namespace StoreApp.BLL.Services
 
         public IEnumerable<CategoryDTO> GetAll()
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<Category, CategoryDTO>()).CreateMapper();
             return config.Map<IEnumerable<Category>, List<CategoryDTO>>(DataBase.Categories.GetAll());
         }
+
         public void Dispose()
         {
             DataBase.Dispose();

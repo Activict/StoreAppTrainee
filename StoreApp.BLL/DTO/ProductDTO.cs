@@ -14,7 +14,5 @@
         public int CategoryId { get; set; }
         public int BrandId { get; set; }
         public int ProducerId { get; set; }
-
-        //public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }

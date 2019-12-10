@@ -10,7 +10,5 @@ namespace StoreApp.BLL.DTO
         public string Status { get; set; }
         public int Discount { get; set; }
         public DateTime OrderTime { get; set; }
-
-        //public ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }

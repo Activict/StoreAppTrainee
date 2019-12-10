@@ -3,20 +3,31 @@ using StoreApp.BLL.DTO;
 using StoreApp.BLL.Interfaces;
 using StoreApp.DAL.Entities;
 using StoreApp.DAL.Intefaces;
+using StoreApp.DAL.Repositories;
 using System.Collections.Generic;
 
 namespace StoreApp.BLL.Services
 {
-    class ProductService : IProductService
+    public class ProductService : IProductService
     {
-        IUnitOfWork DataBase;
+        private IUnitOfWork DataBase { get; set; }
+
+        private IMapper config;
+
         public ProductService(IUnitOfWork uof)
         {
+            config = new MapperConfiguration(cfg => cfg.CreateMap<ProductDTO, Product>()).CreateMapper();
             DataBase = uof;
         }
+
+        public ProductService()
+        {
+            config = new MapperConfiguration(cfg => cfg.CreateMap<ProductDTO, Product>()).CreateMapper();
+            DataBase = new EFUnitOfWork("DefaultConnection");
+        }
+
         public void Create(ProductDTO product)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<Product, ProductDTO>()).CreateMapper();
             Product productDAL = config.Map<ProductDTO, Product>(product);
             DataBase.Products.Create(productDAL);
             DataBase.Save();
@@ -30,7 +41,6 @@ namespace StoreApp.BLL.Services
 
         public void Edit(ProductDTO product)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<Product, ProductDTO>()).CreateMapper();
             Product productDTO = config.Map<ProductDTO, Product>(product);
             DataBase.Products.Update(productDTO);
             DataBase.Save();
@@ -38,15 +48,14 @@ namespace StoreApp.BLL.Services
 
         public ProductDTO Get(int id)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<ProductDTO, Product>()).CreateMapper();
             return config.Map<Product, ProductDTO>(DataBase.Products.Get(id));
         }
 
         public IEnumerable<ProductDTO> GetAll()
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<Product, ProductDTO>()).CreateMapper();
             return config.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(DataBase.Products.GetAll());
         }
+
         public void Dispose()
         {
             DataBase.Dispose();

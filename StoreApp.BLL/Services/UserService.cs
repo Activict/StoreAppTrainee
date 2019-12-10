@@ -4,52 +4,61 @@ using StoreApp.BLL.DTO;
 using StoreApp.BLL.Interfaces;
 using StoreApp.DAL.Entities;
 using StoreApp.DAL.Intefaces;
+using StoreApp.DAL.Repositories;
 
 namespace StoreApp.BLL.Services
 {
-    class UserService : IUserService
+    public class UserService : IUserService
     {
-        IUnitOfWork Database;
+        private IUnitOfWork DataBase { get; set; }
+
+        private IMapper config;
+
         public UserService(IUnitOfWork uof)
         {
-            Database = uof;
+            config = new MapperConfiguration(cfg => cfg.CreateMap<UserDTO, User>()).CreateMapper();
+            DataBase = uof;
         }
+
+        public UserService()
+        {
+            config = new MapperConfiguration(cfg => cfg.CreateMap<UserDTO, User>()).CreateMapper();
+            DataBase = new EFUnitOfWork("DefaultConnection");
+        }
+
         public void Create(UserDTO user)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<UserDTO, User>()).CreateMapper();
             User userDAL = config.Map<UserDTO, User>(user);
-            Database.Users.Create(userDAL);
-            Database.Save();
+            DataBase.Users.Create(userDAL);
+            DataBase.Save();
         }
 
         public void Delete(int id)
         {
-            Database.Users.Delete(id);
-            Database.Save();
+            DataBase.Users.Delete(id);
+            DataBase.Save();
         }
 
         public void Edit(UserDTO user)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<UserDTO, User>()).CreateMapper();
             User userDTO = config.Map<UserDTO, User>(user);
-            Database.Users.Update(userDTO);
-            Database.Save();
+            DataBase.Users.Update(userDTO);
+            DataBase.Save();
         }
 
         public UserDTO Get(int id)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<User, UserDTO>()).CreateMapper();
-            return config.Map<User, UserDTO>(Database.Users.Get(id));
+            return config.Map<User, UserDTO>(DataBase.Users.Get(id));
         }
 
         public IEnumerable<UserDTO> GetAll()
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<User, UserDTO>()).CreateMapper();
-            return config.Map<IEnumerable<User>, IEnumerable<UserDTO>>(Database.Users.GetAll());
+            return config.Map<IEnumerable<User>, IEnumerable<UserDTO>>(DataBase.Users.GetAll());
         }
+
         public void Dispose()
         {
-            Database.Dispose();
+            DataBase.Dispose();
         }
     }
 }

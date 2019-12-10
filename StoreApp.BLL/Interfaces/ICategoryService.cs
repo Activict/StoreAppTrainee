@@ -11,6 +11,5 @@ namespace StoreApp.BLL.Interfaces
         CategoryDTO Get(int id);
         IEnumerable<CategoryDTO> GetAll();
         void Dispose();
-        
     }
 }
