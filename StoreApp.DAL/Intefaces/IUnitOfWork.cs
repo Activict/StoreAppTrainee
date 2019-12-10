@@ -3,7 +3,7 @@ using System;
 
 namespace StoreApp.DAL.Intefaces
 {
-    interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork : IDisposable
     {
         IRepository<Product> Products { get; }
         IRepository<OrderDetail> OrderDetails { get; }
