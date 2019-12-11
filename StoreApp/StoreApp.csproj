@@ -128,6 +128,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -169,6 +170,7 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Store\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -188,6 +190,10 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\StoreApp.BLL\StoreApp.BLL.csproj">
+      <Project>{fb8106d7-f0b5-456d-b13f-6f3c5461c991}</Project>
+      <Name>StoreApp.BLL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StoreApp.DAL\StoreApp.DAL.csproj">
       <Project>{DB1FE33F-273C-4CD3-BE1C-8AE0CADBBAFE}</Project>
       <Name>StoreApp.DAL</Name>
