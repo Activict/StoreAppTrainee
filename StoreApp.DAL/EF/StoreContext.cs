@@ -27,8 +27,8 @@ namespace StoreApp.DAL.EF
     {
         protected override void Seed(StoreContext db)
         {
-            db.Products.Add(new Product { Name = "TestProduct",  Quantity = 1 });
-            db.SaveChanges();
+            //db.Products.Add(new Product { Name = "TestProduct",  Quantity = 1 });
+            //db.SaveChanges();
         } 
     }
 }
