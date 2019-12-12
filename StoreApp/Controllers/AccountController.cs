@@ -11,6 +11,7 @@ namespace StoreApp.Controllers
         private UserValidateService userValidateService;
         private UserService userService;
         private IMapper config;
+
         public AccountController()
         {
             userValidateService = new UserValidateService();
@@ -21,7 +22,6 @@ namespace StoreApp.Controllers
         [HttpGet]
         public ActionResult Registration()
         {
-            ViewBag.User = new UserRegistrationViewModel();
             return View();
         }
 
@@ -30,8 +30,8 @@ namespace StoreApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Message = "Your registraition wrong!";
-                return View(model);
+                ViewBag.Message = "Your registration wrong!";
+                return View();
             }
 
             if (!userValidateService.CheckEmail(model.Email) &&
@@ -45,7 +45,7 @@ namespace StoreApp.Controllers
                 
                 userService.Create(userDTO);
 
-                TempData["Message"] = "Your registraition successful!";
+                TempData["Message"] = "Your registration successful!";
             }
             else
             {

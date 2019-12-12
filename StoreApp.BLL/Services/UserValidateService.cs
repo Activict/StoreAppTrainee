@@ -1,6 +1,7 @@
 ﻿using StoreApp.BLL.DTO;
 using StoreApp.DAL.Intefaces;
 using StoreApp.DAL.Repositories;
+using System.Linq;
 
 namespace StoreApp.BLL.Services
 {
@@ -17,57 +18,28 @@ namespace StoreApp.BLL.Services
         {
             var users = DataBase.Users.GetAll();
 
-            foreach (var user in users)
-            {
-                if (user.Email == email)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return users.Any(u => u.Email.Equals(email));
         }
 
         public bool CheckUserName(string userName)
         {
             var users = DataBase.Users.GetAll();
 
-            foreach (var user in users)
-            {
-                if (user.UserName == userName)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return users.Any(u => u.UserName.Equals(userName));
         }
 
         public bool CheckLogin(UserDTO userDTO)
         {
             var users = DataBase.Users.GetAll();
 
-            foreach (var user in users)
-            {
-                if (user.UserName == userDTO.UserName && user.Password == userDTO.Password)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return users.Any(u => u.UserName.Equals(userDTO.UserName) && u.Password.Equals(userDTO.Password));
         }
 
         public string GetRole(UserDTO userDTO)
         {
             var users = DataBase.Users.GetAll();
 
-            foreach (var user in users)
-            {
-                if (user.UserName == userDTO.UserName && user.Password == userDTO.Password)
-                {
-                    return user.Role;
-                }
-            }
-
-            return null;
+            return users.FirstOrDefault(u => u.UserName.Equals(userDTO.UserName) && u.Password.Equals(userDTO.Password))?.Role;
         }
     }
 }
