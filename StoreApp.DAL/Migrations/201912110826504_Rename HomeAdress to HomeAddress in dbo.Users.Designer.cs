@@ -6,14 +6,14 @@ namespace StoreApp.DAL.Migrations
     using System.Data.Entity.Migrations.Infrastructure;
     using System.Resources;
     
-    [GeneratedCode("EntityFramework.Migrations", "6.3.0")]
-    public sealed partial class AddpropertySqlDateTimeOrderDateindboOrder : IMigrationMetadata
+    [GeneratedCode("EntityFramework.Migrations", "6.4.0")]
+    public sealed partial class RenameHomeAdresstoHomeAddressindboUsers : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddpropertySqlDateTimeOrderDateindboOrder));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(RenameHomeAdresstoHomeAddressindboUsers));
         
         string IMigrationMetadata.Id
         {
-            get { return "201912051311474_Add property SqlDateTime OrderDate in dbo.Order"; }
+            get { return "201912110826504_Rename HomeAdress to HomeAddress in dbo.Users"; }
         }
         
         string IMigrationMetadata.Source

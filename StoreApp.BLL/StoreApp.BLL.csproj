@@ -90,6 +90,7 @@
     <Compile Include="Services\ProducerService.cs" />
     <Compile Include="Services\ProductService.cs" />
     <Compile Include="Services\UserService.cs" />
+    <Compile Include="Services\UserValidateService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StoreApp.DAL\StoreApp.DAL.csproj">

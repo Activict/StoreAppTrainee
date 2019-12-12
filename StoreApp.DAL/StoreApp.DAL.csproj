@@ -69,9 +69,13 @@
     <Compile Include="Migrations\201912051257012_Add property OrderDate in dbo.Order.designer.cs">
       <DependentUpon>201912051257012_Add property OrderDate in dbo.Order.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201912051311474_Add property SqlDateTime OrderDate in dbo.Order.cs" />
-    <Compile Include="Migrations\201912051311474_Add property SqlDateTime OrderDate in dbo.Order.designer.cs">
-      <DependentUpon>201912051311474_Add property SqlDateTime OrderDate in dbo.Order.cs</DependentUpon>
+    <Compile Include="Migrations\201912101442266_Add Role to dbo.Users.cs" />
+    <Compile Include="Migrations\201912101442266_Add Role to dbo.Users.designer.cs">
+      <DependentUpon>201912101442266_Add Role to dbo.Users.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912110826504_Rename HomeAdress to HomeAddress in dbo.Users.cs" />
+    <Compile Include="Migrations\201912110826504_Rename HomeAdress to HomeAddress in dbo.Users.designer.cs">
+      <DependentUpon>201912110826504_Rename HomeAdress to HomeAddress in dbo.Users.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -95,8 +99,11 @@
     <EmbeddedResource Include="Migrations\201912051257012_Add property OrderDate in dbo.Order.resx">
       <DependentUpon>201912051257012_Add property OrderDate in dbo.Order.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201912051311474_Add property SqlDateTime OrderDate in dbo.Order.resx">
-      <DependentUpon>201912051311474_Add property SqlDateTime OrderDate in dbo.Order.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201912101442266_Add Role to dbo.Users.resx">
+      <DependentUpon>201912101442266_Add Role to dbo.Users.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912110826504_Rename HomeAdress to HomeAddress in dbo.Users.resx">
+      <DependentUpon>201912110826504_Rename HomeAdress to HomeAddress in dbo.Users.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
