@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "Registration";
+}
+
+<h2>Registration</h2>
+
+@if (ViewBag.Message != null)
+{
+    <div class="btn-danger col-md-2">@ViewBag.Message</div>
+}
+
+<br />
+<hr />
+
+<form method="post" action="/Account/Registration">
+
+    <div>
+        <div class="col-md-2">
+            Email:
+        </div> 
+        <input type="email" name="Email" />
+    </div>
+    <div>
+        <div class="col-md-2">
+            Username:
+        </div>
+        <input type="text" name="Username" />
+    </div>
+    <div>
+        <div class="col-md-2">
+            Home address:
+        </div>
+        <input type="text" name="HomeAddress" />
+    </div>
+    <div>
+        <div class="col-md-2">
+            Password:
+        </div>
+        <input type="password" name="Password" />
+    </div>
+    <div>
+        <div class="col-md-2">
+            Confirm password:
+        </div>
+        <input type="password" name="ConfirmPassword" />
+    </div>
+    <div>
+        <input type="submit" value="Registration" />
+    </div>
+
+</form>
