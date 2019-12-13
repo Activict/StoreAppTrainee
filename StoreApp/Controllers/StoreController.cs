@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using AutoMapper;
 using StoreApp.BLL.DTO;
 using StoreApp.BLL.Services;
+using StoreApp.Models.Store;
 
 namespace StoreApp.Controllers
 {
@@ -16,14 +14,18 @@ namespace StoreApp.Controllers
         private BrandService brandService;
         private ProducerService producerService;
 
+        private IMapper config;
+
         public StoreController()
         {
             productService = new ProductService();
             categoryService = new CategoryService();
             brandService = new BrandService();
             producerService = new ProducerService();
+
+            config = new MapperConfiguration(cfg => cfg.CreateMap<CreateProductViewModel, ProductDTO>()).CreateMapper();
         }
-        // GET: Store
+
         public ActionResult Index()
         {
             var products = productService.GetAll();
@@ -42,31 +44,32 @@ namespace StoreApp.Controllers
         [HttpGet]
         public ActionResult CreateProduct()
         {
+            TempData["Categories"] = new SelectList(categoryService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+            TempData["Brands"] = new SelectList(brandService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+            TempData["Producers"] = new SelectList(producerService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+
             return View();
         }
 
         [HttpPost]
-        public ActionResult CreateProduct(ProductDTO product)
+        public ActionResult CreateProduct(CreateProductViewModel product)
         {
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "New product doesn't create");
+                TempData["Categories"] = new SelectList(categoryService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+                TempData["Brands"] = new SelectList(brandService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+                TempData["Producers"] = new SelectList(producerService.GetAll(), dataValueField: "Id", dataTextField: "Name");
                 return View(product);
             }
-            if (product== null)
-            {
-                return View();
-            }
 
-            productService.Create(product);
+            ProductDTO productDTO = config.Map<CreateProductViewModel, ProductDTO>(product); 
 
-            ViewBag.Categories = new SelectList(categoryService.GetAll());
-            ViewBag.Brands = new SelectList(brandService.GetAll());
-            ViewBag.Producers = new SelectList(producerService.GetAll());
+            productService.Create(productDTO);
 
             TempData["Message"] = "New product created seccessful!";
 
-            return View(product);
+            return RedirectToAction("Index");
         }
     }
 }
