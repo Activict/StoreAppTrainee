@@ -150,5 +150,42 @@ namespace StoreApp.Controllers
             return View(product);
         }
 
+        [HttpGet]
+        public ActionResult DeleteProduct(int id)
+        {
+            ProductDTO productDTO = productService.Get(id);
+
+            DetailsProductViewModel product = new DetailsProductViewModel()
+            {
+                Id = productDTO.Id,
+                Name = productDTO.Name,
+                Price = productDTO.Price,
+                Quantity = productDTO.Quantity,
+                Unit = productDTO.Unit,
+                Picture = productDTO.Picture,
+                Quality = productDTO.Quality,
+                Enable = productDTO.Enable,
+                Category = categoryService.Get(productDTO.CategoryId)?.Name,
+                Brand = brandService.Get(productDTO.BrandId)?.Name,
+                Producer = producerService.Get(productDTO.ProducerId)?.Name
+            };
+
+            return View(product);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteProduct(DetailsProductViewModel product)
+        {
+            if (product == null)
+            {
+                TempData["Message"] = "Product don't delete!";
+                return RedirectToAction("Index");
+            }
+
+            productService.Delete(product.Id);
+
+            return RedirectToAction("Index");
+        }
+
     }
 }
