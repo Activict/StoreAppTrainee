@@ -157,6 +157,7 @@
     <Compile Include="Models\Account\UserLoginViewModel.cs" />
     <Compile Include="Models\Account\UserRegistrationViewModel.cs" />
     <Compile Include="Models\Store\CreateProductViewModel.cs" />
+    <Compile Include="Models\Store\DetailsProductViewModel.cs" />
     <Compile Include="Models\Store\EditProductViewModel.cs" />
     <Compile Include="Models\Store\ProductViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -202,6 +203,7 @@
     <Content Include="Views\Store\EditProduct.cshtml" />
     <Content Include="Views\Account\Registration.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Store\DetailsProduct.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

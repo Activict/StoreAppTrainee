@@ -27,6 +27,7 @@ namespace StoreApp.Controllers
             config = new MapperConfiguration(cfg => { cfg.CreateMap<CreateProductViewModel, ProductDTO>();
                                                       cfg.CreateMap<ProductDTO, EditProductViewModel>();
                                                       cfg.CreateMap<EditProductViewModel, ProductDTO>();
+                                                      cfg.CreateMap<ProductDTO, DetailsProductViewModel>();
                                                     }).CreateMapper();
         }
 
@@ -123,6 +124,28 @@ namespace StoreApp.Controllers
             productService.Edit(config.Map<EditProductViewModel, ProductDTO>(product));
 
             TempData["Message"] = "Product have edited";
+
+            return View(product);
+        }
+
+        [HttpGet]
+        public ActionResult DetailsProduct(int id)
+        {
+            ProductDTO productDTO = productService.Get(id);
+
+            DetailsProductViewModel product = new DetailsProductViewModel() { 
+                Id = productDTO.Id,
+                Name = productDTO.Name,
+                Price = productDTO.Price,
+                Quantity = productDTO.Quantity,
+                Unit = productDTO.Unit,
+                Picture = productDTO.Picture,
+                Quality = productDTO.Quality,
+                Enable = productDTO.Enable,
+                Category = categoryService.Get(productDTO.CategoryId)?.Name,
+                Brand = brandService.Get(productDTO.BrandId)?.Name,
+                Producer = producerService.Get(productDTO.ProducerId)?.Name
+            };
 
             return View(product);
         }
