@@ -16,13 +16,13 @@ namespace StoreApp.BLL.Services
 
         public CategoryService(IUnitOfWork uow)
         {
-            config = new MapperConfiguration(cfg => cfg.CreateMap<CategoryDTO, Category>()).CreateMapper();
+            config = new MapperConfiguration(cfg => cfg.CreateMap<Category, CategoryDTO>()).CreateMapper();
             DataBase = uow;
         }
 
         public CategoryService()
         {
-            config = new MapperConfiguration(cfg => cfg.CreateMap<CategoryDTO, Category>()).CreateMapper();
+            config = new MapperConfiguration(cfg => cfg.CreateMap<Category, CategoryDTO>()).CreateMapper();
             DataBase = new EFUnitOfWork("DefaultConnection");
         }
 
@@ -52,7 +52,7 @@ namespace StoreApp.BLL.Services
 
         public CategoryDTO Get(int id)
         {
-            return new CategoryDTO(DataBase.Categories.Get(id));
+            return config.Map<Category, CategoryDTO>(DataBase.Categories.Get(id));
         }
 
         public IEnumerable<CategoryDTO> GetAll()
