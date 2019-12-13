@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Web.Mvc;
 using AutoMapper;
 using StoreApp.BLL.DTO;
 using StoreApp.BLL.Services;
@@ -28,7 +29,21 @@ namespace StoreApp.Controllers
 
         public ActionResult Index()
         {
-            var products = productService.GetAll();
+            var products = productService.GetAll()
+                .Select(p => new ProductViewModel()
+                {   
+                    Id = p.Id,
+                    Name = p.Name,
+                    Price = p.Price,
+                    Quantity = p.Quantity,
+                    Unit = p.Unit,
+                    Picture = p.Picture,
+                    Quality = p.Quality,
+                    Enable = p.Enable,
+                    Category = categoryService.Get(p.CategoryId)?.Name,
+                    Brand = brandService.Get(p.BrandId)?.Name,
+                    Producer = producerService.Get(p.ProducerId)?.Name
+                });
 
             if (products == null)
             {
@@ -63,7 +78,7 @@ namespace StoreApp.Controllers
                 return View(product);
             }
 
-            ProductDTO productDTO = config.Map<CreateProductViewModel, ProductDTO>(product); 
+            ProductDTO productDTO = config.Map<CreateProductViewModel, ProductDTO>(product);
 
             productService.Create(productDTO);
 

@@ -1,10 +1,9 @@
-﻿@model IEnumerable<StoreApp.BLL.DTO.ProductDTO>
+﻿@model IEnumerable<StoreApp.Models.Store.ProductViewModel>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
 
 @if (TempData["Message"] != null)
 {
@@ -13,7 +12,7 @@
 <br />
 
 <p>
-    @Html.ActionLink("New product", "CreateProduct", "", new { @class = "btn btn-success"})
+    @Html.ActionLink("New product", "CreateProduct", "Store", null, new { @class = "btn btn-success"})
 </p>
 <table class="table">
     <tr>
@@ -39,13 +38,13 @@
             @Html.DisplayNameFor(model => model.Enable)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CategoryId)
+            @Html.DisplayNameFor(model => model.Category)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.BrandId)
+            @Html.DisplayNameFor(model => model.Brand)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ProducerId)
+            @Html.DisplayNameFor(model => model.Producer)
         </th>
         <th></th>
     </tr>
@@ -75,13 +74,13 @@
                 @Html.DisplayFor(modelItem => item.Enable)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CategoryId)
+                @Html.DisplayFor(modelItem => item.Category)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BrandId)
+                @Html.DisplayFor(modelItem => item.Brand)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProducerId)
+                @Html.DisplayFor(modelItem => item.Producer)
             </td>
             <td>
                 @Html.ActionLink("Edit", "EditProduct", new { id = item.Id }) |

@@ -157,6 +157,7 @@
     <Compile Include="Models\Account\UserLoginViewModel.cs" />
     <Compile Include="Models\Account\UserRegistrationViewModel.cs" />
     <Compile Include="Models\Store\CreateProductViewModel.cs" />
+    <Compile Include="Models\Store\ProductViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
