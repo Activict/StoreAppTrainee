@@ -2,10 +2,7 @@
 using StoreApp.BLL.DTO;
 using StoreApp.BLL.Services;
 using StoreApp.Models.Categories;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace StoreApp.Controllers
@@ -50,6 +47,35 @@ namespace StoreApp.Controllers
             categoryService.Create(categoryDTO);
 
             TempData["Message"] = "Category created success!";
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public ActionResult EditCategory(int id)
+        {
+            CategoryViewModel category = config.Map<CategoryDTO, CategoryViewModel>(categoryService.Get(id));
+
+            if (category == null)
+            {
+                RedirectToAction("Index");
+            }
+
+            return View(category);
+        }
+
+        [HttpPost]
+        public ActionResult EditCategory(CategoryViewModel category)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Category edited wrong!");
+                return View(category);
+            }
+
+            categoryService.Edit(config.Map<CategoryViewModel, CategoryDTO>(category));
+
+            TempData["Message"] = "Category edited success!";
 
             return RedirectToAction("Index");
         }
