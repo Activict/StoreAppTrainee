@@ -24,7 +24,10 @@ namespace StoreApp.Controllers
             brandService = new BrandService();
             producerService = new ProducerService();
 
-            config = new MapperConfiguration(cfg => cfg.CreateMap<CreateProductViewModel, ProductDTO>()).CreateMapper();
+            config = new MapperConfiguration(cfg => { cfg.CreateMap<CreateProductViewModel, ProductDTO>();
+                                                      cfg.CreateMap<ProductDTO, EditProductViewModel>();
+                                                      cfg.CreateMap<EditProductViewModel, ProductDTO>();
+                                                    }).CreateMapper();
         }
 
         public ActionResult Index()
@@ -86,5 +89,43 @@ namespace StoreApp.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public ActionResult EditProduct(int id)
+        {
+            EditProductViewModel product = config.Map<ProductDTO, EditProductViewModel>(productService.Get(id));
+
+            if (product == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            TempData["Categories"] = new SelectList(categoryService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+            TempData["Brands"] = new SelectList(brandService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+            TempData["Producers"] = new SelectList(producerService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+
+            return View(product);
+        }
+
+        [HttpPost]
+        public ActionResult EditProduct(EditProductViewModel product)
+        {
+            TempData["Categories"] = new SelectList(categoryService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+            TempData["Brands"] = new SelectList(brandService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+            TempData["Producers"] = new SelectList(producerService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Product haven't edited");
+                return View(product);
+            }
+            
+            productService.Edit(config.Map<EditProductViewModel, ProductDTO>(product));
+
+            TempData["Message"] = "Product have edited";
+
+            return View(product);
+        }
+
     }
 }
