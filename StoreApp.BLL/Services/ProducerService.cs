@@ -16,13 +16,21 @@ namespace StoreApp.BLL.Services
 
         public ProducerService(IUnitOfWork uof)
         {
-            config = new MapperConfiguration(cfg => cfg.CreateMap<Producer, ProducerDTO>()).CreateMapper();
+            config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Producer, ProducerDTO>();
+                cfg.CreateMap<ProducerDTO, Producer>();
+            }).CreateMapper();
             DataBase = uof;
         }
 
         public ProducerService()
         {
-            config = new MapperConfiguration(cfg => cfg.CreateMap<Producer, ProducerDTO>()).CreateMapper();
+            config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Producer, ProducerDTO>();
+                cfg.CreateMap<ProducerDTO, Producer>();
+            }).CreateMapper();
             DataBase = new EFUnitOfWork("DefaultConnection");
         }
 

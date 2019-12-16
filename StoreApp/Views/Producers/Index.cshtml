@@ -1,0 +1,33 @@
+﻿@model IEnumerable<StoreApp.Models.Producers.ProducerViewModel>
+
+@{
+    ViewBag.Title = "Producers";
+}
+
+<br />
+
+<p>
+    @Html.ActionLink("Create new producer", "CreateProducer")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "EditProducer", new { id=item.Id }) |
+            @Html.ActionLink("Details", "DetailsProducer", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "DeleteProducer", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

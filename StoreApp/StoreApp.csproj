@@ -152,12 +152,14 @@
     <Compile Include="Controllers\BrandsController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProducersController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Account\UserLoginViewModel.cs" />
     <Compile Include="Models\Account\UserRegistrationViewModel.cs" />
+    <Compile Include="Models\Producers\ProducerViewModel.cs" />
     <Compile Include="Models\Brands\BrandViewModel.cs" />
     <Compile Include="Models\Store\CreateProductViewModel.cs" />
     <Compile Include="Models\Store\EditProductViewModel.cs" />
@@ -219,6 +221,11 @@
     <Content Include="Views\Brands\DetailsBrand.cshtml" />
     <Content Include="Views\Brands\EditBrand.cshtml" />
     <Content Include="Views\Brands\DeleteBrand.cshtml" />
+    <Content Include="Views\Producers\Index.cshtml" />
+    <Content Include="Views\Producers\CreateProducer.cshtml" />
+    <Content Include="Views\Producers\EditProducer.cshtml" />
+    <Content Include="Views\Producers\DetailsProducer.cshtml" />
+    <Content Include="Views\Producers\DeleteProducer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
