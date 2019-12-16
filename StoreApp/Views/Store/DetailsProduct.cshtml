@@ -1,0 +1,98 @@
+﻿@model StoreApp.Models.Store.DetailsProductViewModel
+
+@{
+    ViewBag.Title = "Details product";
+}
+
+<h3>Details @Model.Name</h3>
+
+<div>
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Unit)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Unit)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Picture)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Picture)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Quality)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Quality)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Enable)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Enable)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Category)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Brand)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Brand)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Producer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Producer)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "EditProduct", new { id = Model.Id }, new { @class = "btn btn-success"}) |
+    @Html.ActionLink("Back to products", "Index")
+</p>

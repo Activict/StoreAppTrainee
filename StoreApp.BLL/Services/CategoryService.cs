@@ -5,6 +5,7 @@ using StoreApp.DAL.Intefaces;
 using StoreApp.DAL.Entities;
 using AutoMapper;
 using StoreApp.DAL.Repositories;
+using System.Linq;
 
 namespace StoreApp.BLL.Services
 {

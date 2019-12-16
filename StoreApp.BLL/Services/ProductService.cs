@@ -16,13 +16,15 @@ namespace StoreApp.BLL.Services
 
         public ProductService(IUnitOfWork uof)
         {
-            config = new MapperConfiguration(cfg => cfg.CreateMap<ProductDTO, Product>()).CreateMapper();
+            config = new MapperConfiguration(cfg => { cfg.CreateMap<Product, ProductDTO>();
+                                                      cfg.CreateMap<ProductDTO, Product>(); }).CreateMapper();
             DataBase = uof;
         }
 
         public ProductService()
         {
-            config = new MapperConfiguration(cfg => cfg.CreateMap<ProductDTO, Product>()).CreateMapper();
+            config = new MapperConfiguration(cfg => { cfg.CreateMap<Product, ProductDTO>();
+                                                      cfg.CreateMap<ProductDTO, Product>(); }).CreateMapper();
             DataBase = new EFUnitOfWork("DefaultConnection");
         }
 
@@ -41,8 +43,8 @@ namespace StoreApp.BLL.Services
 
         public void Edit(ProductDTO product)
         {
-            Product productDTO = config.Map<ProductDTO, Product>(product);
-            DataBase.Products.Update(productDTO);
+            Product productDAL = config.Map<ProductDTO, Product>(product);
+            DataBase.Products.Update(productDAL);
             DataBase.Save();
         }
 
