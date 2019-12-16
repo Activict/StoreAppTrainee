@@ -16,9 +16,11 @@ namespace StoreApp.Controllers
         {
             categoryService = new CategoryService();
 
-            config = new MapperConfiguration(cfg => { cfg.CreateMap<CategoryDTO, CategoryViewModel>();
-                                                      cfg.CreateMap<CategoryViewModel, CategoryDTO>();
-                                                    }).CreateMapper();
+            config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<CategoryDTO, CategoryViewModel>();
+                cfg.CreateMap<CategoryViewModel, CategoryDTO>();
+            }).CreateMapper();
         }
         public ActionResult Index()
         {
@@ -76,6 +78,50 @@ namespace StoreApp.Controllers
             categoryService.Edit(config.Map<CategoryViewModel, CategoryDTO>(category));
 
             TempData["Message"] = "Category edited success!";
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public ActionResult DetailsCategory(int id)
+        {
+            CategoryViewModel category = config.Map<CategoryDTO, CategoryViewModel>(categoryService.Get(id));
+
+            if (category == null)
+            {
+                TempData["Message"] = "This category isn't exist";
+                return RedirectToAction("Index");
+            }
+
+            return View(category);
+        }
+
+        [HttpGet]
+        public ActionResult DeleteCategory(int id)
+        {
+            CategoryViewModel category = config.Map<CategoryDTO, CategoryViewModel>(categoryService.Get(id));
+
+            if (category == null)
+            {
+                TempData["Message"] = "This category isn't exist";
+                return RedirectToAction("Index");
+            }
+
+            return View(category);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteCategory(CategoryViewModel category)
+        {
+            if (category == null)
+            {
+                TempData["Message"] = "This category isn't exist";
+                return RedirectToAction("Index");
+            }
+
+            categoryService.Delete(category.Id);
+
+            TempData["Message"] = "Category deleted success!";
 
             return RedirectToAction("Index");
         }

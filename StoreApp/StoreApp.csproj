@@ -200,6 +200,8 @@
     <Content Include="Views\Category\Index.cshtml" />
     <Content Include="Views\Category\CreateCategory.cshtml" />
     <Content Include="Views\Category\EditCategory.cshtml" />
+    <Content Include="Views\Category\DetailsCategory.cshtml" />
+    <Content Include="Views\Category\DeleteCategory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
