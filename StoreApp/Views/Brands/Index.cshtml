@@ -1,0 +1,33 @@
+﻿@model IEnumerable<StoreApp.Models.Brands.BrandViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Brands</h2>
+
+<p>
+    @Html.ActionLink("Create new brand", "CreateBrand")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "EditBrand", new { id=item.Id }) |
+            @Html.ActionLink("Details", "DetailsBrand", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "DeleteBrand", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>
