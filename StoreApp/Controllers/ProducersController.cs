@@ -96,5 +96,36 @@ namespace StoreApp.Controllers
 
             return View(producer);
         }
+
+        [HttpGet]
+        public ActionResult DeleteProducer(int id)
+        {
+            ProducerViewModel producer = config.Map<ProducerDTO, ProducerViewModel>(producerService.Get(id));
+
+            if (producer == null)
+            {
+                TempData["Message"] = "This producer isn't exist";
+                return RedirectToAction("Index");
+            }
+
+            return View(producer);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteProducer(ProducerViewModel producer)
+        {
+            if (producer == null)
+            {
+                TempData["Message"] = "This producer isn't exist";
+                return RedirectToAction("Index");
+            }
+
+            producerService.Delete(producer.Id);
+
+            TempData["Message"] = "Producer deleted success!";
+
+            return RedirectToAction("Index");
+        }
+
     }
 }
