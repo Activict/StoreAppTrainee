@@ -9,12 +9,12 @@ namespace StoreApp.Controllers
 {
     public class BrandsController : Controller
     {
-        private BrandService brandsService;
+        private BrandService brandService;
         private IMapper config;
 
         public BrandsController()
         {
-            brandsService = new BrandService();
+            brandService = new BrandService();
             config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<BrandDTO, BrandViewModel>();
@@ -25,7 +25,7 @@ namespace StoreApp.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var brands = config.Map<IEnumerable<BrandDTO>, IEnumerable<BrandViewModel>>(brandsService.GetAll());
+            var brands = config.Map<IEnumerable<BrandDTO>, IEnumerable<BrandViewModel>>(brandService.GetAll());
             
             return View(brands);
         }
@@ -48,7 +48,7 @@ namespace StoreApp.Controllers
 
             BrandDTO brandDTO = config.Map<BrandViewModel, BrandDTO>(brand);
 
-            brandsService.Create(brandDTO);
+            brandService.Create(brandDTO);
 
             TempData["Message"] = "Brand created success!";
 
@@ -58,7 +58,7 @@ namespace StoreApp.Controllers
         [HttpGet]
         public ActionResult DetailsBrand(int id)
         {
-            BrandViewModel brand = config.Map<BrandDTO, BrandViewModel>(brandsService.Get(id));
+            BrandViewModel brand = config.Map<BrandDTO, BrandViewModel>(brandService.Get(id));
 
             if (brand == null)
             {
@@ -67,6 +67,36 @@ namespace StoreApp.Controllers
             }
 
             return View(brand);
+        }
+
+        [HttpGet]
+        public ActionResult EditBrand(int id)
+        {
+            BrandViewModel brand = config.Map<BrandDTO, BrandViewModel>(brandService.Get(id));
+
+            if (brand == null)
+            {
+                TempData["Message"] = "This brand isn't exist";
+                return RedirectToAction("Index");
+            }
+
+            return View(brand);
+        }
+
+        [HttpPost]
+        public ActionResult EditBrand(BrandViewModel brand)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Brand edited wrong!");
+                return View(brand);
+            }
+
+            brandService.Edit(config.Map<BrandViewModel, BrandDTO>(brand));
+
+            TempData["Message"] = "Brand edited success!";
+
+            return RedirectToAction("Index");
         }
     }
 }
