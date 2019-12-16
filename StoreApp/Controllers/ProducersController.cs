@@ -29,5 +29,29 @@ namespace StoreApp.Controllers
 
             return View(producers);
         }
+
+        [HttpGet]
+        public ActionResult CreateProducer()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult CreateProducer(ProducerViewModel producer)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Producer edit is wrong");
+                return View(producer);
+            }
+
+            ProducerDTO producerDTO = config.Map<ProducerViewModel, ProducerDTO>(producer);
+
+            producerService.Create(producerDTO);
+
+            TempData["Message"] = "Producer created success!";
+
+            return RedirectToAction("Index");
+        }
     }
 }
