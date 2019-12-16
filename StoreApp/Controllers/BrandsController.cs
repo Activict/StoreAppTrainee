@@ -26,7 +26,7 @@ namespace StoreApp.Controllers
         public ActionResult Index()
         {
             var brands = config.Map<IEnumerable<BrandDTO>, IEnumerable<BrandViewModel>>(brandService.GetAll());
-            
+
             return View(brands);
         }
 
@@ -95,6 +95,36 @@ namespace StoreApp.Controllers
             brandService.Edit(config.Map<BrandViewModel, BrandDTO>(brand));
 
             TempData["Message"] = "Brand edited success!";
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public ActionResult DeleteBrand(int id)
+        {
+            BrandViewModel brand = config.Map<BrandDTO, BrandViewModel>(brandService.Get(id));
+
+            if (brand == null)
+            {
+                TempData["Message"] = "This brand isn't exist";
+                return RedirectToAction("Index");
+            }
+
+            return View(brand);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteBrand(BrandViewModel brand)
+        {
+            if (brand == null)
+            {
+                TempData["Message"] = "This brand isn't exist";
+                return RedirectToAction("Index");
+            }
+
+            brandService.Delete(brand.Id);
+
+            TempData["Message"] = "Brand deleted success!";
 
             return RedirectToAction("Index");
         }
