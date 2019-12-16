@@ -53,5 +53,34 @@ namespace StoreApp.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public ActionResult EditProducer(int id)
+        {
+            ProducerViewModel producer = config.Map<ProducerDTO, ProducerViewModel>(producerService.Get(id));
+
+            if (producer == null)
+            {
+                RedirectToAction("Index");
+            }
+
+            return View(producer);
+        }
+
+        [HttpPost]
+        public ActionResult EditProducer(ProducerViewModel producer)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Producer edited wrong!");
+                return View(producer);
+            }
+
+            producerService.Edit(config.Map<ProducerViewModel, ProducerDTO>(producer));
+
+            TempData["Message"] = "Producer edited success!";
+
+            return RedirectToAction("Index");
+        }
     }
 }

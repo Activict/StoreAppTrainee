@@ -216,6 +216,7 @@
     <Content Include="Views\Category\DeleteCategory.cshtml" />
     <Content Include="Views\Producers\Index.cshtml" />
     <Content Include="Views\Producers\CreateProducer.cshtml" />
+    <Content Include="Views\Producers\EditProducer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
