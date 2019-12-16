@@ -16,13 +16,15 @@ namespace StoreApp.BLL.Services
 
         public BrandService(IUnitOfWork uof)
         {
-            config = new MapperConfiguration(cfg => cfg.CreateMap<Brand, BrandDTO>()).CreateMapper();
+            config = new MapperConfiguration(cfg => { cfg.CreateMap<Brand, BrandDTO>();
+                                                      cfg.CreateMap<BrandDTO, Brand>(); }).CreateMapper();
             DataBase = uof;
         }
 
         public BrandService()
         {
-            config = new MapperConfiguration(cfg => cfg.CreateMap<Brand, BrandDTO>()).CreateMapper();
+            config = new MapperConfiguration(cfg => { cfg.CreateMap<Brand, BrandDTO>();
+                                                      cfg.CreateMap<BrandDTO, Brand>(); }).CreateMapper();
             DataBase = new EFUnitOfWork("DefaultConnection");
         }
 

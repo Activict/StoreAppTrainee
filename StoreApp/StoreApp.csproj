@@ -149,6 +149,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BrandsController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
@@ -157,6 +158,7 @@
     </Compile>
     <Compile Include="Models\Account\UserLoginViewModel.cs" />
     <Compile Include="Models\Account\UserRegistrationViewModel.cs" />
+    <Compile Include="Models\Brands\BrandViewModel.cs" />
     <Compile Include="Models\Store\CreateProductViewModel.cs" />
     <Compile Include="Models\Store\EditProductViewModel.cs" />
     <Compile Include="Models\Store\ProductViewModel.cs" />
@@ -212,6 +214,11 @@
     <Content Include="Views\Category\EditCategory.cshtml" />
     <Content Include="Views\Category\DetailsCategory.cshtml" />
     <Content Include="Views\Category\DeleteCategory.cshtml" />
+    <Content Include="Views\Brands\Index.cshtml" />
+    <Content Include="Views\Brands\CreateBrand.cshtml" />
+    <Content Include="Views\Brands\DetailsBrand.cshtml" />
+    <Content Include="Views\Brands\EditBrand.cshtml" />
+    <Content Include="Views\Brands\DeleteBrand.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
