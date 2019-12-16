@@ -54,5 +54,19 @@ namespace StoreApp.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public ActionResult DetailsBrand(int id)
+        {
+            BrandViewModel brand = config.Map<BrandDTO, BrandViewModel>(brandsService.Get(id));
+
+            if (brand == null)
+            {
+                TempData["Message"] = "This brand isn't exist";
+                return RedirectToAction("Index");
+            }
+
+            return View(brand);
+        }
     }
 }
