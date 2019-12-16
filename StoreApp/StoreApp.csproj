@@ -217,6 +217,7 @@
     <Content Include="Views\Producers\Index.cshtml" />
     <Content Include="Views\Producers\CreateProducer.cshtml" />
     <Content Include="Views\Producers\EditProducer.cshtml" />
+    <Content Include="Views\Producers\DetailsProducer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -82,5 +82,19 @@ namespace StoreApp.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public ActionResult DetailsProducer(int id)
+        {
+            ProducerViewModel producer = config.Map<ProducerDTO, ProducerViewModel>(producerService.Get(id));
+
+            if (producer == null)
+            {
+                TempData["Message"] = "This producer isn't exist";
+                return RedirectToAction("Index");
+            }
+
+            return View(producer);
+        }
     }
 }
