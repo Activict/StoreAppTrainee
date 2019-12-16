@@ -1,21 +1,19 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
-using AutoMapper;
 using StoreApp.BLL.DTO;
 using StoreApp.BLL.Services;
 using StoreApp.Models.Store;
+using StoreApp.Util;
 
 namespace StoreApp.Controllers
 {
     public class StoreController : Controller
     {
         private ProductService productService;
-
         private CategoryService categoryService;
         private BrandService brandService;
         private ProducerService producerService;
-
-        private IMapper config;
+        private readonly WebMapper webMapper;
 
         public StoreController()
         {
@@ -23,31 +21,12 @@ namespace StoreApp.Controllers
             categoryService = new CategoryService();
             brandService = new BrandService();
             producerService = new ProducerService();
-
-            config = new MapperConfiguration(cfg => { cfg.CreateMap<CreateProductViewModel, ProductDTO>();
-                                                      cfg.CreateMap<ProductDTO, EditProductViewModel>();
-                                                      cfg.CreateMap<EditProductViewModel, ProductDTO>();
-                                                      cfg.CreateMap<ProductDTO, DetailsProductViewModel>();
-                                                    }).CreateMapper();
+            webMapper  = new WebMapper();
         }
 
         public ActionResult Index()
         {
-            var products = productService.GetAll()
-                .Select(p => new ProductViewModel()
-                {   
-                    Id = p.Id,
-                    Name = p.Name,
-                    Price = p.Price,
-                    Quantity = p.Quantity,
-                    Unit = p.Unit,
-                    Picture = p.Picture,
-                    Quality = p.Quality,
-                    Enable = p.Enable,
-                    Category = categoryService.Get(p.CategoryId)?.Name,
-                    Brand = brandService.Get(p.BrandId)?.Name,
-                    Producer = producerService.Get(p.ProducerId)?.Name
-                });
+            var products = productService.GetAll().Select(p => webMapper.Map(p));
 
             if (products == null)
             {
@@ -82,7 +61,7 @@ namespace StoreApp.Controllers
                 return View(product);
             }
 
-            ProductDTO productDTO = config.Map<CreateProductViewModel, ProductDTO>(product);
+            ProductDTO productDTO = webMapper.config.Map<CreateProductViewModel, ProductDTO>(product);
 
             productService.Create(productDTO);
 
@@ -94,7 +73,7 @@ namespace StoreApp.Controllers
         [HttpGet]
         public ActionResult EditProduct(int id)
         {
-            EditProductViewModel product = config.Map<ProductDTO, EditProductViewModel>(productService.Get(id));
+            EditProductViewModel product = webMapper.config.Map<ProductDTO, EditProductViewModel>(productService.Get(id));
 
             if (product == null)
             {
@@ -121,7 +100,7 @@ namespace StoreApp.Controllers
                 return View(product);
             }
             
-            productService.Edit(config.Map<EditProductViewModel, ProductDTO>(product));
+            productService.Edit(webMapper.config.Map<EditProductViewModel, ProductDTO>(product));
 
             TempData["Message"] = "Product have edited";
 
@@ -133,19 +112,7 @@ namespace StoreApp.Controllers
         {
             ProductDTO productDTO = productService.Get(id);
 
-            DetailsProductViewModel product = new DetailsProductViewModel() { 
-                Id = productDTO.Id,
-                Name = productDTO.Name,
-                Price = productDTO.Price,
-                Quantity = productDTO.Quantity,
-                Unit = productDTO.Unit,
-                Picture = productDTO.Picture,
-                Quality = productDTO.Quality,
-                Enable = productDTO.Enable,
-                Category = categoryService.Get(productDTO.CategoryId)?.Name,
-                Brand = brandService.Get(productDTO.BrandId)?.Name,
-                Producer = producerService.Get(productDTO.ProducerId)?.Name
-            };
+            ProductViewModel product = webMapper.Map(productDTO);
 
             return View(product);
         }
@@ -155,26 +122,13 @@ namespace StoreApp.Controllers
         {
             ProductDTO productDTO = productService.Get(id);
 
-            DetailsProductViewModel product = new DetailsProductViewModel()
-            {
-                Id = productDTO.Id,
-                Name = productDTO.Name,
-                Price = productDTO.Price,
-                Quantity = productDTO.Quantity,
-                Unit = productDTO.Unit,
-                Picture = productDTO.Picture,
-                Quality = productDTO.Quality,
-                Enable = productDTO.Enable,
-                Category = categoryService.Get(productDTO.CategoryId)?.Name,
-                Brand = brandService.Get(productDTO.BrandId)?.Name,
-                Producer = producerService.Get(productDTO.ProducerId)?.Name
-            };
+            ProductViewModel product = webMapper.Map(productDTO);
 
             return View(product);
         }
 
         [HttpPost]
-        public ActionResult DeleteProduct(DetailsProductViewModel product)
+        public ActionResult DeleteProduct(ProductViewModel product)
         {
             if (product == null)
             {
