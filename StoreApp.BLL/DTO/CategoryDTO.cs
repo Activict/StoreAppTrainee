@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace StoreApp.BLL.DTO
+﻿namespace StoreApp.BLL.DTO
 {
     public class CategoryDTO
     {

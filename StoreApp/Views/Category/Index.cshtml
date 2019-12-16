@@ -1,0 +1,41 @@
+﻿@model IEnumerable<StoreApp.Models.Categories.CategoryViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h3>Categories</h3>
+
+@if (TempData["Message"] != null)
+{
+    <div class="col-md-2 btn-success">@TempData["Message"]</div>
+}
+
+<br />
+
+<p>
+    @Html.ActionLink("Create category", "CreateCategory", null, new { @class = "btn btn-success" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "EditCategory", new { id = item.Id }) |
+                @Html.ActionLink("Details", "DetailsCategory", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "DeleteCategory", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
