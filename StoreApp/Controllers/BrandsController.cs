@@ -29,5 +29,30 @@ namespace StoreApp.Controllers
             
             return View(brands);
         }
+
+        [HttpGet]
+        public ActionResult CreateBrand()
+        {
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult CreateBrand(BrandViewModel brand)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Brand create is wrong!");
+                return View(brand);
+            }
+
+            BrandDTO brandDTO = config.Map<BrandViewModel, BrandDTO>(brand);
+
+            brandsService.Create(brandDTO);
+
+            TempData["Message"] = "Brand created success!";
+
+            return RedirectToAction("Index");
+        }
     }
 }

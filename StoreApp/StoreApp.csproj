@@ -215,6 +215,7 @@
     <Content Include="Views\Category\DetailsCategory.cshtml" />
     <Content Include="Views\Category\DeleteCategory.cshtml" />
     <Content Include="Views\Brands\Index.cshtml" />
+    <Content Include="Views\Brands\CreateBrand.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
