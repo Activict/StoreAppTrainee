@@ -159,6 +159,7 @@
     </Compile>
     <Compile Include="Models\Account\UserLoginViewModel.cs" />
     <Compile Include="Models\Account\UserRegistrationViewModel.cs" />
+    <Compile Include="Models\Filter\FilterProducts.cs" />
     <Compile Include="Models\Producers\ProducerViewModel.cs" />
     <Compile Include="Models\Brands\BrandViewModel.cs" />
     <Compile Include="Models\Store\CreateProductViewModel.cs" />
@@ -226,6 +227,7 @@
     <Content Include="Views\Producers\EditProducer.cshtml" />
     <Content Include="Views\Producers\DetailsProducer.cshtml" />
     <Content Include="Views\Producers\DeleteProducer.cshtml" />
+    <Content Include="Views\Store\_FilterMenuPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
