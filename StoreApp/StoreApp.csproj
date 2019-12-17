@@ -159,7 +159,7 @@
     </Compile>
     <Compile Include="Models\Account\UserLoginViewModel.cs" />
     <Compile Include="Models\Account\UserRegistrationViewModel.cs" />
-    <Compile Include="Models\Filter\FilterProducts.cs" />
+    <Compile Include="Models\Filter\FilterProductsViewModel.cs" />
     <Compile Include="Models\Producers\ProducerViewModel.cs" />
     <Compile Include="Models\Brands\BrandViewModel.cs" />
     <Compile Include="Models\Store\CreateProductViewModel.cs" />

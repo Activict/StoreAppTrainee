@@ -1,6 +1,12 @@
-﻿namespace StoreApp.Models.Filter
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace StoreApp.BLL.DTO
 {
-    public class FilterProducts
+    public class FilterProductsDTO
     {
         public string Name { get; set; }
         public int? PriceFrom { get; set; }

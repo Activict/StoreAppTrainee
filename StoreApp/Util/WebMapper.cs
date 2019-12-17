@@ -2,6 +2,7 @@
 using StoreApp.Models.Store;
 using AutoMapper;
 using StoreApp.BLL.Services;
+using StoreApp.Models.Filter;
 
 namespace StoreApp.Util
 {
@@ -24,6 +25,7 @@ namespace StoreApp.Util
                 cfg.CreateMap<ProductDTO, EditProductViewModel>();
                 cfg.CreateMap<EditProductViewModel, ProductDTO>();
                 cfg.CreateMap<ProductDTO, ProductViewModel>();
+                cfg.CreateMap<FilterProductsViewModel, FilterProductsDTO>();
             }).CreateMapper();
         }
 

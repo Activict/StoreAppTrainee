@@ -14,6 +14,7 @@ namespace StoreApp.Controllers
         private CategoryService categoryService;
         private BrandService brandService;
         private ProducerService producerService;
+        private FilterProductsService filterProductsService;
         private readonly WebMapper webMapper;
 
         public StoreController()
@@ -22,6 +23,7 @@ namespace StoreApp.Controllers
             categoryService = new CategoryService();
             brandService = new BrandService();
             producerService = new ProducerService();
+            filterProductsService = new FilterProductsService();
             webMapper  = new WebMapper();
         }
 
@@ -42,61 +44,22 @@ namespace StoreApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(FilterProducts filter)
+        public ActionResult Index(FilterProductsViewModel filter)
         {
-            var products = productService.GetAll().Select(p => webMapper.Map(p));
-
             TempData["Filter"] = filter;
 
             if (!ModelState.IsValid)
             {
+                var products = productService.GetAll().Select(p => webMapper.Map(p));
+
                 return View(products);
             }
-
-            if (filter.Name != null)
-            {
-                products = products.Where(p => p.Name.Contains(filter.Name));
-            }
-
-            if (filter.PriceFrom > 0)
-            {
-                products = products.Where(p => p.Price >= filter.PriceFrom);
-            }
-
-            if (filter.PriceTo > 0)
-            {
-                products = products.Where(p => p.Price < filter.PriceTo);
-            }
-
-            if (filter.Enable == true)
-            {
-                products = products.Where(p => p.Enable == true);
-            }
-
             
+            FilterProductsDTO filterDTO = webMapper.config.Map<FilterProductsViewModel, FilterProductsDTO>(filter);
+            
+            var productsFiltered = filterProductsService.GetProductsDTOFiltered(filterDTO).Select(p => webMapper.Map(p));
 
-            if (filter.CategoryId > 0)
-            {
-                string category = categoryService.Get(filter.CategoryId ?? 0).Name;
-
-                products = products.Where(p => p.Category.Equals(category));
-            }
-
-            if (filter.BrandId > 0)
-            {
-                string brand = brandService.Get(filter.BrandId ?? 0).Name;
-
-                products = products.Where(p => p.Brand.Equals(brand));
-            }
-
-            if (filter.ProducerId > 0)
-            {
-                string producer = producerService.Get(filter.ProducerId ?? 0).Name;
-
-                products = products.Where(p => p.Producer.Equals(producer));
-            }
-
-            return View(products);
+            return View(productsFiltered);
         }
 
         public ActionResult FilterMenuPartial()
