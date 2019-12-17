@@ -63,6 +63,18 @@ namespace StoreApp.BLL.Services
             return config.Map<IEnumerable<Category>, List<CategoryDTO>>(DataBase.Categories.GetAll());
         }
 
+        public int? CountProductsInCategory(int id)
+        {
+            int count = DataBase.Products.GetAll().Count(p => p.CategoryId.Equals(id));
+            
+            if (count == 0)
+            {
+                return null;
+            }
+
+            return count;
+        }
+
         public void Dispose()
         {
             DataBase.Dispose();

@@ -107,6 +107,8 @@ namespace StoreApp.Controllers
                 return RedirectToAction("Index");
             }
 
+            TempData["coutProducts"] = categoryService.CountProductsInCategory(id);
+
             return View(category);
         }
 
