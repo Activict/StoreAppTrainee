@@ -4,10 +4,10 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Brands</h2>
-
+<h3>Brands</h3>
+<br />
 <p>
-    @Html.ActionLink("Create new brand", "CreateBrand")
+    @Html.ActionLink("Create brand", "CreateBrand", null, new { @class = "btn btn-success" })
 </p>
 <table class="table">
     <tr>
@@ -29,5 +29,4 @@
         </td>
     </tr>
 }
-
 </table>
