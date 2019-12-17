@@ -5,6 +5,7 @@ using StoreApp.DAL.Entities;
 using StoreApp.DAL.Intefaces;
 using StoreApp.DAL.Repositories;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace StoreApp.BLL.Services
 {
@@ -62,6 +63,18 @@ namespace StoreApp.BLL.Services
         public IEnumerable<ProducerDTO> GetAll()
         {
             return config.Map<IEnumerable<Producer>, IEnumerable<ProducerDTO>>(DataBase.Producers.GetAll());
+        }
+
+        public int? CountProductsInCategory(int id)
+        {
+            var count = DataBase.Products.GetAll().Count(p => p.ProducerId.Equals(id));
+
+            if (count == 0)
+            {
+                return null;
+            }
+
+            return count;
         }
 
         public void Dispose()
