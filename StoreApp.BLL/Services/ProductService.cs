@@ -58,6 +58,20 @@ namespace StoreApp.BLL.Services
             return config.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(DataBase.Products.GetAll());
         }
 
+        public bool ValidateNewProduct(ProductDTO product)
+        {
+            var validate = DataBase.Products.Find(p => p.Name.Equals(product.Name) &&
+                                                       p.BrandId.Equals(product.BrandId) &&
+                                                       p.ProducerId.Equals(product.ProducerId));
+
+            foreach (var item in validate)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public void Dispose()
         {
             DataBase.Dispose();

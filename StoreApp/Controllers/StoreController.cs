@@ -21,7 +21,7 @@ namespace StoreApp.Controllers
             categoryService = new CategoryService();
             brandService = new BrandService();
             producerService = new ProducerService();
-            webMapper  = new WebMapper();
+            webMapper = new WebMapper();
         }
 
         public ActionResult Index()
@@ -52,16 +52,26 @@ namespace StoreApp.Controllers
         [HttpPost]
         public ActionResult CreateProduct(CreateProductViewModel product)
         {
-            if (!ModelState.IsValid)
+            ProductDTO productDTO = webMapper.config.Map<CreateProductViewModel, ProductDTO>(product);
+
+            bool validate = productService.ValidateNewProduct(productDTO);
+
+            if (!ModelState.IsValid || !validate)
             {
-                ModelState.AddModelError("", "New product doesn't create");
+                if (!validate)
+                {
+                    ModelState.AddModelError("", "Such product already exist");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "New product doesn't create");
+                }
+
                 TempData["Categories"] = new SelectList(categoryService.GetAll(), dataValueField: "Id", dataTextField: "Name");
                 TempData["Brands"] = new SelectList(brandService.GetAll(), dataValueField: "Id", dataTextField: "Name");
                 TempData["Producers"] = new SelectList(producerService.GetAll(), dataValueField: "Id", dataTextField: "Name");
                 return View(product);
             }
-
-            ProductDTO productDTO = webMapper.config.Map<CreateProductViewModel, ProductDTO>(product);
 
             productService.Create(productDTO);
 
