@@ -81,26 +81,31 @@ namespace StoreApp.BLL.Services
 
         public bool ValidateEditProduct(ProductDTO productDTO)
         {
-            Product product = DataBase.Products.Get(productDTO.Id);
+            var products = DataBase.Products.GetAll();
 
-            if (product.Name == productDTO.Name &&
+            var product = products.FirstOrDefault(p => p.Equals(productDTO.Id));
+
+            if (product != null &&
+                product.Name == productDTO.Name &&
                 product.BrandId == productDTO.BrandId &&
                 product.ProducerId == productDTO.ProducerId)
+            {
+                products.ToList().ForEach(p => DataBase.Products.Detach(p));
+                return true;
+            }
+
+            product = products.FirstOrDefault(p => p.Name.Equals(productDTO.Name) &&
+                                                   p.BrandId.Equals(productDTO.BrandId) &&
+                                                   p.ProducerId.Equals(productDTO.ProducerId));
+
+            products.ToList().ForEach(p => DataBase.Products.Detach(p));
+
+            if (product == null)
             {
                 return true;
             }
 
-            var validate = DataBase.Products.GetAll()
-                                            .Any(p => p.Name.Equals(productDTO.Name) &&
-                                                      p.BrandId.Equals(productDTO.BrandId) &&
-                                                      p.ProducerId.Equals(productDTO.ProducerId));
-
-            if (validate)
-            {
-                return false;
-            }
-
-            return true;
+            return false;
         }
 
         public void Dispose()
