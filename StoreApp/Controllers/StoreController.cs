@@ -62,11 +62,10 @@ namespace StoreApp.Controllers
             return View(productsFiltered);
         }
 
+        [HttpGet]
         public ActionResult FilterMenuPartial()
         {
-            TempData["Categories"] = new SelectList(categoryService.GetAll(), dataValueField: "Id", dataTextField: "Name");
-            TempData["Brands"] = new SelectList(brandService.GetAll(), dataValueField: "Id", dataTextField: "Name");
-            TempData["Producers"] = new SelectList(producerService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+            ViewBag.References = GetReferences();
 
             return PartialView("_FilterMenuPartial", TempData["Filter"]);
         }
@@ -74,9 +73,7 @@ namespace StoreApp.Controllers
         [HttpGet]
         public ActionResult CreateProduct()
         {
-            TempData["Categories"] = new SelectList(categoryService.GetAll(), dataValueField: "Id", dataTextField: "Name");
-            TempData["Brands"] = new SelectList(brandService.GetAll(), dataValueField: "Id", dataTextField: "Name");
-            TempData["Producers"] = new SelectList(producerService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+            ViewBag.References = GetReferences();
 
             return View();
         }
@@ -87,9 +84,7 @@ namespace StoreApp.Controllers
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "New product doesn't create");
-                TempData["Categories"] = new SelectList(categoryService.GetAll(), dataValueField: "Id", dataTextField: "Name");
-                TempData["Brands"] = new SelectList(brandService.GetAll(), dataValueField: "Id", dataTextField: "Name");
-                TempData["Producers"] = new SelectList(producerService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+                ViewBag.References = GetReferences(); 
                 return View(product);
             }
 
@@ -112,9 +107,7 @@ namespace StoreApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            TempData["Categories"] = new SelectList(categoryService.GetAll(), dataValueField: "Id", dataTextField: "Name");
-            TempData["Brands"] = new SelectList(brandService.GetAll(), dataValueField: "Id", dataTextField: "Name");
-            TempData["Producers"] = new SelectList(producerService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+            ViewBag.References = GetReferences();
 
             return View(product);
         }
@@ -122,9 +115,7 @@ namespace StoreApp.Controllers
         [HttpPost]
         public ActionResult EditProduct(EditProductViewModel product)
         {
-            TempData["Categories"] = new SelectList(categoryService.GetAll(), dataValueField: "Id", dataTextField: "Name");
-            TempData["Brands"] = new SelectList(brandService.GetAll(), dataValueField: "Id", dataTextField: "Name");
-            TempData["Producers"] = new SelectList(producerService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+            ViewBag.References = GetReferences();
 
             if (!ModelState.IsValid)
             {
@@ -173,5 +164,14 @@ namespace StoreApp.Controllers
             return RedirectToAction("Index");
         }
 
+        private ReferenceProducts GetReferences()
+        {
+            return new ReferenceProducts()
+            {
+                Categories = new SelectList(categoryService.GetAll(), dataValueField: "Id", dataTextField: "Name"),
+                Brands = new SelectList(brandService.GetAll(), dataValueField: "Id", dataTextField: "Name"),
+                Producers = new SelectList(producerService.GetAll(), dataValueField: "Id", dataTextField: "Name")
+            };
+        }
     }
 }

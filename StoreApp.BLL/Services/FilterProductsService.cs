@@ -3,6 +3,7 @@ using StoreApp.BLL.DTO;
 using StoreApp.DAL.Entities;
 using StoreApp.DAL.Intefaces;
 using StoreApp.DAL.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,7 +12,6 @@ namespace StoreApp.BLL.Services
     public class FilterProductsService
     {
         private IUnitOfWork DataBase { get; set; }
-
         private IMapper config;
 
         public FilterProductsService()
@@ -29,7 +29,7 @@ namespace StoreApp.BLL.Services
         {
             var products = config.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(DataBase.Products.GetAll());
 
-            if (filter.Name != null)
+            if (!String.IsNullOrEmpty(filter.Name))
             {
                 products = products.Where(p => p.Name.Contains(filter.Name));
             }
@@ -44,9 +44,9 @@ namespace StoreApp.BLL.Services
                 products = products.Where(p => p.Price < filter.PriceTo);
             }
 
-            if (filter.Enable == true)
+            if (filter.Enable)
             {
-                products = products.Where(p => p.Enable == true);
+                products = products.Where(p => p.Enable);
             }
 
             if (filter.CategoryId > 0)

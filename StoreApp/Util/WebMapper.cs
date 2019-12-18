@@ -20,18 +20,20 @@ namespace StoreApp.Util
             categoryService = new CategoryService();
             brandService = new BrandService();
             producerService = new ProducerService();
-            config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<CreateProductViewModel, ProductDTO>();
-                cfg.CreateMap<ProductDTO, EditProductViewModel>();
-                cfg.CreateMap<EditProductViewModel, ProductDTO>();
-                cfg.CreateMap<ProductDTO, ProductViewModel>();
-                cfg.CreateMap<FilterProductsViewModel, FilterProductsDTO>();
-            }).CreateMapper();
+            config = new MapperConfiguration(
+                cfg =>
+                {
+                    cfg.CreateMap<CreateProductViewModel, ProductDTO>();
+                    cfg.CreateMap<ProductDTO, EditProductViewModel>();
+                    cfg.CreateMap<EditProductViewModel, ProductDTO>();
+                    cfg.CreateMap<ProductDTO, ProductViewModel>();
+                    cfg.CreateMap<FilterProductsViewModel, FilterProductsDTO>();
+                }).CreateMapper();
         }
 
         public ProductViewModel Map(ProductDTO productDTO)
         {
-            return  new ProductViewModel()
+            return new ProductViewModel()
             {
                 Id = productDTO.Id,
                 Name = productDTO.Name,

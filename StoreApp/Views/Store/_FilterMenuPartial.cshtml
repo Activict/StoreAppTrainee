@@ -36,19 +36,19 @@
                 Category:
             </div>
             <div class="form-group">
-                @Html.DropDownListFor(m => m.CategoryId, TempData["Categories"] as SelectList, "", new { @class = "form-control" })
+                @Html.DropDownListFor(m => m.CategoryId, ViewBag.References.Categories as SelectList, "", new { @class = "form-control" })
             </div>
             <div>
                 Brand:
             </div>
             <div class="form-group">
-                @Html.DropDownListFor(m => m.BrandId, TempData["Brands"] as SelectList, "", new { @class = "form-control" })
+                @Html.DropDownListFor(m => m.BrandId, ViewBag.References.Brands as SelectList, "", new { @class = "form-control" })
             </div>
             <div>
                 Producer:
             </div>
             <div class="form-group">
-                @Html.DropDownListFor(m => m.ProducerId, TempData["Producers"] as SelectList, "", new { @class = "form-control" })
+                @Html.DropDownListFor(m => m.ProducerId, ViewBag.References.Producers as SelectList, "", new { @class = "form-control" })
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
