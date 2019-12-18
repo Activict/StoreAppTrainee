@@ -62,7 +62,6 @@ namespace StoreApp.Controllers
             return View(productsFiltered);
         }
 
-        [HttpGet]
         public ActionResult FilterMenuPartial()
         {
             ViewBag.References = GetReferences();
