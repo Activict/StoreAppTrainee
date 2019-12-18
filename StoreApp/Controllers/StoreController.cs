@@ -104,13 +104,25 @@ namespace StoreApp.Controllers
             TempData["Brands"] = new SelectList(brandService.GetAll(), dataValueField: "Id", dataTextField: "Name");
             TempData["Producers"] = new SelectList(producerService.GetAll(), dataValueField: "Id", dataTextField: "Name");
 
-            if (!ModelState.IsValid)
+            ProductDTO productDTO = webMapper.config.Map<EditProductViewModel, ProductDTO>(product);
+
+            bool validate = productService.ValidateEditProduct(productDTO);
+
+            if (!ModelState.IsValid || !validate)
             {
-                ModelState.AddModelError("", "Product haven't edited");
+                if (!validate)
+                {
+                    ModelState.AddModelError("", "Such product already exist");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Product haven't edited");
+                }
+                
                 return View(product);
             }
             
-            productService.Edit(webMapper.config.Map<EditProductViewModel, ProductDTO>(product));
+            productService.Edit(productDTO);
 
             TempData["Message"] = "Product have edited";
 

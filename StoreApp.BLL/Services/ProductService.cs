@@ -5,6 +5,7 @@ using StoreApp.DAL.Entities;
 using StoreApp.DAL.Intefaces;
 using StoreApp.DAL.Repositories;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace StoreApp.BLL.Services
 {
@@ -16,15 +17,21 @@ namespace StoreApp.BLL.Services
 
         public ProductService(IUnitOfWork uof)
         {
-            config = new MapperConfiguration(cfg => { cfg.CreateMap<Product, ProductDTO>();
-                                                      cfg.CreateMap<ProductDTO, Product>(); }).CreateMapper();
+            config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Product, ProductDTO>();
+                cfg.CreateMap<ProductDTO, Product>();
+            }).CreateMapper();
             DataBase = uof;
         }
 
         public ProductService()
         {
-            config = new MapperConfiguration(cfg => { cfg.CreateMap<Product, ProductDTO>();
-                                                      cfg.CreateMap<ProductDTO, Product>(); }).CreateMapper();
+            config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Product, ProductDTO>();
+                cfg.CreateMap<ProductDTO, Product>();
+            }).CreateMapper();
             DataBase = new EFUnitOfWork("DefaultConnection");
         }
 
@@ -65,6 +72,30 @@ namespace StoreApp.BLL.Services
                                                        p.ProducerId.Equals(product.ProducerId));
 
             foreach (var item in validate)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool ValidateEditProduct(ProductDTO productDTO)
+        {
+            Product product = DataBase.Products.Get(productDTO.Id);
+
+            if (product.Name == productDTO.Name &&
+                product.BrandId == productDTO.BrandId &&
+                product.ProducerId == productDTO.ProducerId)
+            {
+                return true;
+            }
+
+            var validate = DataBase.Products.GetAll()
+                                            .Any(p => p.Name.Equals(productDTO.Name) &&
+                                                      p.BrandId.Equals(productDTO.BrandId) &&
+                                                      p.ProducerId.Equals(productDTO.ProducerId));
+
+            if (validate)
             {
                 return false;
             }
