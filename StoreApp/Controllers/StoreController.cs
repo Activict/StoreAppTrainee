@@ -73,6 +73,11 @@ namespace StoreApp.Controllers
                 return View(product);
             }
 
+            if (productDTO.Price.Equals(0))
+            {
+                productDTO.Enable = false;
+            }
+
             productService.Create(productDTO);
 
             TempData["Message"] = "New product created seccessful!";
@@ -121,7 +126,12 @@ namespace StoreApp.Controllers
                 
                 return View(product);
             }
-            
+
+            if (productDTO.Price.Equals(0))
+            {
+                productDTO.Enable = false;
+            }
+
             productService.Edit(productDTO);
 
             TempData["Message"] = "Product have edited";
