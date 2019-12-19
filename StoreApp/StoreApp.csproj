@@ -233,6 +233,7 @@
     <Content Include="Views\Store\_FilterMenuPartial.cshtml" />
     <Content Include="Views\Units\CreateUnit.cshtml" />
     <Content Include="Views\Units\Index.cshtml" />
+    <Content Include="Views\Units\EditUnit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

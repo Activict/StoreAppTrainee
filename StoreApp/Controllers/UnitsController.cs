@@ -55,6 +55,33 @@ namespace StoreApp.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public ActionResult EditUnit(int id)
+        {
+            UnitViewModel unit = config.Map<UnitDTO, UnitViewModel>(unitService.Get(id));
 
+            if (unit == null)
+            {
+                RedirectToAction("Index");
+            }
+
+            return View(unit);
+        }
+
+        [HttpPost]
+        public ActionResult EditUnit(UnitViewModel unit)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Unit edited wrong!");
+                return View(unit);
+            }
+
+            unitService.Edit(config.Map<UnitViewModel, UnitDTO>(unit));
+
+            TempData["Message"] = "Unit edited success";
+
+            return RedirectToAction("Index");
+        }
     }
 }
