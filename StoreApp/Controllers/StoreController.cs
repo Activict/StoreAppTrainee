@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using StoreApp.BLL.DTO;
 using StoreApp.BLL.Services;
+using StoreApp.Models.Filter;
 using StoreApp.Models.Store;
 using StoreApp.Util;
 
@@ -13,6 +14,7 @@ namespace StoreApp.Controllers
         private CategoryService categoryService;
         private BrandService brandService;
         private ProducerService producerService;
+        private FilterProductsService filterProductsService;
         private readonly WebMapper webMapper;
 
         public StoreController()
@@ -21,13 +23,15 @@ namespace StoreApp.Controllers
             categoryService = new CategoryService();
             brandService = new BrandService();
             producerService = new ProducerService();
-            webMapper = new WebMapper();
+            filterProductsService = new FilterProductsService();
+            webMapper  = new WebMapper();
         }
 
+        [HttpGet]
         public ActionResult Index()
         {
             var products = productService.GetAll().Select(p => webMapper.Map(p));
-
+            
             if (products == null)
             {
                 ViewBag.Message = "No products";
@@ -39,12 +43,36 @@ namespace StoreApp.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult Index(FilterProductsViewModel filter)
+        {
+            TempData["Filter"] = filter;
+
+            if (!ModelState.IsValid)
+            {
+                var products = productService.GetAll().Select(p => webMapper.Map(p));
+
+                return View(products);
+            }
+            
+            FilterProductsDTO filterDTO = webMapper.config.Map<FilterProductsViewModel, FilterProductsDTO>(filter);
+            
+            var productsFiltered = filterProductsService.GetProductsDTOFiltered(filterDTO).Select(p => webMapper.Map(p));
+
+            return View(productsFiltered);
+        }
+
+        public ActionResult FilterMenuPartial()
+        {
+            ViewBag.References = GetReferences();
+
+            return PartialView("_FilterMenuPartial", TempData["Filter"]);
+        }
+
         [HttpGet]
         public ActionResult CreateProduct()
         {
-            TempData["Categories"] = new SelectList(categoryService.GetAll(), dataValueField: "Id", dataTextField: "Name");
-            TempData["Brands"] = new SelectList(brandService.GetAll(), dataValueField: "Id", dataTextField: "Name");
-            TempData["Producers"] = new SelectList(producerService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+            ViewBag.References = GetReferences();
 
             return View();
         }
@@ -95,9 +123,7 @@ namespace StoreApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            TempData["Categories"] = new SelectList(categoryService.GetAll(), dataValueField: "Id", dataTextField: "Name");
-            TempData["Brands"] = new SelectList(brandService.GetAll(), dataValueField: "Id", dataTextField: "Name");
-            TempData["Producers"] = new SelectList(producerService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+            ViewBag.References = GetReferences();
 
             return View(product);
         }
@@ -105,9 +131,7 @@ namespace StoreApp.Controllers
         [HttpPost]
         public ActionResult EditProduct(EditProductViewModel product)
         {
-            TempData["Categories"] = new SelectList(categoryService.GetAll(), dataValueField: "Id", dataTextField: "Name");
-            TempData["Brands"] = new SelectList(brandService.GetAll(), dataValueField: "Id", dataTextField: "Name");
-            TempData["Producers"] = new SelectList(producerService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+            ViewBag.References = GetReferences();
 
             ProductDTO productDTO = webMapper.config.Map<EditProductViewModel, ProductDTO>(product);
 
@@ -173,5 +197,14 @@ namespace StoreApp.Controllers
             return RedirectToAction("Index");
         }
 
+        private ReferenceProducts GetReferences()
+        {
+            return new ReferenceProducts()
+            {
+                Categories = new SelectList(categoryService.GetAll(), dataValueField: "Id", dataTextField: "Name"),
+                Brands = new SelectList(brandService.GetAll(), dataValueField: "Id", dataTextField: "Name"),
+                Producers = new SelectList(producerService.GetAll(), dataValueField: "Id", dataTextField: "Name")
+            };
+        }
     }
 }
