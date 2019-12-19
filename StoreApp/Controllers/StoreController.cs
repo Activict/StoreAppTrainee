@@ -80,14 +80,31 @@ namespace StoreApp.Controllers
         [HttpPost]
         public ActionResult CreateProduct(CreateProductViewModel product)
         {
-            if (!ModelState.IsValid)
+            ProductDTO productDTO = webMapper.config.Map<CreateProductViewModel, ProductDTO>(product);
+
+            bool validate = productService.ValidateNewProduct(productDTO);
+
+            if (!ModelState.IsValid || !validate)
             {
-                ModelState.AddModelError("", "New product doesn't create");
-                ViewBag.References = GetReferences(); 
+                if (!validate)
+                {
+                    ModelState.AddModelError("", "Such product already exist");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "New product doesn't create");
+                }
+
+                TempData["Categories"] = new SelectList(categoryService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+                TempData["Brands"] = new SelectList(brandService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+                TempData["Producers"] = new SelectList(producerService.GetAll(), dataValueField: "Id", dataTextField: "Name");
                 return View(product);
             }
 
-            ProductDTO productDTO = webMapper.config.Map<CreateProductViewModel, ProductDTO>(product);
+            if (productDTO.Quantity.Equals(0))
+            {
+                productDTO.Enable = false;
+            }
 
             productService.Create(productDTO);
 
@@ -116,13 +133,30 @@ namespace StoreApp.Controllers
         {
             ViewBag.References = GetReferences();
 
-            if (!ModelState.IsValid)
+            ProductDTO productDTO = webMapper.config.Map<EditProductViewModel, ProductDTO>(product);
+
+            bool validate = productService.ValidateEditProduct(productDTO);
+
+            if (!ModelState.IsValid || !validate)
             {
-                ModelState.AddModelError("", "Product haven't edited");
+                if (!validate)
+                {
+                    ModelState.AddModelError("", "Such product already exist");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Product haven't edited");
+                }
+                
                 return View(product);
             }
-            
-            productService.Edit(webMapper.config.Map<EditProductViewModel, ProductDTO>(product));
+
+            if (productDTO.Quantity.Equals(0))
+            {
+                productDTO.Enable = false;
+            }
+
+            productService.Edit(productDTO);
 
             TempData["Message"] = "Product have edited";
 

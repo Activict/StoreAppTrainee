@@ -110,6 +110,8 @@ namespace StoreApp.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.CountProducts = brandService.GetCountProductsByBrandId(id);
+
             return View(brand);
         }
 

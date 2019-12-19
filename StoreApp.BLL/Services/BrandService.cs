@@ -5,6 +5,7 @@ using StoreApp.DAL.Entities;
 using StoreApp.DAL.Intefaces;
 using StoreApp.DAL.Repositories;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace StoreApp.BLL.Services
 {
@@ -16,15 +17,21 @@ namespace StoreApp.BLL.Services
 
         public BrandService(IUnitOfWork uof)
         {
-            config = new MapperConfiguration(cfg => { cfg.CreateMap<Brand, BrandDTO>();
-                                                      cfg.CreateMap<BrandDTO, Brand>(); }).CreateMapper();
+            config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Brand, BrandDTO>();
+                cfg.CreateMap<BrandDTO, Brand>();
+            }).CreateMapper();
             DataBase = uof;
         }
 
         public BrandService()
         {
-            config = new MapperConfiguration(cfg => { cfg.CreateMap<Brand, BrandDTO>();
-                                                      cfg.CreateMap<BrandDTO, Brand>(); }).CreateMapper();
+            config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Brand, BrandDTO>();
+                cfg.CreateMap<BrandDTO, Brand>();
+            }).CreateMapper();
             DataBase = new EFUnitOfWork("DefaultConnection");
         }
 
@@ -56,6 +63,11 @@ namespace StoreApp.BLL.Services
         public IEnumerable<BrandDTO> GetAll()
         {
             return config.Map<IEnumerable<Brand>, List<BrandDTO>>(DataBase.Brands.GetAll());
+        }
+
+        public int GetCountProductsByBrandId(int id)
+        {
+            return DataBase.Products.GetAll().Count(p => p.BrandId.Equals(id));
         }
 
         public void Dispose()

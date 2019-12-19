@@ -17,15 +17,21 @@ namespace StoreApp.BLL.Services
 
         public CategoryService(IUnitOfWork uow)
         {
-            config = new MapperConfiguration(cfg => { cfg.CreateMap<Category, CategoryDTO>();
-                                                      cfg.CreateMap<CategoryDTO, Category>(); }).CreateMapper();
+            config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Category, CategoryDTO>();
+                cfg.CreateMap<CategoryDTO, Category>();
+            }).CreateMapper();
             DataBase = uow;
         }
 
         public CategoryService()
         {
-            config = new MapperConfiguration(cfg => { cfg.CreateMap<Category, CategoryDTO>();
-                                                      cfg.CreateMap<CategoryDTO, Category>(); }).CreateMapper();
+            config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Category, CategoryDTO>();
+                cfg.CreateMap<CategoryDTO, Category>();
+            }).CreateMapper();
             DataBase = new EFUnitOfWork("DefaultConnection");
         }
 
@@ -61,6 +67,11 @@ namespace StoreApp.BLL.Services
         public IEnumerable<CategoryDTO> GetAll()
         {
             return config.Map<IEnumerable<Category>, List<CategoryDTO>>(DataBase.Categories.GetAll());
+        }
+
+        public int GetCountProductsByCategoryId(int id)
+        {
+            return DataBase.Products.GetAll().Count(p => p.CategoryId.Equals(id));
         }
 
         public void Dispose()

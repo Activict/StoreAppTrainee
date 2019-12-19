@@ -5,6 +5,7 @@ using StoreApp.DAL.Entities;
 using StoreApp.DAL.Intefaces;
 using StoreApp.DAL.Repositories;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace StoreApp.BLL.Services
 {
@@ -21,6 +22,7 @@ namespace StoreApp.BLL.Services
                 cfg.CreateMap<Producer, ProducerDTO>();
                 cfg.CreateMap<ProducerDTO, Producer>();
             }).CreateMapper();
+
             DataBase = uof;
         }
 
@@ -31,6 +33,7 @@ namespace StoreApp.BLL.Services
                 cfg.CreateMap<Producer, ProducerDTO>();
                 cfg.CreateMap<ProducerDTO, Producer>();
             }).CreateMapper();
+
             DataBase = new EFUnitOfWork("DefaultConnection");
         }
 
@@ -62,6 +65,11 @@ namespace StoreApp.BLL.Services
         public IEnumerable<ProducerDTO> GetAll()
         {
             return config.Map<IEnumerable<Producer>, IEnumerable<ProducerDTO>>(DataBase.Producers.GetAll());
+        }
+
+        public int GetCountProductsByProducerId(int id)
+        {
+            return DataBase.Products.GetAll().Count(p => p.ProducerId.Equals(id));
         }
 
         public void Dispose()
