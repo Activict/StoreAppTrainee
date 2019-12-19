@@ -19,7 +19,7 @@
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
-        @if (TempData["countProducts"] == null)
+        @if (ViewBag.CountProducts == 0)
         {
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
@@ -31,7 +31,7 @@
         {
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10 btn-danger">
-                    If you want delete @Model.Name, you must delete @TempData["countProducts"] product(s)
+                    If you want to delete @Model.Name, you must delete @ViewBag.CountProducts product(s)
                 </div>
             </div>
         }

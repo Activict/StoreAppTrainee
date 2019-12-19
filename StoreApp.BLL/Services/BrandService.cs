@@ -17,15 +17,21 @@ namespace StoreApp.BLL.Services
 
         public BrandService(IUnitOfWork uof)
         {
-            config = new MapperConfiguration(cfg => { cfg.CreateMap<Brand, BrandDTO>();
-                                                      cfg.CreateMap<BrandDTO, Brand>(); }).CreateMapper();
+            config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Brand, BrandDTO>();
+                cfg.CreateMap<BrandDTO, Brand>();
+            }).CreateMapper();
             DataBase = uof;
         }
 
         public BrandService()
         {
-            config = new MapperConfiguration(cfg => { cfg.CreateMap<Brand, BrandDTO>();
-                                                      cfg.CreateMap<BrandDTO, Brand>(); }).CreateMapper();
+            config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Brand, BrandDTO>();
+                cfg.CreateMap<BrandDTO, Brand>();
+            }).CreateMapper();
             DataBase = new EFUnitOfWork("DefaultConnection");
         }
 
@@ -59,16 +65,9 @@ namespace StoreApp.BLL.Services
             return config.Map<IEnumerable<Brand>, List<BrandDTO>>(DataBase.Brands.GetAll());
         }
 
-        public int? CountProductsInCategory(int id)
+        public int GetCountProductsByBrandId(int id)
         {
-            var count = DataBase.Products.GetAll().Count(p => p.BrandId.Equals(id));
-
-            if (count == 0)
-            {
-                return null;
-            }
-
-            return count;
+            return DataBase.Products.GetAll().Count(p => p.BrandId.Equals(id));
         }
 
         public void Dispose()

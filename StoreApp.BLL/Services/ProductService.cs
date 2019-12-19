@@ -67,45 +67,26 @@ namespace StoreApp.BLL.Services
 
         public bool ValidateNewProduct(ProductDTO product)
         {
-            var validate = DataBase.Products.Find(p => p.Name.Equals(product.Name) &&
+            return !DataBase.Products.Find(p => p.Name.Equals(product.Name) &&
                                                        p.BrandId.Equals(product.BrandId) &&
-                                                       p.ProducerId.Equals(product.ProducerId));
-
-            foreach (var item in validate)
-            {
-                return false;
-            }
-
-            return true;
+                                                       p.ProducerId.Equals(product.ProducerId)).Any();
         }
 
         public bool ValidateEditProduct(ProductDTO productDTO)
         {
             var products = DataBase.Products.GetAll();
 
-            var product = products.FirstOrDefault(p => p.Equals(productDTO.Id));
-
-            if (product != null &&
-                product.Name == productDTO.Name &&
-                product.BrandId == productDTO.BrandId &&
-                product.ProducerId == productDTO.ProducerId)
-            {
-                products.ToList().ForEach(p => DataBase.Products.Detach(p));
-                return true;
-            }
-
-            product = products.FirstOrDefault(p => p.Name.Equals(productDTO.Name) &&
-                                                   p.BrandId.Equals(productDTO.BrandId) &&
-                                                   p.ProducerId.Equals(productDTO.ProducerId));
-
             products.ToList().ForEach(p => DataBase.Products.Detach(p));
 
-            if (product == null)
-            {
+            if (products.Any(p => p.Id.Equals(productDTO.Id) && 
+                                  p.Name.Equals(productDTO.Name) &&
+                                  p.BrandId .Equals(productDTO.BrandId) &&
+                                  p.ProducerId.Equals(productDTO.ProducerId)))
                 return true;
-            }
 
-            return false;
+            return !products.Any(p => p.Name.Equals(productDTO.Name) &&
+                                      p.BrandId.Equals(productDTO.BrandId) &&
+                                      p.ProducerId.Equals(productDTO.ProducerId));
         }
 
         public void Dispose()

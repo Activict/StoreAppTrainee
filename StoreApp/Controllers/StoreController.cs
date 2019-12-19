@@ -73,7 +73,7 @@ namespace StoreApp.Controllers
                 return View(product);
             }
 
-            if (productDTO.Price.Equals(0))
+            if (productDTO.Quantity.Equals(0))
             {
                 productDTO.Enable = false;
             }
@@ -127,7 +127,7 @@ namespace StoreApp.Controllers
                 return View(product);
             }
 
-            if (productDTO.Price.Equals(0))
+            if (productDTO.Quantity.Equals(0))
             {
                 productDTO.Enable = false;
             }

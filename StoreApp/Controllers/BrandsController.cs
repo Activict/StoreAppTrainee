@@ -110,7 +110,7 @@ namespace StoreApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            TempData["countProducts"] = brandService.CountProductsInCategory(id);
+            ViewBag.CountProducts = brandService.GetCountProductsByBrandId(id);
 
             return View(brand);
         }

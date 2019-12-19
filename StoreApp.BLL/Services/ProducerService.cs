@@ -22,6 +22,7 @@ namespace StoreApp.BLL.Services
                 cfg.CreateMap<Producer, ProducerDTO>();
                 cfg.CreateMap<ProducerDTO, Producer>();
             }).CreateMapper();
+
             DataBase = uof;
         }
 
@@ -32,6 +33,7 @@ namespace StoreApp.BLL.Services
                 cfg.CreateMap<Producer, ProducerDTO>();
                 cfg.CreateMap<ProducerDTO, Producer>();
             }).CreateMapper();
+
             DataBase = new EFUnitOfWork("DefaultConnection");
         }
 
@@ -65,16 +67,9 @@ namespace StoreApp.BLL.Services
             return config.Map<IEnumerable<Producer>, IEnumerable<ProducerDTO>>(DataBase.Producers.GetAll());
         }
 
-        public int? CountProductsInCategory(int id)
+        public int GetCountProductsByProducerId(int id)
         {
-            var count = DataBase.Products.GetAll().Count(p => p.ProducerId.Equals(id));
-
-            if (count == 0)
-            {
-                return null;
-            }
-
-            return count;
+            return DataBase.Products.GetAll().Count(p => p.ProducerId.Equals(id));
         }
 
         public void Dispose()

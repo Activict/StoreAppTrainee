@@ -108,7 +108,7 @@ namespace StoreApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            TempData["countProducts"] = producerService.CountProductsInCategory(id);
+             ViewBag.CountProducts = producerService.GetCountProductsByProducerId(id);
 
             return View(producer);
         }
