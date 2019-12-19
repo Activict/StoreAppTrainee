@@ -78,11 +78,15 @@ namespace StoreApp.BLL.Services
 
             products.ToList().ForEach(p => DataBase.Products.Detach(p));
 
-            if (products.Any(p => p.Id.Equals(productDTO.Id) && 
-                                  p.Name.Equals(productDTO.Name) &&
-                                  p.BrandId .Equals(productDTO.BrandId) &&
-                                  p.ProducerId.Equals(productDTO.ProducerId)))
+            bool existProduct = products.Any(p => p.Id.Equals(productDTO.Id) &&
+                                                  p.Name.Equals(productDTO.Name) &&
+                                                  p.BrandId.Equals(productDTO.BrandId) &&
+                                                  p.ProducerId.Equals(productDTO.ProducerId));
+
+            if (existProduct)
+            {
                 return true;
+            }
 
             return !products.Any(p => p.Name.Equals(productDTO.Name) &&
                                       p.BrandId.Equals(productDTO.BrandId) &&
