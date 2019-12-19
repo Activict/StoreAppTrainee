@@ -50,7 +50,7 @@ namespace StoreApp.Controllers
 
             unitService.Create(unitDTO);
 
-            TempData["Meaasage"] = "Unit created success";
+            TempData["Message"] = "Unit created success";
 
             return RedirectToAction("Index");
         }
