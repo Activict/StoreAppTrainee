@@ -83,5 +83,49 @@ namespace StoreApp.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public ActionResult DetailsUnit(int id)
+        {
+            UnitViewModel unit = config.Map<UnitDTO, UnitViewModel>(unitService.Get(id));
+
+            if (unit == null)
+            {
+                TempData["Message"] = "This unit isn't exist";
+                return RedirectToAction("Index");
+            }
+
+            return View(unit);
+        }
+
+        [HttpGet]
+        public ActionResult DeleteUnit(int id)
+        {
+            UnitViewModel unit = config.Map<UnitDTO, UnitViewModel>(unitService.Get(id));
+
+            if (unit == null)
+            {
+                TempData["Message"] = "This unit isn't exist";
+                return RedirectToAction("Index");
+            }
+
+            return View(unit);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteUnit(UnitViewModel unit)
+        {
+            if (unit == null)
+            {
+                TempData["Message"] = "This unit isn't exist";
+                return RedirectToAction("Index");
+            }
+
+            unitService.Delete(unit.Id);
+
+            TempData["Message"] = "Unit deleted success!";
+
+            return RedirectToAction("Index");
+        }
     }
 }
