@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
+using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using StoreApp.BLL.DTO;
 using StoreApp.BLL.Services;
@@ -78,7 +81,7 @@ namespace StoreApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateProduct(CreateProductViewModel product)
+        public ActionResult CreateProduct(CreateProductViewModel product, HttpPostedFileBase file)
         {
             ProductDTO productDTO = webMapper.config.Map<CreateProductViewModel, ProductDTO>(product);
 
@@ -95,9 +98,7 @@ namespace StoreApp.Controllers
                     ModelState.AddModelError("", "New product doesn't create");
                 }
 
-                TempData["Categories"] = new SelectList(categoryService.GetAll(), dataValueField: "Id", dataTextField: "Name");
-                TempData["Brands"] = new SelectList(brandService.GetAll(), dataValueField: "Id", dataTextField: "Name");
-                TempData["Producers"] = new SelectList(producerService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+                ViewBag.References = GetReferences();
                 return View(product);
             }
 
@@ -106,7 +107,49 @@ namespace StoreApp.Controllers
                 productDTO.Enable = false;
             }
 
-            productService.Create(productDTO);
+            if (file != null && file.ContentLength > 0)
+            {
+                string pictureType = file.ContentType.ToLower();
+
+                if (pictureType != "image/jpg" &&
+                    pictureType != "image/jpeg" &&
+                    pictureType != "image/png")
+                {
+                    ModelState.AddModelError("", "The image was not uploaded - wrong image extension");
+                    ViewBag.References = GetReferences();
+                    return View(product);
+                }
+
+                productDTO.Picture = file.FileName;
+
+                productService.Create(productDTO);
+
+                int productId = productService.GetAll()
+                                              .FirstOrDefault(p => p.Name.Equals(productDTO.Name) &&
+                                                                   p.BrandId.Equals(productDTO.BrandId) &&
+                                                                   p.ProducerId.Equals(productDTO.ProducerId)).Id;
+
+                var pathStringPictures = new DirectoryInfo(string.Format($"{Server.MapPath(@"\")}Pictures\\Products"));
+                var pathStringProductsById = Path.Combine(pathStringPictures.ToString(), productId.ToString());
+
+                if (!Directory.Exists(pathStringProductsById))
+                    Directory.CreateDirectory(pathStringProductsById);
+
+                var pathSavePicture = string.Format($"{pathStringProductsById}\\{file.FileName}");
+                var pathSavePicturePreview = string.Format($"{pathStringProductsById}\\{ "preview_" + file.FileName}");
+
+                WebImage pic = new WebImage(file.InputStream);
+                pic.Resize(200, 200).Crop(1, 1);
+                pic.Save(pathSavePicture);
+                pic.Resize(24, 24).Crop(1, 1);
+                pic.Save(pathSavePicturePreview);
+            }
+            else
+            {
+                ModelState.AddModelError("", "The image was not uploaded - image isn't exist");
+                ViewBag.References = GetReferences();
+                return View(product);
+            }
 
             TempData["Message"] = "New product created seccessful!";
 
