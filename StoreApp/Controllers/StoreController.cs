@@ -146,9 +146,7 @@ namespace StoreApp.Controllers
             }
             else
             {
-                ModelState.AddModelError("", "The image was not uploaded - image isn't exist");
-                ViewBag.References = GetReferences();
-                return View(product);
+                productService.Create(productDTO);
             }
 
             TempData["Message"] = "New product created seccessful!";
@@ -172,7 +170,7 @@ namespace StoreApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditProduct(EditProductViewModel product)
+        public ActionResult EditProduct(EditProductViewModel product, HttpPostedFileBase file)
         {
             ViewBag.References = GetReferences();
 
@@ -199,7 +197,52 @@ namespace StoreApp.Controllers
                 productDTO.Enable = false;
             }
 
-            productService.Edit(productDTO);
+            if (file != null && file.ContentLength > 0)
+            {
+                string pictureType = file.ContentType.ToLower();
+
+                if (pictureType != "image/jpg" &&
+                    pictureType != "image/jpeg" &&
+                    pictureType != "image/png")
+                {
+                    ModelState.AddModelError("", "The image was not uploaded - wrong image extension");
+                    ViewBag.References = GetReferences();
+                    return View(product);
+                }
+
+                productDTO.Picture = file.FileName;
+
+                productService.Edit(productDTO);
+
+                var pathStringPictures = new DirectoryInfo(string.Format($"{Server.MapPath(@"\")}Pictures\\Products"));
+                var pathStringProductsById = Path.Combine(pathStringPictures.ToString(), product.Id.ToString());
+
+                if (!Directory.Exists(pathStringProductsById))
+                    Directory.CreateDirectory(pathStringProductsById);
+                else
+                {
+                    DirectoryInfo listOfFiles = new DirectoryInfo(pathStringProductsById);
+                    foreach (var fileForDel in listOfFiles.GetFiles())
+                    {
+                        fileForDel.Delete();
+                    }
+                }
+
+                var pathSavePicture = string.Format($"{pathStringProductsById}\\{file.FileName}");
+                var pathSavePicturePreview = string.Format($"{pathStringProductsById}\\{ "preview_" + file.FileName}");
+
+                WebImage pic = new WebImage(file.InputStream);
+                pic.Resize(200, 200).Crop(1, 1);
+                pic.Save(pathSavePicture);
+                pic.Resize(24, 24).Crop(1, 1);
+                pic.Save(pathSavePicturePreview);
+            }
+            else
+            {
+                productService.Edit(productDTO);
+            }
+
+            product = webMapper.config.Map<ProductDTO, EditProductViewModel>(productDTO);
 
             TempData["Message"] = "Product have edited";
 
