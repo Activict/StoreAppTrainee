@@ -150,6 +150,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BrandsController.cs" />
+    <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProducersController.cs" />
@@ -236,6 +237,7 @@
     <Content Include="Views\Units\EditUnit.cshtml" />
     <Content Include="Views\Units\DetailsUnit.cshtml" />
     <Content Include="Views\Units\DeleteUnit.cshtml" />
+    <Content Include="Views\Cart\_CartPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

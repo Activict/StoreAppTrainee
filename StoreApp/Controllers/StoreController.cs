@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using StoreApp.BLL.DTO;
 using StoreApp.BLL.Services;
@@ -195,6 +196,37 @@ namespace StoreApp.Controllers
             }
 
             productService.Delete(product.Id);
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public ActionResult Buy(int id)
+        {
+            ProductDTO productDTO = productService.Get(id);
+
+            if (productDTO == null)
+            {
+                TempData["Message"] = "Product don't add to cart";
+            }
+
+            var cart = Session["Сart"] as List<ProductDTO> ?? new List<ProductDTO>();
+
+            ProductDTO productCart = cart.FirstOrDefault(p => p.Id == id);
+
+            if (productCart != null)
+            {
+                productCart.Quantity++;
+            }
+            else
+            {
+                productDTO.Quantity = 1;
+                cart.Add(productDTO);
+            }
+
+            Session["Сart"] = cart;
+
+            TempData["Message"] = "Product added to cart";
 
             return RedirectToAction("Index");
         }

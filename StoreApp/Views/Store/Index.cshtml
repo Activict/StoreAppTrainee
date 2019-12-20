@@ -89,13 +89,13 @@
                         @Html.DisplayFor(modelItem => item.Producer)
                     </td>
                     <td>
+                        @Html.ActionLink("Buy", "Buy", new { id = item.Id }, new { @class = "btn btn-success"}) |
                         @Html.ActionLink("Edit", "EditProduct", new { id = item.Id }) |
                         @Html.ActionLink("Details", "DetailsProduct", new { id = item.Id }) |
                         @Html.ActionLink("Delete", "DeleteProduct", new { id = item.Id })
                     </td>
                 </tr>
             }
-
         </table>
     </div>
 </div>
