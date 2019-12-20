@@ -12,6 +12,7 @@ namespace StoreApp.DAL.EF
         public DbSet<Category> Categories { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Producer> Producers { get; set; }
+        public DbSet<Unit> Units { get; set; }
 
         static StoreContext()
         {

@@ -1,0 +1,41 @@
+﻿@model IEnumerable<StoreApp.Models.Unit.UnitViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h3>Units</h3>
+
+@if (TempData["Message"] != null)
+{
+    <div class="col-md-2 btn-success">@TempData["Message"]</div>
+}
+
+<br />
+
+<p>
+    @Html.ActionLink("Create unit", "CreateUnit", null, new { @class = "btn btn-success" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "EditUnit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "DetailsUnit", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "DeleteUnit", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>

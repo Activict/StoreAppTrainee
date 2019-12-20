@@ -8,6 +8,7 @@ namespace StoreApp.Util
 {
     public class WebMapper
     {
+        private UnitService unitService;
         private ProductService productService;
         private CategoryService categoryService;
         private BrandService brandService;
@@ -16,6 +17,7 @@ namespace StoreApp.Util
 
         public WebMapper()
         {
+            unitService = new UnitService();
             productService = new ProductService();
             categoryService = new CategoryService();
             brandService = new BrandService();
@@ -39,10 +41,10 @@ namespace StoreApp.Util
                 Name = productDTO.Name,
                 Price = productDTO.Price,
                 Quantity = productDTO.Quantity,
-                Unit = productDTO.Unit,
                 Picture = productDTO.Picture,
                 Quality = productDTO.Quality,
                 Enable = productDTO.Enable,
+                Unit = unitService.Get(productDTO.UnitId)?.Name,
                 Category = categoryService.Get(productDTO.CategoryId)?.Name,
                 Brand = brandService.Get(productDTO.BrandId)?.Name,
                 Producer = producerService.Get(productDTO.ProducerId)?.Name

@@ -15,11 +15,12 @@ namespace StoreApp.Models.Store
         [Required]
         [Range(0, 999999999999, ErrorMessage = "Invalid value")]
         public int Quantity { get; set; }
-        public string Unit { get; set; }
         public string Picture { get; set; }
         public string Quality { get; set; }
         public bool Enable { get; set; }
 
+        [DisplayName("Unit")]
+        public int UnitId { get; set; }
         [DisplayName("Category")]
         public int CategoryId { get; set; }
         [DisplayName("Brand")]

@@ -58,6 +58,7 @@
     <Compile Include="Entities\OrderDetail.cs" />
     <Compile Include="Entities\Producer.cs" />
     <Compile Include="Entities\Product.cs" />
+    <Compile Include="Entities\Unit.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Intefaces\IRepository.cs" />
     <Compile Include="Intefaces\IUnitOfWork.cs" />
@@ -77,6 +78,10 @@
     <Compile Include="Migrations\201912110826504_Rename HomeAdress to HomeAddress in dbo.Users.designer.cs">
       <DependentUpon>201912110826504_Rename HomeAdress to HomeAddress in dbo.Users.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912190944472_Added dbo.Unit.cs" />
+    <Compile Include="Migrations\201912190944472_Added dbo.Unit.designer.cs">
+      <DependentUpon>201912190944472_Added dbo.Unit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\BrandRepository.cs" />
@@ -86,6 +91,7 @@
     <Compile Include="Repositories\OrderRepository.cs" />
     <Compile Include="Repositories\ProducerRepository.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />
+    <Compile Include="Repositories\UnitRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -104,6 +110,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912110826504_Rename HomeAdress to HomeAddress in dbo.Users.resx">
       <DependentUpon>201912110826504_Rename HomeAdress to HomeAddress in dbo.Users.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912190944472_Added dbo.Unit.resx">
+      <DependentUpon>201912190944472_Added dbo.Unit.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

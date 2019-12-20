@@ -10,6 +10,7 @@ namespace StoreApp.Controllers
 {
     public class StoreController : Controller
     {
+        private UnitService unitservice;
         private ProductService productService;
         private CategoryService categoryService;
         private BrandService brandService;
@@ -19,6 +20,7 @@ namespace StoreApp.Controllers
 
         public StoreController()
         {
+            unitservice = new UnitService();
             productService = new ProductService();
             categoryService = new CategoryService();
             brandService = new BrandService();
@@ -201,6 +203,7 @@ namespace StoreApp.Controllers
         {
             return new ReferenceProducts()
             {
+                Units = new SelectList(unitservice.GetAll(), dataValueField: "Id", dataTextField: "Name"),
                 Categories = new SelectList(categoryService.GetAll(), dataValueField: "Id", dataTextField: "Name"),
                 Brands = new SelectList(brandService.GetAll(), dataValueField: "Id", dataTextField: "Name"),
                 Producers = new SelectList(producerService.GetAll(), dataValueField: "Id", dataTextField: "Name")
