@@ -108,6 +108,8 @@ namespace StoreApp.Controllers
                 return RedirectToAction("Index");
             }
 
+             ViewBag.CountProducts = producerService.GetCountProductsByProducerId(id);
+
             return View(producer);
         }
 

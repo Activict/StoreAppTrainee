@@ -5,6 +5,7 @@ using StoreApp.DAL.Entities;
 using StoreApp.DAL.Intefaces;
 using StoreApp.DAL.Repositories;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace StoreApp.BLL.Services
 {
@@ -16,15 +17,21 @@ namespace StoreApp.BLL.Services
 
         public ProductService(IUnitOfWork uof)
         {
-            config = new MapperConfiguration(cfg => { cfg.CreateMap<Product, ProductDTO>();
-                                                      cfg.CreateMap<ProductDTO, Product>(); }).CreateMapper();
+            config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Product, ProductDTO>();
+                cfg.CreateMap<ProductDTO, Product>();
+            }).CreateMapper();
             DataBase = uof;
         }
 
         public ProductService()
         {
-            config = new MapperConfiguration(cfg => { cfg.CreateMap<Product, ProductDTO>();
-                                                      cfg.CreateMap<ProductDTO, Product>(); }).CreateMapper();
+            config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Product, ProductDTO>();
+                cfg.CreateMap<ProductDTO, Product>();
+            }).CreateMapper();
             DataBase = new EFUnitOfWork("DefaultConnection");
         }
 
@@ -56,6 +63,34 @@ namespace StoreApp.BLL.Services
         public IEnumerable<ProductDTO> GetAll()
         {
             return config.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(DataBase.Products.GetAll());
+        }
+
+        public bool ValidateNewProduct(ProductDTO product)
+        {
+            return !DataBase.Products.Find(p => p.Name.Equals(product.Name) &&
+                                                       p.BrandId.Equals(product.BrandId) &&
+                                                       p.ProducerId.Equals(product.ProducerId)).Any();
+        }
+
+        public bool ValidateEditProduct(ProductDTO productDTO)
+        {
+            var products = DataBase.Products.GetAll();
+
+            products.ToList().ForEach(p => DataBase.Products.Detach(p));
+
+            bool existProduct = products.Any(p => p.Id.Equals(productDTO.Id) &&
+                                                  p.Name.Equals(productDTO.Name) &&
+                                                  p.BrandId.Equals(productDTO.BrandId) &&
+                                                  p.ProducerId.Equals(productDTO.ProducerId));
+
+            if (existProduct)
+            {
+                return true;
+            }
+
+            return !products.Any(p => p.Name.Equals(productDTO.Name) &&
+                                      p.BrandId.Equals(productDTO.BrandId) &&
+                                      p.ProducerId.Equals(productDTO.ProducerId));
         }
 
         public void Dispose()

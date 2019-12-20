@@ -11,5 +11,6 @@ namespace StoreApp.DAL.Intefaces
         void Create(T item);
         void Update(T item);
         void Delete(int id);
+        void Detach(T item);
     }
 }

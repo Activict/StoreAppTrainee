@@ -107,6 +107,8 @@ namespace StoreApp.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.CountProducts = categoryService.GetCountProductsByCategoryId(id);
+
             return View(category);
         }
 

@@ -3,6 +3,7 @@ using StoreApp.DAL.Entities;
 using StoreApp.DAL.Intefaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 
 namespace StoreApp.DAL.Repositories
 {
@@ -28,6 +29,11 @@ namespace StoreApp.DAL.Repositories
             }
         }
 
+        public void Detach(Brand item)
+        {
+            db.Entry(item).State = EntityState.Modified;
+        }
+
         public IEnumerable<Brand> Find(Func<Brand, bool> predicate)
         {
             throw new NotImplementedException();
@@ -45,7 +51,7 @@ namespace StoreApp.DAL.Repositories
 
         public void Update(Brand item)
         {
-            db.Entry(item).State = System.Data.Entity.EntityState.Modified;
+            db.Entry(item).State = EntityState.Modified;
         }
     }
 }

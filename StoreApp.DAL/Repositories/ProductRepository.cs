@@ -3,6 +3,7 @@ using StoreApp.DAL.Entities;
 using StoreApp.DAL.Intefaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 
 namespace StoreApp.DAL.Repositories
@@ -61,7 +62,12 @@ namespace StoreApp.DAL.Repositories
 
         public void Update(Product item)
         {
-            db.Entry(item).State = System.Data.Entity.EntityState.Modified;
+            db.Entry(item).State = EntityState.Modified;
+        }
+
+        public void Detach(Product item)
+        {
+            db.Entry(item).State = EntityState.Detached;
         }
     }
 }
