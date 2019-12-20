@@ -27,14 +27,14 @@ namespace StoreApp.Controllers
             brandService = new BrandService();
             producerService = new ProducerService();
             filterProductsService = new FilterProductsService();
-            webMapper  = new WebMapper();
+            webMapper = new WebMapper();
         }
 
         [HttpGet]
         public ActionResult Index()
         {
             var products = productService.GetAll().Select(p => webMapper.Map(p));
-            
+
             if (products == null)
             {
                 ViewBag.Message = "No products";
@@ -57,9 +57,9 @@ namespace StoreApp.Controllers
 
                 return View(products);
             }
-            
+
             FilterProductsDTO filterDTO = webMapper.config.Map<FilterProductsViewModel, FilterProductsDTO>(filter);
-            
+
             var productsFiltered = filterProductsService.GetProductsDTOFiltered(filterDTO).Select(p => webMapper.Map(p));
 
             return View(productsFiltered);
@@ -188,7 +188,7 @@ namespace StoreApp.Controllers
                 {
                     ModelState.AddModelError("", "Product haven't edited");
                 }
-                
+
                 return View(product);
             }
 
@@ -276,6 +276,14 @@ namespace StoreApp.Controllers
             {
                 TempData["Message"] = "Product don't delete!";
                 return RedirectToAction("Index");
+            }
+
+            var pathStringPictures = new DirectoryInfo(string.Format($"{Server.MapPath(@"\")}Pictures\\Products"));
+            var pathStringProductsById = Path.Combine(pathStringPictures.ToString(), product.Id.ToString());
+
+            if (Directory.Exists(pathStringProductsById))
+            {
+                Directory.Delete(pathStringProductsById, true);
             }
 
             productService.Delete(product.Id);

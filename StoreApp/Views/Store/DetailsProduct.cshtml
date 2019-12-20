@@ -47,7 +47,14 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Picture)
+            @if (Model.Picture == null)
+            {
+                <img src="~/Pictures/no_image.png" />
+            }
+            else
+            {
+                <img src="/Pictures/Products/@Model.Id/@Model.Picture" />
+            }
         </dd>
 
         <dt>
