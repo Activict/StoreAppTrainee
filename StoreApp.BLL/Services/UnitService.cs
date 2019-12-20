@@ -13,7 +13,9 @@ namespace StoreApp.BLL.Services
     public class UnitService : IUnitService
     {
         private IUnitOfWork DataBase { get; set; }
+
         private IMapper config;
+
         public UnitService(IUnitOfWork uof)
         {
             config = new MapperConfiguration(cfg => {
