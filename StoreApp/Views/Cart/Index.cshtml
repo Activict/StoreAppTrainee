@@ -1,0 +1,111 @@
+﻿@model List<StoreApp.Models.Store.ProductViewModel>
+
+@{
+    ViewBag.Title = "Cart";
+    decimal totalPrice = 0m;
+    int totalItems = 0;
+}
+
+<h3>Cart</h3>
+
+
+<table class="table">
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Price
+        </th>
+        <th>
+            Quantity
+        </th>
+        <th>
+            Unit
+        </th>
+        <th>
+            Picture
+        </th>
+        <th>
+            Quality
+        </th>
+        <th>
+            Enable
+        </th>
+        <th>
+            Category
+        </th>
+        <th>
+            Brand
+        </th>
+        <th>
+            Producer
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        totalPrice += item.Price * item.Quantity;
+        totalItems += item.Quantity;
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                $ @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.ActionLink("-", "DecreaseProduct", new { id = item.Id })
+                @Html.DisplayFor(modelItem => item.Quantity)
+                @Html.ActionLink("+", "IncreaseProduct", new { id = item.Id })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Unit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Picture)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quality)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Enable)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Brand)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Producer)
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "DeleteFromCart", new { id = item.Id })
+            </td>
+        </tr>
+    }
+    <tr>
+        <td>
+            Total price:
+        </td>
+        <td>
+            $ @totalPrice
+        </td>
+        <td>
+            of @totalItems item(s)
+        </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td>
+            @ViewBag.TotalPriceCart
+        </td>
+    </tr>
+
+</table>

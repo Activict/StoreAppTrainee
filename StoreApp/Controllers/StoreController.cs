@@ -203,16 +203,16 @@ namespace StoreApp.Controllers
         [HttpGet]
         public ActionResult Buy(int id)
         {
-            ProductDTO productDTO = productService.Get(id);
+            ProductViewModel productVM = webMapper.config.Map<ProductDTO, ProductViewModel>(productService.Get(id));
 
-            if (productDTO == null)
+            if (productVM == null)
             {
                 TempData["Message"] = "Product don't add to cart";
             }
 
-            var cart = Session["Сart"] as List<ProductDTO> ?? new List<ProductDTO>();
+            var cart = TempData["Сart"] as List<ProductViewModel> ?? new List<ProductViewModel>();
 
-            ProductDTO productCart = cart.FirstOrDefault(p => p.Id == id);
+            ProductViewModel productCart = cart.FirstOrDefault(p => p.Id == id);
 
             if (productCart != null)
             {
@@ -220,11 +220,11 @@ namespace StoreApp.Controllers
             }
             else
             {
-                productDTO.Quantity = 1;
-                cart.Add(productDTO);
+                productVM.Quantity = 1;
+                cart.Add(productVM);
             }
 
-            Session["Сart"] = cart;
+            TempData["Сart"] = cart;
 
             TempData["Message"] = "Product added to cart";
 

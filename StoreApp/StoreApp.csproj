@@ -238,6 +238,7 @@
     <Content Include="Views\Units\DetailsUnit.cshtml" />
     <Content Include="Views\Units\DeleteUnit.cshtml" />
     <Content Include="Views\Cart\_CartPartial.cshtml" />
+    <Content Include="Views\Cart\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
