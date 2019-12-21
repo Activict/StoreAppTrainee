@@ -6,6 +6,11 @@
 
 <h3>Account @Model.UserName</h3>
 
+@if (TempData["Message"] != null)
+{
+    <div class="alert-danger">@TempData["Message"]</div>
+}
+
 <div>
     <hr />
     <dl class="dl-horizontal">
@@ -41,8 +46,8 @@
             @Html.DisplayFor(model => model.Role)
         </dd>
 
+        <dd>
+            @Html.ActionLink("Edit", "EditUser", new { id = Model.Id }, new { @class = "btn btn-success" })
+        </dd>
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "EditUser", new { id = Model.Id })
-</p>

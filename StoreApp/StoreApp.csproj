@@ -158,6 +158,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Account\UserEditViewModel.cs" />
     <Compile Include="Models\Account\UserLoginViewModel.cs" />
     <Compile Include="Models\Account\UserRegistrationViewModel.cs" />
     <Compile Include="Models\Account\UserViewModel.cs" />
@@ -238,6 +239,7 @@
     <Content Include="Views\Units\DetailsUnit.cshtml" />
     <Content Include="Views\Units\DeleteUnit.cshtml" />
     <Content Include="Views\Account\Account.cshtml" />
+    <Content Include="Views\Account\EditUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

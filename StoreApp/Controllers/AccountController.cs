@@ -92,6 +92,7 @@ namespace StoreApp.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult Account()
         {
             if (Request.IsAuthenticated)
@@ -108,6 +109,53 @@ namespace StoreApp.Controllers
         }
 
         [HttpGet]
+        [Authorize]
+        public ActionResult EditUser(int id)
+        {
+            UserEditViewModel user = webMapper.config.Map<UserDTO, UserEditViewModel>(userService.Get(id));
+
+            if (user != null && user.Username.Equals(User.Identity.Name))
+            {
+                return View(user);
+            }
+
+            return RedirectToAction("Account");
+        }
+
+        [HttpPost]
+        public ActionResult EditUser(UserEditViewModel userEdit)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Your edit account wrong!");
+                return View(userEdit);
+            }
+
+            UserDTO userDTO = webMapper.config.Map<UserEditViewModel, UserDTO>(userEdit);
+
+            if (!userValidateService.CheckTruePassword(userDTO))
+            {
+                ModelState.AddModelError("", "Your enter wrong password!");
+                return View(userEdit);
+            }
+
+            if (userValidateService.CheckForEditUser(userDTO))
+            {
+                userService.Edit(userDTO);
+
+                TempData["Message"] = "Your edit account successful!";
+
+                return RedirectToAction("Account");
+            }
+            else
+            {
+                ModelState.AddModelError("", "This is Email or Username already exist!");
+                return View(userEdit);
+            }
+        }
+
+        [HttpGet]
+        [Authorize]
         public ActionResult Logout()
         {
             TempData["Message"] = null;

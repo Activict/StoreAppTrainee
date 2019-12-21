@@ -35,6 +35,8 @@ namespace StoreApp.Util
                     cfg.CreateMap<UserViewModel, UserDTO>();
                     cfg.CreateMap<UserLoginViewModel, UserDTO>();
                     cfg.CreateMap<UserRegistrationViewModel, UserDTO>();
+                    cfg.CreateMap<UserDTO, UserEditViewModel>();
+                    cfg.CreateMap<UserEditViewModel, UserDTO>();
                 }).CreateMapper();
         }
 

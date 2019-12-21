@@ -13,6 +13,10 @@ namespace StoreApp.BLL.Services
         {
             DataBase = new EFUnitOfWork("DefaultConnection");
         }
+        public UserValidateService(IUnitOfWork uof)
+        {
+            DataBase = uof;
+        }
 
         public bool CheckEmail(string email)
         {
@@ -40,6 +44,21 @@ namespace StoreApp.BLL.Services
             var users = DataBase.Users.GetAll();
 
             return users.FirstOrDefault(u => u.UserName.Equals(userDTO.UserName) && u.Password.Equals(userDTO.Password))?.Role;
+        }
+
+        public bool CheckTruePassword(UserDTO userDTO)
+        {
+            return DataBase.Users.GetAll()
+                                 .Any(u => u.Id.Equals(userDTO.Id) &&
+                                           u.Password.Equals(userDTO.Password));
+        }
+
+        public bool CheckForEditUser(UserDTO userDTO)
+        {
+            return !DataBase.Users.GetAll()
+                                  .Where(u => u.Id != userDTO.Id)
+                                  .Any(u => u.UserName.Equals(userDTO.UserName) ||
+                                            u.Email.Equals(userDTO.Email));
         }
     }
 }
