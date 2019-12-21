@@ -3,6 +3,7 @@ using StoreApp.Models.Store;
 using AutoMapper;
 using StoreApp.BLL.Services;
 using StoreApp.Models.Filter;
+using StoreApp.Models.Account;
 
 namespace StoreApp.Util
 {
@@ -30,6 +31,10 @@ namespace StoreApp.Util
                     cfg.CreateMap<EditProductViewModel, ProductDTO>();
                     cfg.CreateMap<ProductDTO, ProductViewModel>();
                     cfg.CreateMap<FilterProductsViewModel, FilterProductsDTO>();
+                    cfg.CreateMap<UserDTO, UserViewModel>();
+                    cfg.CreateMap<UserViewModel, UserDTO>();
+                    cfg.CreateMap<UserLoginViewModel, UserDTO>();
+                    cfg.CreateMap<UserRegistrationViewModel, UserDTO>();
                 }).CreateMapper();
         }
 

@@ -160,6 +160,7 @@
     </Compile>
     <Compile Include="Models\Account\UserLoginViewModel.cs" />
     <Compile Include="Models\Account\UserRegistrationViewModel.cs" />
+    <Compile Include="Models\Account\UserViewModel.cs" />
     <Compile Include="Models\Filter\FilterProductsViewModel.cs" />
     <Compile Include="Models\Producers\ProducerViewModel.cs" />
     <Compile Include="Models\Brands\BrandViewModel.cs" />
@@ -236,6 +237,7 @@
     <Content Include="Views\Units\EditUnit.cshtml" />
     <Content Include="Views\Units\DetailsUnit.cshtml" />
     <Content Include="Views\Units\DeleteUnit.cshtml" />
+    <Content Include="Views\Account\Account.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -26,6 +26,16 @@
                     <li>@Html.ActionLink("Category", "Index", "Category")</li>
                     <li>@Html.ActionLink("Brands", "Index", "Brands")</li>
                     <li>@Html.ActionLink("Producers", "Index", "Producers")</li>
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink(User.Identity.Name, "Account", "Account")</li>
+                        <li>@Html.ActionLink("logout", "Logout", "Account")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Login", "Login", "Account")</li>
+                        <li>@Html.ActionLink("Register", "Registration", "Account")</li>
+                    }
                 </ul>
             </div>
         </div>

@@ -1,8 +1,11 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Web.Mvc;
+using System.Web.Security;
 using AutoMapper;
 using StoreApp.BLL.DTO;
 using StoreApp.BLL.Services;
 using StoreApp.Models.Account;
+using StoreApp.Util;
 
 namespace StoreApp.Controllers
 {
@@ -10,13 +13,13 @@ namespace StoreApp.Controllers
     {
         private UserValidateService userValidateService;
         private UserService userService;
-        private IMapper config;
+        private WebMapper webMapper;
 
         public AccountController()
         {
             userValidateService = new UserValidateService();
             userService = new UserService();
-            config = new MapperConfiguration(cfg => cfg.CreateMap<UserLoginViewModel, UserDTO>()).CreateMapper();
+            webMapper = new WebMapper();
         }
         
         [HttpGet]
@@ -37,12 +40,9 @@ namespace StoreApp.Controllers
             if (!userValidateService.CheckEmail(model.Email) &&
                 !userValidateService.CheckUserName(model.Username))
             {
-                UserDTO userDTO = new UserDTO() { Email = model.Email,
-                                                  Password = model.Password,
-                                                  UserName = model.Username,
-                                                  HomeAddress = model.HomeAddress,
-                                                  Role = "user"};
-                
+                UserDTO userDTO = webMapper.config.Map<UserRegistrationViewModel, UserDTO>(model);
+                userDTO.Role = "user";
+
                 userService.Create(userDTO);
 
                 TempData["Message"] = "Your registration successful!";
@@ -59,6 +59,11 @@ namespace StoreApp.Controllers
         [HttpGet]
         public ActionResult Login()
         {
+            if (Request.IsAuthenticated)
+            {
+                return RedirectToAction("Account");
+            }
+
             return View();
         }
 
@@ -70,10 +75,11 @@ namespace StoreApp.Controllers
                 return View();
             }
 
-            UserDTO userDTO = config.Map<UserLoginViewModel, UserDTO>(model);
+            UserDTO userDTO = webMapper.config.Map<UserLoginViewModel, UserDTO>(model);
 
             if (userValidateService.CheckLogin(userDTO))
             {
+                FormsAuthentication.SetAuthCookie(model.UserName, false);
                 Session["Role"] = userValidateService.GetRole(userDTO);
                 TempData["Message"] = "You login successful!";
                 return RedirectToAction("Index", "Home");
@@ -81,8 +87,32 @@ namespace StoreApp.Controllers
             else
             {
                 ModelState.AddModelError("", "Login or password wrong!");
-                return View();
+                return View(model);
             }
+        }
+
+        [HttpGet]
+        public ActionResult Account()
+        {
+            if (Request.IsAuthenticated)
+            {
+                UserDTO userDTO = userService.GetAll().FirstOrDefault(u => u.UserName.Equals(User.Identity.Name));
+                UserViewModel user = webMapper.config.Map<UserDTO, UserViewModel>(userDTO);
+
+                return View(user);
+            }
+            else
+            {
+                return RedirectToAction("Login");
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Logout()
+        {
+            TempData["Message"] = null;
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Login");
         }
     }
 }
