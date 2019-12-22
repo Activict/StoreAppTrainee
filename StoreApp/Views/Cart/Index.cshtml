@@ -88,10 +88,10 @@
     }
     <tr>
         <td>
-            Total price:
+            <b>Total price:</b>
         </td>
         <td>
-            $ @totalPrice
+            $ <b>@totalPrice</b>
         </td>
         <td>
             of @totalItems item(s)
@@ -104,7 +104,7 @@
         <td> </td>
         <td> </td>
         <td>
-            @ViewBag.TotalPriceCart
+            @Html.ActionLink("Order", "Order", "Cart", null, new { @class = "btn btn-success"})
         </td>
     </tr>
 
