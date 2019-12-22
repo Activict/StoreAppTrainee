@@ -1,7 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
-using AutoMapper;
 using StoreApp.BLL.DTO;
 using StoreApp.BLL.Services;
 using StoreApp.Models.Account;
@@ -22,6 +22,19 @@ namespace StoreApp.Controllers
             webMapper = new WebMapper();
         }
         
+        [HttpGet]
+        [Authorize]
+        public ActionResult Index()
+        {
+            if (Session["Role"] as string == "admin" ) 
+            {
+                var users = webMapper.config.Map<IEnumerable<UserDTO>, IEnumerable<UserViewModel>>(userService.GetAll());
+                return View(users);
+            }
+
+            return RedirectToAction("Index", "Store", null);
+        }
+
         [HttpGet]
         public ActionResult Registration()
         {
@@ -152,6 +165,19 @@ namespace StoreApp.Controllers
                 ModelState.AddModelError("", "This is Email or Username already exist!");
                 return View(userEdit);
             }
+        }
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult DetailsUser(int id)
+        {
+            if (Session["Role"] as string == "admin")
+            {
+                var user = webMapper.config.Map<UserDTO, UserViewModel>(userService.Get(id));
+                return View(user);
+            }
+
+            return RedirectToAction("Account", "Account", null);
         }
 
         [HttpGet]
