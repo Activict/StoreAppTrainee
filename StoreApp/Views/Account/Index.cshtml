@@ -6,6 +6,11 @@
 
 <h3>Users</h3>
 
+@if (TempData["Message"] != null)
+{
+    <div class="alert-info">@TempData["Message"]</div>
+}
+
 <table class="table">
     <tr>
         <th>

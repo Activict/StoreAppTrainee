@@ -6,6 +6,11 @@
 
 <h3>Details user @Model.UserName for admin</h3>
 
+@if (TempData["Message"] != null)
+{
+    <div class="alert-info">@TempData["Message"]</div>
+}
+
 <div>
     <hr />
     <dl class="dl-horizontal">

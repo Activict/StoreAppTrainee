@@ -51,7 +51,7 @@ namespace StoreApp.Controllers
             }
 
             if (!userValidateService.CheckEmail(model.Email) &&
-                !userValidateService.CheckUserName(model.Username))
+                !userValidateService.CheckUserName(model.UserName))
             {
                 UserDTO userDTO = webMapper.config.Map<UserRegistrationViewModel, UserDTO>(model);
                 userDTO.Role = "user";
@@ -127,7 +127,7 @@ namespace StoreApp.Controllers
         {
             UserEditViewModel user = webMapper.config.Map<UserDTO, UserEditViewModel>(userService.Get(id));
 
-            if (user != null && user.Username.Equals(User.Identity.Name))
+            if (user != null && user.UserName.Equals(User.Identity.Name))
             {
                 return View(user);
             }
@@ -178,6 +178,94 @@ namespace StoreApp.Controllers
             }
 
             return RedirectToAction("Account", "Account", null);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult EditUserAdmin(int id)
+        {
+            if (Session["Role"] as string == "admin")
+            {
+                UserViewModel user = webMapper.config.Map<UserDTO, UserViewModel>(userService.Get(id));
+
+                if (user != null)
+                {
+                    return View(user);
+                }
+
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("Account", "Account", null);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult EditUserAdmin(UserViewModel user)
+        {
+            if (Session["Role"] as string == "admin")
+            {
+                if (user.Role.Equals("0"))
+                {
+                    user.Role = "user";
+                }
+                else if (user.Role.Equals("1"))
+                {
+                    user.Role = "admin";
+                }
+
+                UserDTO userDTO = webMapper.config.Map<UserViewModel, UserDTO>(user);
+
+                userService.Edit(userDTO);
+
+                TempData["Message"] = user.UserName + " edit success";
+
+                return RedirectToAction("DetailsUser", "Account", new { id = user.Id });
+            }
+
+            TempData["Message"] = user.UserName + " don't edited";
+
+            return RedirectToAction("Account", "Account");
+        }
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult DeleteUser(int id)
+        {
+            if (Session["Role"] as string == "admin")
+            {
+                UserViewModel user = webMapper.config.Map<UserDTO, UserViewModel>(userService.Get(id));
+
+                if (user != null)
+                {
+                    return View(user);
+                }
+
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("Account", "Account", null);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult DeleteUser(UserViewModel user)
+        {
+            if (Session["Role"] as string == "admin")
+            {
+                if (user != null)
+                {
+                    userService.Delete(user.Id);
+
+                    TempData["Message"] = user.UserName + " deleted success";
+                }
+                else
+                {
+                    TempData["Message"] = user.UserName + " don't deleted";
+                }
+            }
+
+            return RedirectToAction("Index");
         }
 
         [HttpGet]

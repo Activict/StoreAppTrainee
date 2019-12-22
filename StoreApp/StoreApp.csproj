@@ -347,6 +347,8 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\DetailsUser.cshtml" />
+    <Content Include="Views\Account\EditUserAdmin.cshtml" />
+    <Content Include="Views\Account\DeleteUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
