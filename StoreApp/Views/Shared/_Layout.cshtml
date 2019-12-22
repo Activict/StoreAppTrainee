@@ -8,38 +8,80 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Store", "Index", "Store")</li>
-                    <li>@Html.ActionLink("Units", "Index", "Units")</li>
-                    <li>@Html.ActionLink("Category", "Index", "Category")</li>
-                    <li>@Html.ActionLink("Brands", "Index", "Brands")</li>
-                    <li>@Html.ActionLink("Producers", "Index", "Producers")</li>
-                    @if (Request.IsAuthenticated)
-                    {
-                        <li>@Html.ActionLink(User.Identity.Name, "Account", "Account")</li>
-                        <li>@Html.ActionLink("logout", "Logout", "Account")</li>
-                    }
-                    else
-                    {
-                        <li>@Html.ActionLink("Login", "Login", "Account")</li>
-                        <li>@Html.ActionLink("Register", "Registration", "Account")</li>
-                    }
-                </ul>
-            </div>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-inverse fixed-top container">
+        <a class="navbar-brand">
+            <img src="https://www.freeiconspng.com/uploads/c-logo-icon-18.png" width="30" alt="E-shop" /></a>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Store", "Index", "Store", null, new { @class = "nav-link" })</li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Admin panel
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        @Html.ActionLink("Units", "Index", "Units", null, new { @class = "dropdown-item" })
+                        @Html.ActionLink("Category", "Index", "Category", null, new { @class = "dropdown-item" })
+                        @Html.ActionLink("Brands", "Index", "Brands", null, new { @class = "dropdown-item" })
+                        @Html.ActionLink("Producers", "Index", "Producers", null, new { @class = "dropdown-item" })
+                    </div>
+                </li>
+            </ul>
+            <span>
+                @if (Request.IsAuthenticated)
+                {
+                    @Html.ActionLink(User.Identity.Name, "Account", "Account")
+                    @Html.ActionLink("logout", "Logout", "Account")
+                }
+                else
+                {
+                    @Html.ActionLink("Login", "Login", "Account", null, new { @class = "navbar-text" })
+
+                    @Html.ActionLink("Register", "Registration", "Account", null, new { @class = "navbar-text" })
+                }
+            </span>
         </div>
-    </div>
+    </nav>
+
+
+    @*<div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                        <li>@Html.ActionLink("Store", "Index", "Store")</li>
+
+                        <li>@Html.ActionLink("Units", "Index", "Units")</li>
+                        <li>@Html.ActionLink("Category", "Index", "Category")</li>
+                        <li>@Html.ActionLink("Brands", "Index", "Brands")</li>
+                        <li>@Html.ActionLink("Producers", "Index", "Producers")</li>
+
+                        @if (Request.IsAuthenticated)
+                        {
+                            <li>@Html.ActionLink(User.Identity.Name, "Account", "Account")</li>
+                            <li>@Html.ActionLink("logout", "Logout", "Account")</li>
+                        }
+                        else
+                        {
+                            <li>@Html.ActionLink("Login", "Login", "Account")</li>
+                            <li>@Html.ActionLink("Register", "Registration", "Account")</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>*@
     <div class="container body-content">
         @RenderBody()
         <hr />
