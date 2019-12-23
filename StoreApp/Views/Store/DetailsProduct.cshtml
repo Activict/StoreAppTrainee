@@ -7,7 +7,6 @@
 <h3>Details @Model.Name</h3>
 
 <div>
-
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -47,7 +46,14 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Picture)
+            @if (Model.Picture == null)
+            {
+                <img src="~/Pictures/no_image.png" />
+            }
+            else
+            {
+                <img src="/Pictures/Products/@Model.Id/@Model.Picture" />
+            }
         </dd>
 
         <dt>
@@ -89,7 +95,6 @@
         <dd>
             @Html.DisplayFor(model => model.Producer)
         </dd>
-
     </dl>
 </div>
 <p>
