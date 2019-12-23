@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Helpers;
@@ -13,6 +14,7 @@ namespace StoreApp.Controllers
 {
     public class StoreController : Controller
     {
+        private SaveProductImageService saveProductImage;
         private ProductService productService;
         private CategoryService categoryService;
         private BrandService brandService;
@@ -22,6 +24,7 @@ namespace StoreApp.Controllers
 
         public StoreController()
         {
+            saveProductImage = new SaveProductImageService();
             productService = new ProductService();
             categoryService = new CategoryService();
             brandService = new BrandService();
@@ -109,11 +112,9 @@ namespace StoreApp.Controllers
 
             if (file != null && file.ContentLength > 0)
             {
-                string pictureType = file.ContentType.ToLower();
-
-                if (pictureType != "image/jpg" &&
-                    pictureType != "image/jpeg" &&
-                    pictureType != "image/png")
+                bool isEnableImageExtension = ConfigurationManager.AppSettings.Get("imageExtension").Contains(file.ContentType.ToLower());
+                
+                if (!isEnableImageExtension)
                 {
                     ModelState.AddModelError("", "The image was not uploaded - wrong image extension");
                     ViewBag.References = GetReferences();
@@ -123,26 +124,7 @@ namespace StoreApp.Controllers
                 productDTO.Picture = file.FileName;
 
                 productService.Create(productDTO);
-
-                int productId = productService.GetAll()
-                                              .FirstOrDefault(p => p.Name.Equals(productDTO.Name) &&
-                                                                   p.BrandId.Equals(productDTO.BrandId) &&
-                                                                   p.ProducerId.Equals(productDTO.ProducerId)).Id;
-
-                var pathStringPictures = new DirectoryInfo(string.Format($"{Server.MapPath(@"\")}Pictures\\Products"));
-                var pathStringProductsById = Path.Combine(pathStringPictures.ToString(), productId.ToString());
-
-                if (!Directory.Exists(pathStringProductsById))
-                    Directory.CreateDirectory(pathStringProductsById);
-
-                var pathSavePicture = string.Format($"{pathStringProductsById}\\{file.FileName}");
-                var pathSavePicturePreview = string.Format($"{pathStringProductsById}\\{ "preview_" + file.FileName}");
-
-                WebImage pic = new WebImage(file.InputStream);
-                pic.Resize(200, 200).Crop(1, 1);
-                pic.Save(pathSavePicture);
-                pic.Resize(24, 24).Crop(1, 1);
-                pic.Save(pathSavePicturePreview);
+                saveProductImage.SaveImage(productDTO, file);
             }
             else
             {
@@ -199,11 +181,9 @@ namespace StoreApp.Controllers
 
             if (file != null && file.ContentLength > 0)
             {
-                string pictureType = file.ContentType.ToLower();
+                bool isEnableImageExtension = ConfigurationManager.AppSettings.Get("imageExtension").Contains(file.ContentType.ToLower());
 
-                if (pictureType != "image/jpg" &&
-                    pictureType != "image/jpeg" &&
-                    pictureType != "image/png")
+                if (!isEnableImageExtension)
                 {
                     ModelState.AddModelError("", "The image was not uploaded - wrong image extension");
                     ViewBag.References = GetReferences();
@@ -213,29 +193,7 @@ namespace StoreApp.Controllers
                 productDTO.Picture = file.FileName;
 
                 productService.Edit(productDTO);
-
-                var pathStringPictures = new DirectoryInfo(string.Format($"{Server.MapPath(@"\")}Pictures\\Products"));
-                var pathStringProductsById = Path.Combine(pathStringPictures.ToString(), product.Id.ToString());
-
-                if (!Directory.Exists(pathStringProductsById))
-                    Directory.CreateDirectory(pathStringProductsById);
-                else
-                {
-                    DirectoryInfo listOfFiles = new DirectoryInfo(pathStringProductsById);
-                    foreach (var fileForDel in listOfFiles.GetFiles())
-                    {
-                        fileForDel.Delete();
-                    }
-                }
-
-                var pathSavePicture = string.Format($"{pathStringProductsById}\\{file.FileName}");
-                var pathSavePicturePreview = string.Format($"{pathStringProductsById}\\{ "preview_" + file.FileName}");
-
-                WebImage pic = new WebImage(file.InputStream);
-                pic.Resize(200, 200).Crop(1, 1);
-                pic.Save(pathSavePicture);
-                pic.Resize(24, 24).Crop(1, 1);
-                pic.Save(pathSavePicturePreview);
+                saveProductImage.SaveImage(productDTO, file);
             }
             else
             {
