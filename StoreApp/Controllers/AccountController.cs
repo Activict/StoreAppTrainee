@@ -273,6 +273,7 @@ namespace StoreApp.Controllers
         public ActionResult Logout()
         {
             TempData["Message"] = null;
+            TempData["Role"] = null;
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");
         }
