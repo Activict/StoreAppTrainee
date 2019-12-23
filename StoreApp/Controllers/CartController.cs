@@ -36,11 +36,8 @@ namespace StoreApp.Controllers
             {
                 var cart = TempData.Peek("Сart") as List<ProductViewModel>;
 
-                foreach (var product in cart)
-                {
-                    ViewBag.CountToCart += product.Quantity;
-                    ViewBag.TotalPriceCart += product.Quantity * product.Price;
-                }
+                ViewBag.TotalPriceCart = cart.Sum(p => p.Price * p.Quantity);
+                ViewBag.CountToCart = cart.Sum(p => p.Quantity);
             }
 
             return PartialView("_CartPartial");
@@ -53,15 +50,17 @@ namespace StoreApp.Controllers
             {
                 var cart = TempData.Peek("Сart") as List<ProductViewModel>;
 
-                for (int i = 0; i < cart.Count; i++)
-                {
-                    if (cart[i].Id == id)
-                    {
-                        cart.RemoveAt(i);
+                cart.Where(p => p.Id == id).Where(p => cart.RemoveAt(p.Id));
 
-                        TempData["Cart"] = cart;
-                    }
-                }
+                //for (int i = 0; i < cart.Count; i++)
+                //{
+                //    if (cart[i].Id == id)
+                //    {
+                //        cart.RemoveAt(i);
+
+                //        TempData["Cart"] = cart;
+                //    }
+                //}
             }
 
             return RedirectToAction("Index");
@@ -123,12 +122,7 @@ namespace StoreApp.Controllers
             {
                 var cart = TempData.Peek("Сart") as List<ProductViewModel>;
 
-                decimal totalPriceCart = 0;
-
-                foreach (var product in cart)
-                {
-                    totalPriceCart += product.Quantity * product.Price;
-                }
+                decimal totalPriceCart = cart.Sum(p => p.Price * p.Quantity);
 
                 int orderId = -1;
 
@@ -144,7 +138,7 @@ namespace StoreApp.Controllers
                 }
                 else
                 {
-                    TempData["Message"] = "Order don't created. Cart is empty";
+                    TempData["Message"] = "The order wasn't created. Cart is empty";
 
                     return RedirectToAction("Index", "Store");
                 }
@@ -169,7 +163,7 @@ namespace StoreApp.Controllers
             }
             else
             {
-                TempData["Message"] = "Order don't created. Cart is empty";
+                TempData["Message"] = "The order wasn't created. Cart is empty";
 
                 return RedirectToAction("Index", "Store");
             }

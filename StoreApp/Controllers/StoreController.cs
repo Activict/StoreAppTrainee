@@ -207,7 +207,7 @@ namespace StoreApp.Controllers
 
             if (productVM == null)
             {
-                TempData["Message"] = "Product don't add to cart";
+                TempData["Message"] = "The product wasn't added to the cart";
             }
 
             var cart = TempData["Сart"] as List<ProductViewModel> ?? new List<ProductViewModel>();
@@ -226,7 +226,7 @@ namespace StoreApp.Controllers
 
             TempData["Сart"] = cart;
 
-            TempData["Message"] = "Product added to cart";
+            TempData["Message"] = "The product was added to the cart";
 
             return RedirectToAction("Index");
         }
