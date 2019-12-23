@@ -103,6 +103,7 @@
     <Compile Include="DTO\OrderDTO.cs" />
     <Compile Include="DTO\ProducerDTO.cs" />
     <Compile Include="DTO\ProductDTO.cs" />
+    <Compile Include="DTO\UnitDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="Interfaces\IBrandService.cs" />
     <Compile Include="Interfaces\ICategoryService.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Interfaces\IOrderService.cs" />
     <Compile Include="Interfaces\IProducerService.cs" />
     <Compile Include="Interfaces\IProductService.cs" />
+    <Compile Include="Interfaces\IUnitService.cs" />
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BrandService.cs" />
@@ -119,6 +121,7 @@
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\ProducerService.cs" />
     <Compile Include="Services\ProductService.cs" />
+    <Compile Include="Services\UnitService.cs" />
     <Compile Include="Services\SaveProductImageService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Services\UserValidateService.cs" />

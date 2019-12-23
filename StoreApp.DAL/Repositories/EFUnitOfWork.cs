@@ -15,6 +15,7 @@ namespace StoreApp.DAL.Repositories
         private CategoryRepository categoryRepository;
         private BrandRepository brandRepository;
         private ProducerRepository producerRepository;
+        private UnitRepository unitRepository;
 
         public EFUnitOfWork(string connectionString)
         {
@@ -96,6 +97,17 @@ namespace StoreApp.DAL.Repositories
                     producerRepository = new ProducerRepository(db);
                 }
                 return producerRepository;
+            }
+        }
+        public IRepository<Unit> Units
+        {
+            get
+            {
+                if (unitRepository == null)
+                {
+                    unitRepository = new UnitRepository(db);
+                }
+                return unitRepository;
             }
         }
 

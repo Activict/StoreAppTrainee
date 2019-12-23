@@ -154,6 +154,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProducersController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
+    <Compile Include="Controllers\UnitsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -167,6 +168,7 @@
     <Compile Include="Models\Store\ProductViewModel.cs" />
     <Compile Include="Models\Categories\CategoryViewModel.cs" />
     <Compile Include="Models\Store\ReferenceProducts.cs" />
+    <Compile Include="Models\Unit\UnitViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\WebMapper.cs" />
   </ItemGroup>
@@ -231,6 +233,11 @@
     <Content Include="Views\Producers\DetailsProducer.cshtml" />
     <Content Include="Views\Producers\DeleteProducer.cshtml" />
     <Content Include="Views\Store\_FilterMenuPartial.cshtml" />
+    <Content Include="Views\Units\CreateUnit.cshtml" />
+    <Content Include="Views\Units\Index.cshtml" />
+    <Content Include="Views\Units\EditUnit.cshtml" />
+    <Content Include="Views\Units\DetailsUnit.cshtml" />
+    <Content Include="Views\Units\DeleteUnit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

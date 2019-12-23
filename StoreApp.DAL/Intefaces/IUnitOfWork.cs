@@ -12,6 +12,7 @@ namespace StoreApp.DAL.Intefaces
         IRepository<Category> Categories { get; }
         IRepository<Brand> Brands { get; }
         IRepository<Producer> Producers { get; }
+        IRepository<Unit> Units { get; } 
 
         void Save();
     }
