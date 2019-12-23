@@ -10,7 +10,7 @@ namespace StoreApp.DAL.Entities
         public decimal TotalCost { get; set; }
         public string Status { get; set; }
         public int Discount { get; set; }
-        public DateTime? OrderDate { get; set; }
+        public DateTime OrderDate { get; set; }
 
         public virtual User User { get; set; }
 

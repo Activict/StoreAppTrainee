@@ -42,7 +42,7 @@ namespace StoreApp.BLL.Services
                 TotalCost = totalPrice,
                 Discount = discount,
                 Status = status,
-                OrderTime = DateTime.Now
+                OrderDate = DateTime.Now
             };
 
             Order orderDAL = config.Map<OrderDTO, Order>(orderDTO);

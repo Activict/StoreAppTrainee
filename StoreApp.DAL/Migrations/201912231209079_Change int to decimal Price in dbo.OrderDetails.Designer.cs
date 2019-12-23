@@ -7,13 +7,13 @@ namespace StoreApp.DAL.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.0")]
-    public sealed partial class ChangeinttodecimalindboOrdersandDateTimenullindboDetailsOrder : IMigrationMetadata
+    public sealed partial class ChangeinttodecimalPriceindboOrderDetails : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(ChangeinttodecimalindboOrdersandDateTimenullindboDetailsOrder));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(ChangeinttodecimalPriceindboOrderDetails));
         
         string IMigrationMetadata.Id
         {
-            get { return "201912221656022_Change int to decimal in dbo.Orders and DateTime null in dbo.DetailsOrder"; }
+            get { return "201912231209079_Change int to decimal Price in dbo.OrderDetails"; }
         }
         
         string IMigrationMetadata.Source
