@@ -50,17 +50,13 @@ namespace StoreApp.Controllers
             {
                 var cart = TempData.Peek("Сart") as List<ProductViewModel>;
 
-                cart.Where(p => p.Id == id).Where(p => cart.RemoveAt(p.Id));
+                var product = cart.FirstOrDefault(p => p.Id == id);
 
-                //for (int i = 0; i < cart.Count; i++)
-                //{
-                //    if (cart[i].Id == id)
-                //    {
-                //        cart.RemoveAt(i);
-
-                //        TempData["Cart"] = cart;
-                //    }
-                //}
+                if (product != null)
+                {
+                    cart.Remove(product);
+                    TempData["Cart"] = cart;
+                }
             }
 
             return RedirectToAction("Index");
@@ -73,15 +69,9 @@ namespace StoreApp.Controllers
             {
                 var cart = TempData.Peek("Сart") as List<ProductViewModel>;
 
-                for (int i = 0; i < cart.Count; i++)
-                {
-                    if (cart[i].Id == id)
-                    {
-                        cart[i].Quantity++;
+                cart.FirstOrDefault(p => p.Id == id).Quantity++;
 
-                        TempData["Cart"] = cart;
-                    }
-                }
+                TempData["Cart"] = cart;
             }
 
             return RedirectToAction("Index");
@@ -94,22 +84,18 @@ namespace StoreApp.Controllers
             {
                 var cart = TempData.Peek("Сart") as List<ProductViewModel>;
 
-                for (int i = 0; i < cart.Count; i++)
+                var product = cart.FirstOrDefault(p => p.Id == id && p.Quantity == 1);
+
+                if (product != null)
                 {
-                    if (cart[i].Id == id)
-                    {
-                        if (cart[i].Quantity > 1)
-                        {
-                            cart[i].Quantity--;
-                        }
-                        else
-                        {
-                            cart.RemoveAt(i);
-                        }
-                        
-                        TempData["Cart"] = cart;
-                    }
+                    cart.Remove(product);
                 }
+                else
+                {
+                    cart.FirstOrDefault(p => p.Id == id && p.Quantity > 1).Quantity--;
+                }
+
+                TempData["Cart"] = cart;
             }
 
             return RedirectToAction("Index");
