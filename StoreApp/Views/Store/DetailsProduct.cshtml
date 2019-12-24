@@ -98,7 +98,16 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Buy", "Buy", new { id = Model.Id }, new { @class = "btn btn-success" })
-    @Html.ActionLink("Edit", "EditProduct", new { id = Model.Id }, new { @class = "btn btn-success" }) |
+    @if (User.Identity.IsAuthenticated)
+    {
+        if (Session["Role"].Equals("user"))
+        {
+            @Html.ActionLink("Buy", "Buy", new { id = Model.Id }, new { @class = "btn btn-success" })
+        }
+        if (Session["Role"].Equals("admin"))
+        {
+            @Html.ActionLink("Edit", "EditProduct", new { id = Model.Id }, new { @class = "btn btn-success" })
+        }
+    }
     @Html.ActionLink("Back to products", "Index")
 </p>

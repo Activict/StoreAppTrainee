@@ -49,7 +49,8 @@ namespace StoreApp.Controllers
 
             producerService.Create(producerDTO);
 
-            TempData["Message"] = "Producer created success!";
+            TempData["StatusMessage"] = "success";
+            TempData["Message"] = "Producer created successful!";
 
             return RedirectToAction("Index");
         }
@@ -78,7 +79,8 @@ namespace StoreApp.Controllers
 
             producerService.Edit(config.Map<ProducerViewModel, ProducerDTO>(producer));
 
-            TempData["Message"] = "Producer edited success!";
+            TempData["StatusMessage"] = "success";
+            TempData["Message"] = "Producer edited successful!";
 
             return RedirectToAction("Index");
         }
@@ -90,6 +92,7 @@ namespace StoreApp.Controllers
 
             if (producer == null)
             {
+                TempData["StatusMessage"] = "danger";
                 TempData["Message"] = "This producer isn't exist";
                 return RedirectToAction("Index");
             }
@@ -104,6 +107,7 @@ namespace StoreApp.Controllers
 
             if (producer == null)
             {
+                TempData["StatusMessage"] = "danger";
                 TempData["Message"] = "This producer isn't exist";
                 return RedirectToAction("Index");
             }
@@ -118,13 +122,15 @@ namespace StoreApp.Controllers
         {
             if (producer == null)
             {
+                TempData["StatusMessage"] = "danger";
                 TempData["Message"] = "This producer isn't exist";
                 return RedirectToAction("Index");
             }
 
             producerService.Delete(producer.Id);
 
-            TempData["Message"] = "Producer deleted success!";
+            TempData["StatusMessage"] = "success";
+            TempData["Message"] = "Producer deleted successful!";
 
             return RedirectToAction("Index");
         }

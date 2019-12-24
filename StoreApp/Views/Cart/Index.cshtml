@@ -10,7 +10,7 @@
 
 @if (TempData["Message"] != null)
 {
-    <span class="badge badge-success">@TempData["Message"]</span>
+    <span class="badge badge-@TempData["StatusMessage"]">@TempData["Message"]</span>
 }
 
 <table class="table">

@@ -48,7 +48,8 @@ namespace StoreApp.Controllers
 
             categoryService.Create(categoryDTO);
 
-            TempData["Message"] = "Category created success!";
+            TempData["StatusMessage"] = "success";
+            TempData["Message"] = "Category created successful!";
 
             return RedirectToAction("Index");
         }
@@ -77,7 +78,8 @@ namespace StoreApp.Controllers
 
             categoryService.Edit(config.Map<CategoryViewModel, CategoryDTO>(category));
 
-            TempData["Message"] = "Category edited success!";
+            TempData["StatusMessage"] = "success";
+            TempData["Message"] = "Category edited successful!";
 
             return RedirectToAction("Index");
         }
@@ -89,6 +91,7 @@ namespace StoreApp.Controllers
 
             if (category == null)
             {
+                TempData["StatusMessage"] = "danger";
                 TempData["Message"] = "This category isn't exist";
                 return RedirectToAction("Index");
             }
@@ -103,6 +106,7 @@ namespace StoreApp.Controllers
 
             if (category == null)
             {
+                TempData["StatusMessage"] = "danger";
                 TempData["Message"] = "This category isn't exist";
                 return RedirectToAction("Index");
             }
@@ -117,13 +121,15 @@ namespace StoreApp.Controllers
         {
             if (category == null)
             {
+                TempData["StatusMessage"] = "danger";
                 TempData["Message"] = "This category isn't exist";
                 return RedirectToAction("Index");
             }
 
             categoryService.Delete(category.Id);
 
-            TempData["Message"] = "Category deleted success!";
+            TempData["StatusMessage"] = "success";
+            TempData["Message"] = "Category deleted successful!";
 
             return RedirectToAction("Index");
         }

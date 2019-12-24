@@ -58,7 +58,7 @@ namespace StoreApp.Controllers
                 userDTO.Role = "user";
 
                 userService.Create(userDTO);
-
+                TempData["StatusMessage"] = "success";
                 TempData["Message"] = "Your registration successful!";
             }
             else
@@ -95,6 +95,7 @@ namespace StoreApp.Controllers
             {
                 FormsAuthentication.SetAuthCookie(model.UserName, false);
                 Session["Role"] = userValidateService.GetRole(userDTO);
+                TempData["StatusMessage"] = "success";
                 TempData["Message"] = "You login successful!";
                 return RedirectToAction("Index", "Home");
             }
@@ -156,7 +157,7 @@ namespace StoreApp.Controllers
             if (userValidateService.CheckForEditUser(userDTO))
             {
                 userService.Edit(userDTO);
-
+                TempData["StatusMessage"] = "success";
                 TempData["Message"] = "Your edit account successful!";
 
                 return RedirectToAction("Account");
@@ -212,18 +213,21 @@ namespace StoreApp.Controllers
         {
             if ((Session["Role"] as string).Equals(UserRoles.admin.ToString()))
             {
-                user.Role = user.Role.Equals((int)UserRoles.user) ? UserRoles.user.ToString() 
-                                                                  : UserRoles.admin.ToString();
+                var i = UserRoles.user.ToString();
+                user.Role = int.Parse(user.Role) == (int)(UserRoles.user) ? UserRoles.user.ToString() 
+                                                                          : UserRoles.admin.ToString();
 
                 UserDTO userDTO = webMapper.config.Map<UserViewModel, UserDTO>(user);
 
                 userService.Edit(userDTO);
 
+                TempData["StatusMessage"] = "success";
                 TempData["Message"] = $"{user.UserName} edit success";
 
                 return RedirectToAction("DetailsUser", "Account", new { id = user.Id });
             }
 
+            TempData["StatusMessage"] = "danger";
             TempData["Message"] = $"{user.UserName} don't edited";
 
             return RedirectToAction("Account", "Account");
@@ -257,11 +261,12 @@ namespace StoreApp.Controllers
                 if (user != null)
                 {
                     userService.Delete(user.Id);
-
-                    TempData["Message"] = $"{user.UserName} deleted success";
+                    TempData["StatusMessage"] = "success";
+                    TempData["Message"] = $"{user.UserName} deleted successful";
                 }
                 else
                 {
+                    TempData["StatusMessage"] = "danger";
                     TempData["Message"] = $"{user.UserName} don't deleted";
                 }
             }
@@ -273,8 +278,10 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult Logout()
         {
+            TempData["StatusMessage"] = null;
             TempData["Message"] = null;
-            TempData["Role"] = null;
+            Session["Role"] = null;
+            TempData["Cart"] = null;
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");
         }

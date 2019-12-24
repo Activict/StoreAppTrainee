@@ -50,6 +50,7 @@ namespace StoreApp.Controllers
 
             unitService.Create(unitDTO);
 
+            TempData["StatusMessage"] = "success";
             TempData["Message"] = "Unit created success";
 
             return RedirectToAction("Index");
@@ -79,6 +80,7 @@ namespace StoreApp.Controllers
 
             unitService.Edit(config.Map<UnitViewModel, UnitDTO>(unit));
 
+            TempData["StatusMessage"] = "success";
             TempData["Message"] = "Unit edited success";
 
             return RedirectToAction("Index");
@@ -91,6 +93,7 @@ namespace StoreApp.Controllers
 
             if (unit == null)
             {
+                TempData["StatusMessage"] = "danger";
                 TempData["Message"] = "This unit isn't exist";
                 return RedirectToAction("Index");
             }
@@ -105,6 +108,7 @@ namespace StoreApp.Controllers
 
             if (unit == null)
             {
+                TempData["StatusMessage"] = "danger";
                 TempData["Message"] = "This unit isn't exist";
                 return RedirectToAction("Index");
             }
@@ -119,12 +123,14 @@ namespace StoreApp.Controllers
         {
             if (unit == null)
             {
+                TempData["StatusMessage"] = "danger";
                 TempData["Message"] = "This unit isn't exist";
                 return RedirectToAction("Index");
             }
 
             unitService.Delete(unit.Id);
 
+            TempData["StatusMessage"] = "danger";
             TempData["Message"] = "Unit deleted success!";
 
             return RedirectToAction("Index");

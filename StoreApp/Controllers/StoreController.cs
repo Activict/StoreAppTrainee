@@ -134,6 +134,7 @@ namespace StoreApp.Controllers
                 productService.Create(productDTO);
             }
 
+            TempData["StatusMessage"] = "success";
             TempData["Message"] = "New product created seccessful!";
 
             return RedirectToAction("Index");
@@ -205,7 +206,8 @@ namespace StoreApp.Controllers
 
             product = webMapper.config.Map<ProductDTO, EditProductViewModel>(productDTO);
 
-            TempData["Message"] = "Product have edited";
+            TempData["StatusMessage"] = "success";
+            TempData["Message"] = "Product edited successful";
 
             return View(product);
         }
@@ -235,6 +237,7 @@ namespace StoreApp.Controllers
         {
             if (product == null)
             {
+                TempData["StatusMessage"] = "danger";
                 TempData["Message"] = "Product don't delete!";
                 return RedirectToAction("Index");
             }
@@ -259,6 +262,7 @@ namespace StoreApp.Controllers
 
             if (productVM == null)
             {
+                TempData["StatusMessage"] = "danger";
                 TempData["Message"] = "The product wasn't added to the cart";
             }
 
@@ -277,7 +281,7 @@ namespace StoreApp.Controllers
             }
 
             TempData["Сart"] = cart;
-
+            TempData["StatusMessage"] = "success";
             TempData["Message"] = "The product was added to the cart";
 
             return RedirectToAction("Index");

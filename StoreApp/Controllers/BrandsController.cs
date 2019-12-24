@@ -50,7 +50,8 @@ namespace StoreApp.Controllers
 
             brandService.Create(brandDTO);
 
-            TempData["Message"] = "Brand created success!";
+            TempData["StatusMessage"] = "success";
+            TempData["Message"] = "Brand created successful!";
 
             return RedirectToAction("Index");
         }
@@ -62,6 +63,7 @@ namespace StoreApp.Controllers
 
             if (brand == null)
             {
+                TempData["StatusMessage"] = "danger";
                 TempData["Message"] = "This brand isn't exist";
                 return RedirectToAction("Index");
             }
@@ -76,6 +78,7 @@ namespace StoreApp.Controllers
 
             if (brand == null)
             {
+                TempData["StatusMessage"] = "danger";
                 TempData["Message"] = "This brand isn't exist";
                 return RedirectToAction("Index");
             }
@@ -88,13 +91,15 @@ namespace StoreApp.Controllers
         {
             if (!ModelState.IsValid)
             {
+                TempData["StatusMessage"] = "danger";
                 ModelState.AddModelError("", "Brand edited wrong!");
                 return View(brand);
             }
 
             brandService.Edit(config.Map<BrandViewModel, BrandDTO>(brand));
 
-            TempData["Message"] = "Brand edited success!";
+            TempData["StatusMessage"] = "success";
+            TempData["Message"] = "Brand edited successful!";
 
             return RedirectToAction("Index");
         }
@@ -106,6 +111,7 @@ namespace StoreApp.Controllers
 
             if (brand == null)
             {
+                TempData["StatusMessage"] = "danger";
                 TempData["Message"] = "This brand isn't exist";
                 return RedirectToAction("Index");
             }
@@ -120,13 +126,15 @@ namespace StoreApp.Controllers
         {
             if (brand == null)
             {
+                TempData["StatusMessage"] = "danger";
                 TempData["Message"] = "This brand isn't exist";
                 return RedirectToAction("Index");
             }
 
             brandService.Delete(brand.Id);
 
-            TempData["Message"] = "Brand deleted success!";
+            TempData["StatusMessage"] = "success";
+            TempData["Message"] = "Brand deleted successful!";
 
             return RedirectToAction("Index");
         }
