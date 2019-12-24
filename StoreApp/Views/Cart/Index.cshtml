@@ -8,6 +8,10 @@
 
 <h3>Cart</h3>
 
+@if (TempData["Message"] != null)
+{
+    <span class="label label-success">@TempData["Message"]</span>
+}
 
 <table class="table">
     <tr>
