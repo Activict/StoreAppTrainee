@@ -6,6 +6,7 @@ using StoreApp.BLL.DTO;
 using StoreApp.BLL.Services;
 using StoreApp.Models.Account;
 using StoreApp.Util;
+using StoreApp.Enums;
 
 namespace StoreApp.Controllers
 {
@@ -21,12 +22,12 @@ namespace StoreApp.Controllers
             userService = new UserService();
             webMapper = new WebMapper();
         }
-        
+
         [HttpGet]
         [Authorize]
         public ActionResult Index()
         {
-            if (Session["Role"] as string == "admin" ) 
+            if ((Session["Role"] as string).Equals(RolesEnum.admin.ToString()))
             {
                 var users = webMapper.config.Map<IEnumerable<UserDTO>, IEnumerable<UserViewModel>>(userService.GetAll());
                 return View(users);
@@ -65,7 +66,7 @@ namespace StoreApp.Controllers
                 ViewBag.Message = "This is Email or Username already exist!";
                 return View();
             }
-            
+
             return RedirectToAction("Login");
         }
 
@@ -171,7 +172,7 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult DetailsUser(int id)
         {
-            if (Session["Role"] as string == "admin")
+            if ((Session["Role"] as string).Equals(RolesEnum.admin.ToString()))
             {
                 var user = webMapper.config.Map<UserDTO, UserViewModel>(userService.Get(id));
                 return View(user);
@@ -184,12 +185,18 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult EditUserAdmin(int id)
         {
-            if (Session["Role"] as string == "admin")
+            if ((Session["Role"] as string).Equals(RolesEnum.admin.ToString()))
             {
                 UserViewModel user = webMapper.config.Map<UserDTO, UserViewModel>(userService.Get(id));
 
                 if (user != null)
                 {
+                    List<SelectListItem> ListOfRoles = new List<SelectListItem>();
+                    ListOfRoles.Add(new SelectListItem() { Text = RolesEnum.user.ToString(), Value = ((int)RolesEnum.user).ToString() });
+                    ListOfRoles.Add(new SelectListItem() { Text = RolesEnum.admin.ToString(), Value = ((int)RolesEnum.admin).ToString() });
+
+                    ViewBag.ListOfRoles = new SelectList(ListOfRoles, "Value", "Text");
+
                     return View(user);
                 }
 
@@ -203,27 +210,27 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult EditUserAdmin(UserViewModel user)
         {
-            if (Session["Role"] as string == "admin")
+            if ((Session["Role"] as string).Equals(RolesEnum.admin.ToString()))
             {
-                if (user.Role.Equals("0"))
+                if (user.Role.Equals((int)RolesEnum.user))
                 {
-                    user.Role = "user";
+                    user.Role = RolesEnum.user.ToString();
                 }
-                else if (user.Role.Equals("1"))
+                else if (user.Role.Equals((int)RolesEnum.admin))
                 {
-                    user.Role = "admin";
+                    user.Role = RolesEnum.admin.ToString();
                 }
 
                 UserDTO userDTO = webMapper.config.Map<UserViewModel, UserDTO>(user);
 
                 userService.Edit(userDTO);
 
-                TempData["Message"] = user.UserName + " edit success";
+                TempData["Message"] = $"{user.UserName} edit success";
 
                 return RedirectToAction("DetailsUser", "Account", new { id = user.Id });
             }
 
-            TempData["Message"] = user.UserName + " don't edited";
+            TempData["Message"] = $"{user.UserName} don't edited";
 
             return RedirectToAction("Account", "Account");
         }
@@ -232,7 +239,7 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult DeleteUser(int id)
         {
-            if (Session["Role"] as string == "admin")
+            if ((Session["Role"] as string).Equals(RolesEnum.admin.ToString()))
             {
                 UserViewModel user = webMapper.config.Map<UserDTO, UserViewModel>(userService.Get(id));
 
@@ -251,17 +258,17 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult DeleteUser(UserViewModel user)
         {
-            if (Session["Role"] as string == "admin")
+            if ((Session["Role"] as string).Equals(RolesEnum.admin.ToString()))
             {
                 if (user != null)
                 {
                     userService.Delete(user.Id);
 
-                    TempData["Message"] = user.UserName + " deleted success";
+                    TempData["Message"] = $"{user.UserName} deleted success";
                 }
                 else
                 {
-                    TempData["Message"] = user.UserName + " don't deleted";
+                    TempData["Message"] = $"{user.UserName} don't deleted";
                 }
             }
 

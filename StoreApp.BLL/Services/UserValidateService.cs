@@ -49,16 +49,16 @@ namespace StoreApp.BLL.Services
         public bool CheckTruePassword(UserDTO userDTO)
         {
             return DataBase.Users.GetAll()
-                                 .Any(u => u.Id.Equals(userDTO.Id) &&
-                                           u.Password.Equals(userDTO.Password));
+                .Any(u => u.Id.Equals(userDTO.Id) &&
+                u.Password.Equals(userDTO.Password));
         }
 
         public bool CheckForEditUser(UserDTO userDTO)
         {
             return !DataBase.Users.GetAll()
-                                  .Where(u => u.Id != userDTO.Id)
-                                  .Any(u => u.UserName.Equals(userDTO.UserName) ||
-                                            u.Email.Equals(userDTO.Email));
+                .Any(u => u.Id != userDTO.Id &&
+                (u.UserName.Equals(userDTO.UserName) ||
+                u.Email.Equals(userDTO.Email)));
         }
     }
 }
