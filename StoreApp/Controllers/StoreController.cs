@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Configuration;
+using System.IO;
+using System.Collections.Generic;
 using System.Linq;
+using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using StoreApp.BLL.DTO;
 using StoreApp.BLL.Services;
@@ -12,6 +16,7 @@ namespace StoreApp.Controllers
     public class StoreController : Controller
     {
         private UnitService unitservice;
+        private SaveProductImageService saveProductImage;
         private ProductService productService;
         private CategoryService categoryService;
         private BrandService brandService;
@@ -22,19 +27,20 @@ namespace StoreApp.Controllers
         public StoreController()
         {
             unitservice = new UnitService();
+            saveProductImage = new SaveProductImageService();
             productService = new ProductService();
             categoryService = new CategoryService();
             brandService = new BrandService();
             producerService = new ProducerService();
             filterProductsService = new FilterProductsService();
-            webMapper  = new WebMapper();
+            webMapper = new WebMapper();
         }
 
         [HttpGet]
         public ActionResult Index()
         {
             var products = productService.GetAll().Select(p => webMapper.Map(p));
-            
+
             if (products == null)
             {
                 ViewBag.Message = "No products";
@@ -57,9 +63,9 @@ namespace StoreApp.Controllers
 
                 return View(products);
             }
-            
+
             FilterProductsDTO filterDTO = webMapper.config.Map<FilterProductsViewModel, FilterProductsDTO>(filter);
-            
+
             var productsFiltered = filterProductsService.GetProductsDTOFiltered(filterDTO).Select(p => webMapper.Map(p));
 
             return View(productsFiltered);
@@ -81,7 +87,7 @@ namespace StoreApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateProduct(CreateProductViewModel product)
+        public ActionResult CreateProduct(CreateProductViewModel product, HttpPostedFileBase file)
         {
             ProductDTO productDTO = webMapper.config.Map<CreateProductViewModel, ProductDTO>(product);
 
@@ -98,9 +104,7 @@ namespace StoreApp.Controllers
                     ModelState.AddModelError("", "New product doesn't create");
                 }
 
-                TempData["Categories"] = new SelectList(categoryService.GetAll(), dataValueField: "Id", dataTextField: "Name");
-                TempData["Brands"] = new SelectList(brandService.GetAll(), dataValueField: "Id", dataTextField: "Name");
-                TempData["Producers"] = new SelectList(producerService.GetAll(), dataValueField: "Id", dataTextField: "Name");
+                ViewBag.References = GetReferences();
                 return View(product);
             }
 
@@ -109,7 +113,26 @@ namespace StoreApp.Controllers
                 productDTO.Enable = false;
             }
 
-            productService.Create(productDTO);
+            if (file != null && file.ContentLength > 0)
+            {
+                bool isEnableImageExtension = ConfigurationManager.AppSettings.Get("imageExtension").Contains(file.ContentType.ToLower());
+                
+                if (!isEnableImageExtension)
+                {
+                    ModelState.AddModelError("", "The image was not uploaded - wrong image extension");
+                    ViewBag.References = GetReferences();
+                    return View(product);
+                }
+
+                productDTO.Picture = file.FileName;
+
+                productService.Create(productDTO);
+                saveProductImage.SaveImage(productDTO, file);
+            }
+            else
+            {
+                productService.Create(productDTO);
+            }
 
             TempData["Message"] = "New product created seccessful!";
 
@@ -132,7 +155,7 @@ namespace StoreApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditProduct(EditProductViewModel product)
+        public ActionResult EditProduct(EditProductViewModel product, HttpPostedFileBase file)
         {
             ViewBag.References = GetReferences();
 
@@ -150,7 +173,7 @@ namespace StoreApp.Controllers
                 {
                     ModelState.AddModelError("", "Product haven't edited");
                 }
-                
+
                 return View(product);
             }
 
@@ -159,7 +182,28 @@ namespace StoreApp.Controllers
                 productDTO.Enable = false;
             }
 
-            productService.Edit(productDTO);
+            if (file != null && file.ContentLength > 0)
+            {
+                bool isEnableImageExtension = ConfigurationManager.AppSettings.Get("imageExtension").Contains(file.ContentType.ToLower());
+
+                if (!isEnableImageExtension)
+                {
+                    ModelState.AddModelError("", "The image was not uploaded - wrong image extension");
+                    ViewBag.References = GetReferences();
+                    return View(product);
+                }
+
+                productDTO.Picture = file.FileName;
+
+                productService.Edit(productDTO);
+                saveProductImage.SaveImage(productDTO, file);
+            }
+            else
+            {
+                productService.Edit(productDTO);
+            }
+
+            product = webMapper.config.Map<ProductDTO, EditProductViewModel>(productDTO);
 
             TempData["Message"] = "Product have edited";
 
@@ -193,6 +237,14 @@ namespace StoreApp.Controllers
             {
                 TempData["Message"] = "Product don't delete!";
                 return RedirectToAction("Index");
+            }
+
+            var pathStringPictures = new DirectoryInfo(string.Format($"{Server.MapPath(@"\")}Pictures\\Products"));
+            var pathStringProductsById = Path.Combine(pathStringPictures.ToString(), product.Id.ToString());
+
+            if (Directory.Exists(pathStringProductsById))
+            {
+                Directory.Delete(pathStringProductsById, true);
             }
 
             productService.Delete(product.Id);

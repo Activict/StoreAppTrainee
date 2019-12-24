@@ -11,7 +11,7 @@
     <div class="label-success">@TempData["Message"]</div>
 }
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("EditProduct", "Store", FormMethod.Post, new { enctype = "multipart/form-data"}))
 {
     @Html.AntiForgeryToken()
 
@@ -54,8 +54,16 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Picture, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Picture, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Picture, "", new { @class = "text-danger" })
+
+                @if (Model.Picture == null)
+                {
+                    <img src="~/Pictures/no_image.png" />
+                }
+                else
+                {
+                    <img src="/Pictures/Products/@Model.Id/@Model.Picture" />
+                }
+                <input type="file" name="file" id="file" />
             </div>
         </div>
 
