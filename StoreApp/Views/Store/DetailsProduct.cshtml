@@ -7,7 +7,6 @@
 <h3>Details @Model.Name</h3>
 
 <div>
-
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -23,7 +22,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Price)
+            $ @Html.DisplayFor(model => model.Price)
         </dd>
 
         <dt>
@@ -47,7 +46,14 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Picture)
+            @if (Model.Picture == null)
+            {
+                <img src="~/Pictures/no_image.png" />
+            }
+            else
+            {
+                <img src="/Pictures/Products/@Model.Id/@Model.Picture" />
+            }
         </dd>
 
         <dt>
@@ -89,10 +95,10 @@
         <dd>
             @Html.DisplayFor(model => model.Producer)
         </dd>
-
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "EditProduct", new { id = Model.Id }, new { @class = "btn btn-success"}) |
+    @Html.ActionLink("Buy", "Buy", new { id = Model.Id }, new { @class = "btn btn-success" })
+    @Html.ActionLink("Edit", "EditProduct", new { id = Model.Id }, new { @class = "btn btn-success" }) |
     @Html.ActionLink("Back to products", "Index")
 </p>

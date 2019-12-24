@@ -82,6 +82,10 @@
     <Compile Include="Migrations\201912190944472_Added dbo.Unit.designer.cs">
       <DependentUpon>201912190944472_Added dbo.Unit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912231209079_Change int to decimal Price in dbo.OrderDetails.cs" />
+    <Compile Include="Migrations\201912231209079_Change int to decimal Price in dbo.OrderDetails.designer.cs">
+      <DependentUpon>201912231209079_Change int to decimal Price in dbo.OrderDetails.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\BrandRepository.cs" />
@@ -113,6 +117,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912190944472_Added dbo.Unit.resx">
       <DependentUpon>201912190944472_Added dbo.Unit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912231209079_Change int to decimal Price in dbo.OrderDetails.resx">
+      <DependentUpon>201912231209079_Change int to decimal Price in dbo.OrderDetails.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

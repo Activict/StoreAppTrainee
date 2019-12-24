@@ -43,6 +43,7 @@
             <ul class="navbar-nav">
                 @if (Request.IsAuthenticated)
                 {
+                    <li class="nav-item">@Html.Action("CartPartial", "Cart")</li>
                     <li class="nav-item">@Html.ActionLink(User.Identity.Name, "Account", "Account", null, new { @class = "nav-link" })</li>
                     <li class="nav-item">@Html.ActionLink("logout", "Logout", "Account", null, new { @class = "nav-link" })</li>
                 }
@@ -57,8 +58,10 @@
     <div class="container body-content mt-3">
         @RenderBody()
         <hr />
+    </div>
+    <div class="container footer-content">
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - E-shop trainee</p>
         </footer>
     </div>
 

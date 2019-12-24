@@ -9,6 +9,6 @@ namespace StoreApp.BLL.DTO
         public decimal TotalCost { get; set; }
         public string Status { get; set; }
         public int Discount { get; set; }
-        public DateTime OrderTime { get; set; }
+        public DateTime OrderDate { get; set; }
     }
 }

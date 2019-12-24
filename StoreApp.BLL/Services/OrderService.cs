@@ -4,6 +4,7 @@ using StoreApp.BLL.Interfaces;
 using StoreApp.DAL.Entities;
 using StoreApp.DAL.Intefaces;
 using StoreApp.DAL.Repositories;
+using System;
 using System.Collections.Generic;
 
 namespace StoreApp.BLL.Services
@@ -31,6 +32,23 @@ namespace StoreApp.BLL.Services
             Order orderDAL = config.Map<OrderDTO, Order>(order);
             DataBase.Orders.Create(orderDAL);
             DataBase.Save();
+        }
+
+        public int Create(int userId, decimal totalPrice, int discount = 0, string status = "done")
+        {
+            OrderDTO orderDTO = new OrderDTO()
+            {
+                UserId = userId,
+                TotalCost = totalPrice,
+                Discount = discount,
+                Status = status,
+                OrderDate = DateTime.Now
+            };
+
+            Order orderDAL = config.Map<OrderDTO, Order>(orderDTO);
+            DataBase.Orders.Create(orderDAL);
+            DataBase.Save();
+            return orderDAL.Id;
         }
 
         public void Delete(int id)
