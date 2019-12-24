@@ -1,2 +1,6 @@
-﻿@Html.ActionLink("Your Cart :", "Index", "Cart")
-@ViewBag.CountToCart item(s) - @ViewBag.TotalPriceCart $
+﻿@{
+    string cart_info = $"Your Cart : {@ViewBag.CountToCart} item(s) - {@ViewBag.TotalPriceCart} $";
+    @Html.ActionLink(cart_info, "Index", "Cart", null, new { @class = "nav-link" });
+}
+
+

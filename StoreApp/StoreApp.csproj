@@ -158,7 +158,7 @@
     <Compile Include="Controllers\ProducersController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Controllers\UnitsController.cs" />
-    <Compile Include="Enums\RolesEnum.cs" />
+    <Compile Include="Enums\UserRoles.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

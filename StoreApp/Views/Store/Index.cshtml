@@ -7,7 +7,7 @@
 
 @if (TempData["Message"] != null)
 {
-    <div class="label-success col-md-3">@TempData["Message"]</div>
+    <span class="badge badge-success">@TempData["Message"]</span>
 }
 
 @if (role != null && role.Equals("admin"))
@@ -74,7 +74,16 @@
                     @Html.DisplayFor(modelItem => item.Unit)
                 </div>
                 <div class="col-1">
-                    @Html.DisplayFor(modelItem => item.Picture)
+                    <a href="/Store/DetailsProduct/@item.Id">
+                        @if (item.Picture == null)
+                        {
+                            <img src="~/Pictures/preview_no_image.png" />
+                        }
+                        else
+                        {
+                            <img src="/Pictures/Products/@item.Id/preview_@item.Picture" />
+                        }
+                    </a>
                 </div>
                 <div class="col-1">
                     @Html.DisplayFor(modelItem => item.Quality)
@@ -94,6 +103,7 @@
                 <div class="col-2">
                     @if (role != null && role.Equals("admin"))
                     {
+                        @Html.ActionLink("Buy", "Buy", new { id = item.Id }, new { @class = "btn btn-success" })
                         @Html.ActionLink("Edit", "EditProduct", new { id = item.Id })
                         @Html.ActionLink("Details", "DetailsProduct", new { id = item.Id })
                         @Html.ActionLink("Delete", "DeleteProduct", new { id = item.Id })

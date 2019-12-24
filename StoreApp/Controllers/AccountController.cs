@@ -27,7 +27,7 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            if ((Session["Role"] as string).Equals(RolesEnum.admin.ToString()))
+            if ((Session["Role"] as string).Equals(UserRoles.admin.ToString()))
             {
                 var users = webMapper.config.Map<IEnumerable<UserDTO>, IEnumerable<UserViewModel>>(userService.GetAll());
                 return View(users);
@@ -172,7 +172,7 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult DetailsUser(int id)
         {
-            if ((Session["Role"] as string).Equals(RolesEnum.admin.ToString()))
+            if ((Session["Role"] as string).Equals(UserRoles.admin.ToString()))
             {
                 var user = webMapper.config.Map<UserDTO, UserViewModel>(userService.Get(id));
                 return View(user);
@@ -185,15 +185,15 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult EditUserAdmin(int id)
         {
-            if ((Session["Role"] as string).Equals(RolesEnum.admin.ToString()))
+            if ((Session["Role"] as string).Equals(UserRoles.admin.ToString()))
             {
                 UserViewModel user = webMapper.config.Map<UserDTO, UserViewModel>(userService.Get(id));
 
                 if (user != null)
                 {
                     List<SelectListItem> ListOfRoles = new List<SelectListItem>();
-                    ListOfRoles.Add(new SelectListItem() { Text = RolesEnum.user.ToString(), Value = ((int)RolesEnum.user).ToString() });
-                    ListOfRoles.Add(new SelectListItem() { Text = RolesEnum.admin.ToString(), Value = ((int)RolesEnum.admin).ToString() });
+                    ListOfRoles.Add(new SelectListItem() { Text = UserRoles.user.ToString(), Value = ((int)UserRoles.user).ToString() });
+                    ListOfRoles.Add(new SelectListItem() { Text = UserRoles.admin.ToString(), Value = ((int)UserRoles.admin).ToString() });
 
                     ViewBag.ListOfRoles = new SelectList(ListOfRoles, "Value", "Text");
 
@@ -210,16 +210,10 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult EditUserAdmin(UserViewModel user)
         {
-            if ((Session["Role"] as string).Equals(RolesEnum.admin.ToString()))
+            if ((Session["Role"] as string).Equals(UserRoles.admin.ToString()))
             {
-                if (user.Role.Equals((int)RolesEnum.user))
-                {
-                    user.Role = RolesEnum.user.ToString();
-                }
-                else if (user.Role.Equals((int)RolesEnum.admin))
-                {
-                    user.Role = RolesEnum.admin.ToString();
-                }
+                user.Role = user.Role.Equals((int)UserRoles.user) ? UserRoles.user.ToString() 
+                                                                  : UserRoles.admin.ToString();
 
                 UserDTO userDTO = webMapper.config.Map<UserViewModel, UserDTO>(user);
 
@@ -239,7 +233,7 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult DeleteUser(int id)
         {
-            if ((Session["Role"] as string).Equals(RolesEnum.admin.ToString()))
+            if ((Session["Role"] as string).Equals(UserRoles.admin.ToString()))
             {
                 UserViewModel user = webMapper.config.Map<UserDTO, UserViewModel>(userService.Get(id));
 
@@ -258,7 +252,7 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult DeleteUser(UserViewModel user)
         {
-            if ((Session["Role"] as string).Equals(RolesEnum.admin.ToString()))
+            if ((Session["Role"] as string).Equals(UserRoles.admin.ToString()))
             {
                 if (user != null)
                 {

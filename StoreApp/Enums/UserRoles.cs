@@ -1,6 +1,6 @@
 ﻿namespace StoreApp.Enums
 {
-    public enum RolesEnum
+    public enum UserRoles
     {
         user = 0,
         admin

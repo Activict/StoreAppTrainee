@@ -8,10 +8,10 @@
 
 @if (TempData["Message"] != null)
 {
-    <div class="label-success">@TempData["Message"]</div>
+    <span class="badge badge-success">@TempData["Message"]</span>
 }
 
-@using (Html.BeginForm("EditProduct", "Store", FormMethod.Post, new { enctype = "multipart/form-data"}))
+@using (Html.BeginForm("EditProduct", "Store", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 

@@ -8,7 +8,7 @@
 
 @if (TempData["Message"] != null)
 {
-<div class="btn-success col-md-3 ">@TempData["Message"]</div>
+    <span class="badge badge-success">@TempData["Message"]</span>
 }
 
 @using (Html.BeginForm())

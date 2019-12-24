@@ -2,11 +2,11 @@
     ViewBag.Title = "Registration";
 }
 
-<h2>Registration</h2>
+<h3>Registration</h3>
 
 @if (ViewBag.Message != null)
 {
-    <div class="btn-danger col-md-2">@ViewBag.Message</div>
+    <span class="badge badge-success">@ViewBag.Message</span>
 }
 
 <br />
@@ -17,7 +17,7 @@
     <div>
         <div class="col-md-2">
             Email:
-        </div> 
+        </div>
         <input type="email" name="Email" />
     </div>
     <div>
