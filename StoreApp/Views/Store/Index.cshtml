@@ -60,7 +60,8 @@
         <hr />
         @foreach (var item in Model)
         {
-            <div class="row">
+
+            <div class="row text-center justify-content-center ">
                 <div class="col-1">
                     @Html.DisplayFor(modelItem => item.Name)
                 </div>
@@ -100,13 +101,14 @@
                 <div class="col-1">
                     @Html.DisplayFor(modelItem => item.Producer)
                 </div>
-                <div class="col-2">
+                <div class="col-1">
+                    @Html.ActionLink("Buy", "Buy", new { id = item.Id }, new { @class = "btn btn-success " })
+                </div>
+                <div class="col-1">
                     @if (role != null && role.Equals("admin"))
                     {
-                        @Html.ActionLink("Buy", "Buy", new { id = item.Id }, new { @class = "btn btn-success" })
-                        @Html.ActionLink("Edit", "EditProduct", new { id = item.Id })
-                        @Html.ActionLink("Details", "DetailsProduct", new { id = item.Id })
-                        @Html.ActionLink("Delete", "DeleteProduct", new { id = item.Id })
+                        <div>@Html.ActionLink("Edit", "EditProduct", new { id = item.Id })</div>
+                        <div>@Html.ActionLink("Del", "DeleteProduct", new { id = item.Id })</div>
                     }
                 </div>
             </div>
