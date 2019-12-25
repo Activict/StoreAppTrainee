@@ -4,6 +4,7 @@ using StoreApp.DAL.Intefaces;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
 
 namespace StoreApp.DAL.Repositories
 {
@@ -31,12 +32,12 @@ namespace StoreApp.DAL.Repositories
 
         public void Detach(Producer item)
         {
-            db.Entry(item).State = EntityState.Modified;
+            db.Entry(item).State = EntityState.Detached;
         }
 
         public IEnumerable<Producer> Find(Func<Producer, bool> predicate)
         {
-            throw new NotImplementedException();
+            return db.Producers.Where(predicate).ToList();
         }
 
         public Producer Get(int id)
@@ -46,7 +47,7 @@ namespace StoreApp.DAL.Repositories
 
         public IEnumerable<Producer> GetAll()
         {
-            return db.Producers;
+            return db.Producers.ToList();
         }
 
         public void Update(Producer item)

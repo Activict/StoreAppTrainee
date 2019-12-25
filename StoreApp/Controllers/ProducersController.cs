@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace StoreApp.Controllers
 {
+    [Authorize]
     public class ProducersController : Controller
     {
         private ProducerService producerService;
@@ -45,6 +46,12 @@ namespace StoreApp.Controllers
                 return View(producer);
             }
 
+            if (!producerService.CheckExistProducer(config.Map<ProducerViewModel, ProducerDTO>(producer)))
+            {
+                ModelState.AddModelError("", "Such producer already exist!");
+                return View(producer);
+            }
+
             ProducerDTO producerDTO = config.Map<ProducerViewModel, ProducerDTO>(producer);
 
             producerService.Create(producerDTO);
@@ -74,6 +81,12 @@ namespace StoreApp.Controllers
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Producer edited wrong!");
+                return View(producer);
+            }
+
+            if (!producerService.CheckExistProducer(config.Map<ProducerViewModel, ProducerDTO>(producer)))
+            {
+                ModelState.AddModelError("", "Such producer already exist!");
                 return View(producer);
             }
 

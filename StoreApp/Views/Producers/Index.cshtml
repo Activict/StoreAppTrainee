@@ -5,6 +5,12 @@
 }
 
 <h3>Producers</h3>
+
+@if (TempData["Message"] != null)
+{
+    <span class="badge badge-@TempData["StatusMessage"]">@TempData["Message"]</span>
+}
+
 <p>
     @Html.ActionLink("Create producer", "CreateProducer", null, new { @class = "btn btn-success" })
 </p>
@@ -16,17 +22,18 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "EditProducer", new { id=item.Id }) |
-            @Html.ActionLink("Details", "DetailsProducer", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "DeleteProducer", new { id=item.Id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "EditProducer", new { id = item.Id }) |
+                @Html.ActionLink("Details", "DetailsProducer", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "DeleteProducer", new { id = item.Id })
+            </td>
+        </tr>
+    }
 
 </table>
