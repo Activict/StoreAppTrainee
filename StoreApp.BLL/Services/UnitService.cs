@@ -76,6 +76,16 @@ namespace StoreApp.BLL.Services
             return DataBase.Products.GetAll().Count(p => p.UnitId.Equals(id));
         }
 
+        public bool CheckExistUnit(UnitDTO unitDTO)
+        {
+            var units = DataBase.Units.GetAll();
+
+            units.ToList().ForEach(p => DataBase.Units.Detach(p));
+
+            return !units.Any(p => p.Id != unitDTO.Id &&
+                                   p.Name.Equals(unitDTO.Name));
+        }
+
         public void Dispose()
         {
             DataBase.Dispose();

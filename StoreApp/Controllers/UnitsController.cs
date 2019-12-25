@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace StoreApp.Controllers
 {
+    [Authorize]
     public class UnitsController : Controller
     {
         private UnitService unitService;
@@ -46,6 +47,12 @@ namespace StoreApp.Controllers
                 return View(unit);
             }
 
+            if (!unitService.CheckExistUnit(config.Map<UnitViewModel, UnitDTO>(unit)))
+            {
+                ModelState.AddModelError("", "Such unit already exist!");
+                return View(unit);
+            }
+
             UnitDTO unitDTO = config.Map<UnitViewModel, UnitDTO>(unit);
 
             unitService.Create(unitDTO);
@@ -75,6 +82,12 @@ namespace StoreApp.Controllers
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Unit edited wrong!");
+                return View(unit);
+            }
+
+            if (!unitService.CheckExistUnit(config.Map<UnitViewModel, UnitDTO>(unit)))
+            {
+                ModelState.AddModelError("", "Such unit already exist!");
                 return View(unit);
             }
 
