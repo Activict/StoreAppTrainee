@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace StoreApp.Controllers
 {
+    [Authorize]
     public class CategoryController : Controller
     {
         private CategoryService categoryService;
@@ -44,6 +45,12 @@ namespace StoreApp.Controllers
                 return View(category);
             }
 
+            if (!categoryService.CheckExistCategory(config.Map<CategoryViewModel, CategoryDTO>(category)))
+            {
+                ModelState.AddModelError("", "Such category already exist!");
+                return View(category);
+            }
+
             CategoryDTO categoryDTO = config.Map<CategoryViewModel, CategoryDTO>(category);
 
             categoryService.Create(categoryDTO);
@@ -73,6 +80,12 @@ namespace StoreApp.Controllers
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Category edited wrong!");
+                return View(category);
+            }
+
+            if (!categoryService.CheckExistCategory(config.Map<CategoryViewModel, CategoryDTO>(category)))
+            {
+                ModelState.AddModelError("", "Such category already exist!");
                 return View(category);
             }
 

@@ -74,6 +74,16 @@ namespace StoreApp.BLL.Services
             return DataBase.Products.GetAll().Count(p => p.CategoryId.Equals(id));
         }
 
+        public bool CheckExistCategory(CategoryDTO categoryDTO)
+        {
+            var categories = DataBase.Categories.GetAll();
+
+            categories.ToList().ForEach(c => DataBase.Categories.Detach(c));
+
+            return !categories.Any(c => c.Id != categoryDTO.Id &&
+                                        c.Name.Equals(categoryDTO.Name));
+        }
+
         public void Dispose()
         {
             DataBase.Dispose();
