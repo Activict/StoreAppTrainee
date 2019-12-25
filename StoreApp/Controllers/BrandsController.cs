@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace StoreApp.Controllers
 {
+    [Authorize]
     public class BrandsController : Controller
     {
         private BrandService brandService;
@@ -43,6 +44,12 @@ namespace StoreApp.Controllers
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Brand create is wrong!");
+                return View(brand);
+            }
+
+            if (!brandService.CheckExistBrand(config.Map<BrandViewModel, BrandDTO>(brand)))
+            {
+                ModelState.AddModelError("", "Such category already exist!");
                 return View(brand);
             }
 
@@ -93,6 +100,12 @@ namespace StoreApp.Controllers
             {
                 TempData["StatusMessage"] = "danger";
                 ModelState.AddModelError("", "Brand edited wrong!");
+                return View(brand);
+            }
+
+            if (!brandService.CheckExistBrand(config.Map<BrandViewModel, BrandDTO>(brand)))
+            {
+                ModelState.AddModelError("", "Such brand already exist!");
                 return View(brand);
             }
 
