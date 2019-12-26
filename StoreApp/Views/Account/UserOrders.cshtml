@@ -6,7 +6,6 @@
 
 <h3>@User.Identity.Name orders</h3>
 
-
 @foreach (var item in Model)
 {
     <div class="row font-weight-bold">
@@ -51,19 +50,13 @@
         <div class="col-1">
             @Html.DisplayFor(modelItem => item.Discount)
         </div>
-        <div class="col-1">
-
-        </div>
 
     </div>
 
     foreach (var details in item.OrderDetails)
     {
         <div class="row">
-            <div class="col-5">
-
-            </div>
-            <div class="col-1">
+            <div class="col-1 offset-sm-5">
                 @if (details.Product.Picture == null)
                 {
                     <img src="~/Pictures/preview_no_image.png" />
