@@ -7,6 +7,7 @@
         public decimal Price { get; set; }
         public int Quantity { get; set; }
         public string Unit { get; set; }
+        public int UnitId { get; set; }
         public string Picture { get; set; }
         public string Quality { get; set; }
         public bool Enable { get; set; }

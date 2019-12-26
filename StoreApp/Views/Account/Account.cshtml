@@ -1,7 +1,9 @@
-﻿@model StoreApp.Models.Account.UserViewModel
+﻿@using StoreApp.Enums;
+@model StoreApp.Models.Account.UserViewModel
 
 @{
     ViewBag.Title = "Account";
+    string role = Session["Role"] as String;
 }
 
 <h3>Account @Model.UserName</h3>
@@ -14,6 +16,13 @@
 <div>
     <hr />
     <dl class="dl-horizontal">
+        @if (role.Equals(UserRoles.User.ToString()))
+        {
+        <dd>
+            @Html.ActionLink("Show my orders", "UserOrders", new { id = Model.Id })
+        </dd>
+        }
+
         <dt>
             @Html.DisplayNameFor(model => model.Email)
         </dt>

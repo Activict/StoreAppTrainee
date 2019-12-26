@@ -6,18 +6,29 @@ using StoreApp.BLL.DTO;
 using StoreApp.BLL.Services;
 using StoreApp.Models.Account;
 using StoreApp.Util;
+using StoreApp.Models.Orders;
+using StoreApp.Models.OrderDetails;
+using StoreApp.Models.Store;
 using StoreApp.Enums;
 
 namespace StoreApp.Controllers
 {
     public class AccountController : Controller
     {
+        private UnitService unitService;
+        private ProductService productService;
+        private OrderService orderService;
+        private OrderDetailService orderDetailService;
         private UserValidateService userValidateService;
         private UserService userService;
         private WebMapper webMapper;
 
         public AccountController()
         {
+            unitService = new UnitService();
+            productService = new ProductService();
+            orderService = new OrderService();
+            orderDetailService = new OrderDetailService();
             userValidateService = new UserValidateService();
             userService = new UserService();
             webMapper = new WebMapper();
@@ -121,6 +132,26 @@ namespace StoreApp.Controllers
             {
                 return RedirectToAction("Login");
             }
+        }
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult UserOrders(int? id)
+        {
+            var orders = webMapper.config.Map<IEnumerable<OrderDTO>, IEnumerable<OrderViewModel>>(orderService.GetAll().Where(o => id == null ? o.UserId != id : o.UserId == id));
+
+            foreach (var order in orders)
+            {
+                order.OrderDetails = webMapper.config.Map<IEnumerable<OrderDetailDTO>, IEnumerable<OrderDetailsViewModel>>(orderDetailService.GetAll().Where(o => o.OrderId == order.Id));
+
+                foreach (var details in order.OrderDetails)
+                {
+                    details.Product = webMapper.config.Map<ProductDTO, ProductViewModel>(productService.Get(details.ProductId));
+                    details.Product.Unit = unitService.Get(details.Product.UnitId).Name;
+                }
+            }
+
+            return View(orders);
         }
 
         [HttpGet]

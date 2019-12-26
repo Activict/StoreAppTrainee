@@ -16,13 +16,23 @@ namespace StoreApp.BLL.Services
 
         public OrderDetailService(IUnitOfWork eof)
         {
-            config = new MapperConfiguration(cfg => cfg.CreateMap<OrderDetailDTO, OrderDetail>()).CreateMapper();
+            config = new MapperConfiguration(
+                cfg =>
+                {
+                    cfg.CreateMap<OrderDetailDTO, OrderDetail>();
+                    cfg.CreateMap<OrderDetail, OrderDetailDTO>();
+                }).CreateMapper();
             DataBase = eof;
         }
 
         public OrderDetailService()
         {
-            config = new MapperConfiguration(cfg => cfg.CreateMap<OrderDetailDTO, OrderDetail>()).CreateMapper();
+            config = new MapperConfiguration(
+                cfg =>
+                {
+                    cfg.CreateMap<OrderDetailDTO, OrderDetail>();
+                    cfg.CreateMap<OrderDetail, OrderDetailDTO>();
+                }).CreateMapper();
             DataBase = new EFUnitOfWork("DefaultConnection");
         }
 

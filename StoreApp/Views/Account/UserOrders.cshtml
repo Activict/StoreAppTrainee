@@ -1,0 +1,91 @@
+﻿@model IEnumerable<StoreApp.Models.Orders.OrderViewModel>
+
+@{
+    ViewBag.Title = User.Identity.Name + " orders";
+}
+
+<h3>@User.Identity.Name orders</h3>
+
+
+@foreach (var item in Model)
+{
+    <div class="row font-weight-bold">
+        <div class="col-2">
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </div>
+        <div class="col-1">
+            @Html.DisplayNameFor(model => model.TotalCost)
+        </div>
+        <div class="col-1">
+            @Html.DisplayNameFor(model => model.Status)
+        </div>
+        <div class="col-1">
+            @Html.DisplayNameFor(model => model.Discount)
+        </div>
+        <div class="col-1">
+            Picture
+        </div>
+        <div class="col-1">
+            Product
+        </div>
+        <div class="col-1">
+            Price
+        </div>
+        <div class="col-1">
+            Quantity
+        </div>
+        <div class="col-1">
+            Unit
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            @Html.DisplayFor(modelItem => item.OrderDate)
+        </div>
+        <div class="col-1">
+            @Html.DisplayFor(modelItem => item.TotalCost)
+        </div>
+        <div class="col-1">
+            @Html.DisplayFor(modelItem => item.Status)
+        </div>
+        <div class="col-1">
+            @Html.DisplayFor(modelItem => item.Discount)
+        </div>
+        <div class="col-1">
+
+        </div>
+
+    </div>
+
+    foreach (var details in item.OrderDetails)
+    {
+        <div class="row">
+            <div class="col-5">
+
+            </div>
+            <div class="col-1">
+                @if (details.Product.Picture == null)
+                {
+                    <img src="~/Pictures/preview_no_image.png" />
+                }
+                else
+                {
+                    <img src="/Pictures/Products/@details.ProductId/preview_@details.Product.Picture" />
+                }
+            </div>
+            <div class="col-1">
+                @Html.DisplayFor(det => details.Product.Name)
+            </div>
+            <div class="col-1">
+                @Html.DisplayFor(det => details.Price)
+            </div>
+            <div class="col-1">
+                @Html.DisplayFor(det => details.Quantity)
+            </div>
+            <div class="col-1">
+                @Html.DisplayFor(det => details.Product.Unit)
+            </div>
+        </div>
+    }
+    <hr />
+}

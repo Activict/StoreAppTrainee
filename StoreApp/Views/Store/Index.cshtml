@@ -110,12 +110,12 @@ else
                 {
                     if (role.Equals(UserRoles.User.ToString()))
                     {
-                        <div class="col-2">@Html.ActionLink("Buy", "Buy", new { id = item.Id }, new { @class = "btn btn-success " })</div>
+                        <div class="col-2">@Html.ActionLink("Buy", "Buy", new { id = item.Id }, new { @class = "btn btn-success btn-sm" })</div>
                     }
                 }
                 else
                 {
-                    <div class="col-2">@Html.ActionLink("Buy", "Login", "Account", new { id = item.Id }, new { @class = "btn btn-success " })</div>
+                    <div class="col-2">@Html.ActionLink("Buy", "Login", "Account", new { id = item.Id }, new { @class = "btn btn-success btn-sm" })</div>
                 }
 
                 @if (role != null && role.Equals(UserRoles.Admin.ToString()))

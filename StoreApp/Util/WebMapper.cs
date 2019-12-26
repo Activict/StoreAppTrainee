@@ -4,6 +4,8 @@ using AutoMapper;
 using StoreApp.BLL.Services;
 using StoreApp.Models.Filter;
 using StoreApp.Models.Account;
+using StoreApp.Models.Orders;
+using StoreApp.Models.OrderDetails;
 
 namespace StoreApp.Util
 {
@@ -37,6 +39,8 @@ namespace StoreApp.Util
                     cfg.CreateMap<UserRegistrationViewModel, UserDTO>();
                     cfg.CreateMap<UserDTO, UserEditViewModel>();
                     cfg.CreateMap<UserEditViewModel, UserDTO>();
+                    cfg.CreateMap<OrderDTO, OrderViewModel>();
+                    cfg.CreateMap<OrderDetailDTO, OrderDetailsViewModel>();
                 }).CreateMapper();
         }
 

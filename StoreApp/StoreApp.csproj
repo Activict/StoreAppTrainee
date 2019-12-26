@@ -168,6 +168,8 @@
     <Compile Include="Models\Account\UserRegistrationViewModel.cs" />
     <Compile Include="Models\Account\UserViewModel.cs" />
     <Compile Include="Models\Filter\FilterProductsViewModel.cs" />
+    <Compile Include="Models\OrderDetails\OrderDetailsViewModel.cs" />
+    <Compile Include="Models\Orders\OrderViewModel.cs" />
     <Compile Include="Models\Producers\ProducerViewModel.cs" />
     <Compile Include="Models\Brands\BrandViewModel.cs" />
     <Compile Include="Models\Store\CreateProductViewModel.cs" />
@@ -357,6 +359,7 @@
     <Content Include="Views\Account\DetailsUser.cshtml" />
     <Content Include="Views\Account\EditUserAdmin.cshtml" />
     <Content Include="Views\Account\DeleteUser.cshtml" />
+    <Content Include="Views\Account\UserOrders.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
