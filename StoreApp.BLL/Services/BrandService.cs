@@ -70,7 +70,7 @@ namespace StoreApp.BLL.Services
             return DataBase.Products.GetAll().Count(p => p.BrandId.Equals(id));
         }
 
-        public bool CheckExistBrand(BrandDTO brandDTO)
+        public bool IsExistBrand(BrandDTO brandDTO)
         {
             var brands = DataBase.Brands.GetAll();
 

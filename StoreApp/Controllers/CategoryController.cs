@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using StoreApp.BLL.DTO;
 using StoreApp.BLL.Services;
+using StoreApp.Enums;
 using StoreApp.Models.Categories;
 using System.Collections.Generic;
 using System.Web.Mvc;
@@ -45,7 +46,7 @@ namespace StoreApp.Controllers
                 return View(category);
             }
 
-            if (!categoryService.CheckExistCategory(config.Map<CategoryViewModel, CategoryDTO>(category)))
+            if (!categoryService.IsExistCategory(config.Map<CategoryViewModel, CategoryDTO>(category)))
             {
                 ModelState.AddModelError("", "Such category already exist!");
                 return View(category);
@@ -55,7 +56,7 @@ namespace StoreApp.Controllers
 
             categoryService.Create(categoryDTO);
 
-            TempData["StatusMessage"] = "success";
+            TempData["StatusMessage"] = StateMessage.success.ToString();
             TempData["Message"] = "Category created successful!";
 
             return RedirectToAction("Index");
@@ -83,7 +84,7 @@ namespace StoreApp.Controllers
                 return View(category);
             }
 
-            if (!categoryService.CheckExistCategory(config.Map<CategoryViewModel, CategoryDTO>(category)))
+            if (!categoryService.IsExistCategory(config.Map<CategoryViewModel, CategoryDTO>(category)))
             {
                 ModelState.AddModelError("", "Such category already exist!");
                 return View(category);
@@ -91,7 +92,7 @@ namespace StoreApp.Controllers
 
             categoryService.Edit(config.Map<CategoryViewModel, CategoryDTO>(category));
 
-            TempData["StatusMessage"] = "success";
+            TempData["StatusMessage"] = StateMessage.success.ToString();
             TempData["Message"] = "Category edited successful!";
 
             return RedirectToAction("Index");
@@ -104,7 +105,7 @@ namespace StoreApp.Controllers
 
             if (category == null)
             {
-                TempData["StatusMessage"] = "danger";
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
                 TempData["Message"] = "This category isn't exist";
                 return RedirectToAction("Index");
             }
@@ -119,7 +120,7 @@ namespace StoreApp.Controllers
 
             if (category == null)
             {
-                TempData["StatusMessage"] = "danger";
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
                 TempData["Message"] = "This category isn't exist";
                 return RedirectToAction("Index");
             }
@@ -134,14 +135,14 @@ namespace StoreApp.Controllers
         {
             if (category == null)
             {
-                TempData["StatusMessage"] = "danger";
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
                 TempData["Message"] = "This category isn't exist";
                 return RedirectToAction("Index");
             }
 
             categoryService.Delete(category.Id);
 
-            TempData["StatusMessage"] = "success";
+            TempData["StatusMessage"] = StateMessage.success.ToString();
             TempData["Message"] = "Category deleted successful!";
 
             return RedirectToAction("Index");

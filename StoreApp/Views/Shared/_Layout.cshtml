@@ -1,4 +1,5 @@
-﻿@{
+﻿@using StoreApp.Enums;
+@{
     string role = Session["Role"] as String;
 }
 
@@ -24,26 +25,26 @@
                 <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })</li>
                 <li class="nav-item">@Html.ActionLink("Store", "Index", "Store", null, new { @class = "nav-link" })</li>
 
-                @if (role != null && role.Equals("admin"))
+                @if (role != null && role.Equals(UserRoles.Admin.ToString()))
                 {
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Admin panel
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            @Html.ActionLink("Units", "Index", "Units", null, new { @class = "dropdown-item" })
-                            @Html.ActionLink("Category", "Index", "Category", null, new { @class = "dropdown-item" })
-                            @Html.ActionLink("Brands", "Index", "Brands", null, new { @class = "dropdown-item" })
-                            @Html.ActionLink("Producers", "Index", "Producers", null, new { @class = "dropdown-item" })
-                            @Html.ActionLink("Users", "Index", "Account", null, new { @class = "dropdown-item" })
-                        </div>
-                    </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Admin panel
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        @Html.ActionLink("Units", "Index", "Units", null, new { @class = "dropdown-item" })
+                        @Html.ActionLink("Category", "Index", "Category", null, new { @class = "dropdown-item" })
+                        @Html.ActionLink("Brands", "Index", "Brands", null, new { @class = "dropdown-item" })
+                        @Html.ActionLink("Producers", "Index", "Producers", null, new { @class = "dropdown-item" })
+                        @Html.ActionLink("Users", "Index", "Account", null, new { @class = "dropdown-item" })
+                    </div>
+                </li>
                 }
             </ul>
             <ul class="navbar-nav">
                 @if (Request.IsAuthenticated)
                 {
-                    if (!Session["Role"].ToString().Equals("admin"))
+                    if (!Session["Role"].ToString().Equals(UserRoles.Admin.ToString()))
                     {
                         <li class="nav-item">@Html.Action("CartPartial", "Cart")</li>
                     }

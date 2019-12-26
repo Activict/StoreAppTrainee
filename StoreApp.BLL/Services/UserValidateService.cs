@@ -46,14 +46,14 @@ namespace StoreApp.BLL.Services
             return users.FirstOrDefault(u => u.UserName.Equals(userDTO.UserName) && u.Password.Equals(userDTO.Password))?.Role;
         }
 
-        public bool CheckTruePassword(UserDTO userDTO)
+        public bool IsTruePassword(UserDTO userDTO)
         {
             return DataBase.Users.GetAll()
                 .Any(u => u.Id.Equals(userDTO.Id) &&
                 u.Password.Equals(userDTO.Password));
         }
 
-        public bool CheckForEditUser(UserDTO userDTO)
+        public bool IsExistUser(UserDTO userDTO)
         {
             return !DataBase.Users.GetAll()
                 .Any(u => u.Id != userDTO.Id &&

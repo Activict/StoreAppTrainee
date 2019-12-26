@@ -1,5 +1,6 @@
 ﻿using StoreApp.BLL.DTO;
 using StoreApp.BLL.Services;
+using StoreApp.Enums;
 using StoreApp.Models.Store;
 using System.Collections.Generic;
 using System.Linq;
@@ -108,7 +109,7 @@ namespace StoreApp.Controllers
 
             if (cart == null || !cart.Any())
             {
-                TempData["StatusMessage"] = "danger";
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
                 TempData["Message"] = "The order wasn't created. Cart is empty";
                 return RedirectToAction("Index", "Store");
             }
@@ -117,7 +118,7 @@ namespace StoreApp.Controllers
 
             if (!userId.HasValue)
             {
-                TempData["StatusMessage"] = "danger";
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
                 TempData["Message"] = $"The user wasn't found by name '{User.Identity.Name}'";
                 return RedirectToAction("Index", "Store");
             }
@@ -127,7 +128,7 @@ namespace StoreApp.Controllers
             cart.ForEach(p => orderDetailService.Create(new OrderDetailDTO(orderId, p.Id, p.Price, p.Quantity)));
 
             TempData["Сart"] = null;
-            TempData["StatusMessage"] = "success";
+            TempData["StatusMessage"] = StateMessage.success.ToString();
             TempData["Message"] = "Order was created successful";
 
             return RedirectToAction("Index");

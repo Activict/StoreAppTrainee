@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using StoreApp.BLL.DTO;
 using StoreApp.BLL.Services;
+using StoreApp.Enums;
 using StoreApp.Models.Brands;
 using System.Collections.Generic;
 using System.Web.Mvc;
@@ -47,7 +48,7 @@ namespace StoreApp.Controllers
                 return View(brand);
             }
 
-            if (!brandService.CheckExistBrand(config.Map<BrandViewModel, BrandDTO>(brand)))
+            if (!brandService.IsExistBrand(config.Map<BrandViewModel, BrandDTO>(brand)))
             {
                 ModelState.AddModelError("", "Such category already exist!");
                 return View(brand);
@@ -57,7 +58,7 @@ namespace StoreApp.Controllers
 
             brandService.Create(brandDTO);
 
-            TempData["StatusMessage"] = "success";
+            TempData["StatusMessage"] = StateMessage.success.ToString();
             TempData["Message"] = "Brand created successful!";
 
             return RedirectToAction("Index");
@@ -70,7 +71,7 @@ namespace StoreApp.Controllers
 
             if (brand == null)
             {
-                TempData["StatusMessage"] = "danger";
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
                 TempData["Message"] = "This brand isn't exist";
                 return RedirectToAction("Index");
             }
@@ -85,7 +86,7 @@ namespace StoreApp.Controllers
 
             if (brand == null)
             {
-                TempData["StatusMessage"] = "danger";
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
                 TempData["Message"] = "This brand isn't exist";
                 return RedirectToAction("Index");
             }
@@ -98,12 +99,11 @@ namespace StoreApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["StatusMessage"] = "danger";
                 ModelState.AddModelError("", "Brand edited wrong!");
                 return View(brand);
             }
 
-            if (!brandService.CheckExistBrand(config.Map<BrandViewModel, BrandDTO>(brand)))
+            if (!brandService.IsExistBrand(config.Map<BrandViewModel, BrandDTO>(brand)))
             {
                 ModelState.AddModelError("", "Such brand already exist!");
                 return View(brand);
@@ -111,7 +111,7 @@ namespace StoreApp.Controllers
 
             brandService.Edit(config.Map<BrandViewModel, BrandDTO>(brand));
 
-            TempData["StatusMessage"] = "success";
+            TempData["StatusMessage"] = StateMessage.success.ToString();
             TempData["Message"] = "Brand edited successful!";
 
             return RedirectToAction("Index");
@@ -124,7 +124,7 @@ namespace StoreApp.Controllers
 
             if (brand == null)
             {
-                TempData["StatusMessage"] = "danger";
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
                 TempData["Message"] = "This brand isn't exist";
                 return RedirectToAction("Index");
             }
@@ -139,14 +139,14 @@ namespace StoreApp.Controllers
         {
             if (brand == null)
             {
-                TempData["StatusMessage"] = "danger";
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
                 TempData["Message"] = "This brand isn't exist";
                 return RedirectToAction("Index");
             }
 
             brandService.Delete(brand.Id);
 
-            TempData["StatusMessage"] = "success";
+            TempData["StatusMessage"] = StateMessage.success.ToString();
             TempData["Message"] = "Brand deleted successful!";
 
             return RedirectToAction("Index");

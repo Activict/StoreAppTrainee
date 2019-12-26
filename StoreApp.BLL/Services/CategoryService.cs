@@ -74,7 +74,7 @@ namespace StoreApp.BLL.Services
             return DataBase.Products.GetAll().Count(p => p.CategoryId.Equals(id));
         }
 
-        public bool CheckExistCategory(CategoryDTO categoryDTO)
+        public bool IsExistCategory(CategoryDTO categoryDTO)
         {
             var categories = DataBase.Categories.GetAll();
 

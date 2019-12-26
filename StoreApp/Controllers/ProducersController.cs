@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using StoreApp.BLL.DTO;
 using StoreApp.BLL.Services;
+using StoreApp.Enums;
 using StoreApp.Models.Producers;
 using System.Collections.Generic;
 using System.Web.Mvc;
@@ -46,7 +47,7 @@ namespace StoreApp.Controllers
                 return View(producer);
             }
 
-            if (!producerService.CheckExistProducer(config.Map<ProducerViewModel, ProducerDTO>(producer)))
+            if (!producerService.IsExistProducer(config.Map<ProducerViewModel, ProducerDTO>(producer)))
             {
                 ModelState.AddModelError("", "Such producer already exist!");
                 return View(producer);
@@ -56,7 +57,7 @@ namespace StoreApp.Controllers
 
             producerService.Create(producerDTO);
 
-            TempData["StatusMessage"] = "success";
+            TempData["StatusMessage"] = StateMessage.success.ToString();
             TempData["Message"] = "Producer created successful!";
 
             return RedirectToAction("Index");
@@ -84,7 +85,7 @@ namespace StoreApp.Controllers
                 return View(producer);
             }
 
-            if (!producerService.CheckExistProducer(config.Map<ProducerViewModel, ProducerDTO>(producer)))
+            if (!producerService.IsExistProducer(config.Map<ProducerViewModel, ProducerDTO>(producer)))
             {
                 ModelState.AddModelError("", "Such producer already exist!");
                 return View(producer);
@@ -92,7 +93,7 @@ namespace StoreApp.Controllers
 
             producerService.Edit(config.Map<ProducerViewModel, ProducerDTO>(producer));
 
-            TempData["StatusMessage"] = "success";
+            TempData["StatusMessage"] = StateMessage.success.ToString();
             TempData["Message"] = "Producer edited successful!";
 
             return RedirectToAction("Index");
@@ -105,7 +106,7 @@ namespace StoreApp.Controllers
 
             if (producer == null)
             {
-                TempData["StatusMessage"] = "danger";
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
                 TempData["Message"] = "This producer isn't exist";
                 return RedirectToAction("Index");
             }
@@ -120,7 +121,7 @@ namespace StoreApp.Controllers
 
             if (producer == null)
             {
-                TempData["StatusMessage"] = "danger";
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
                 TempData["Message"] = "This producer isn't exist";
                 return RedirectToAction("Index");
             }
@@ -135,14 +136,14 @@ namespace StoreApp.Controllers
         {
             if (producer == null)
             {
-                TempData["StatusMessage"] = "danger";
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
                 TempData["Message"] = "This producer isn't exist";
                 return RedirectToAction("Index");
             }
 
             producerService.Delete(producer.Id);
 
-            TempData["StatusMessage"] = "success";
+            TempData["StatusMessage"] = StateMessage.success.ToString();
             TempData["Message"] = "Producer deleted successful!";
 
             return RedirectToAction("Index");

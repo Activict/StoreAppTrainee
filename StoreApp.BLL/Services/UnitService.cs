@@ -76,7 +76,7 @@ namespace StoreApp.BLL.Services
             return DataBase.Products.GetAll().Count(p => p.UnitId.Equals(id));
         }
 
-        public bool CheckExistUnit(UnitDTO unitDTO)
+        public bool IsExistUnit(UnitDTO unitDTO)
         {
             var units = DataBase.Units.GetAll();
 

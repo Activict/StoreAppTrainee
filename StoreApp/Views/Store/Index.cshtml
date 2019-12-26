@@ -1,11 +1,12 @@
-﻿@model IEnumerable<StoreApp.Models.Store.ProductViewModel>
+﻿@using StoreApp.Enums;
+@model IEnumerable<StoreApp.Models.Store.ProductViewModel>
 
 @{
     ViewBag.Title = "Index";
     string role = Session["Role"] as String;
 }
 
-@if (role != null && role.Equals("admin"))
+@if (role != null && role.Equals(UserRoles.Admin.ToString()))
 {
     <div class="ol-md-2 offset-2 mb-1">
         @Html.ActionLink("New product", "CreateProduct", "Store", null, new { @class = "btn btn-success" })
@@ -107,7 +108,7 @@ else
 
                 @if (User.Identity.IsAuthenticated)
                 {
-                    if (role.Equals("user"))
+                    if (role.Equals(UserRoles.User.ToString()))
                     {
                         <div class="col-2">@Html.ActionLink("Buy", "Buy", new { id = item.Id }, new { @class = "btn btn-success " })</div>
                     }
@@ -117,11 +118,11 @@ else
                     <div class="col-2">@Html.ActionLink("Buy", "Login", "Account", new { id = item.Id }, new { @class = "btn btn-success " })</div>
                 }
 
-                @if (role != null && role.Equals("admin"))
+                @if (role != null && role.Equals(UserRoles.Admin.ToString()))
                 {
                     <div class="col-2">
                         @Html.ActionLink("Edit", "EditProduct", new { id = item.Id })
-                        @Html.ActionLink("Del", "DeleteProduct", new { id = item.Id })
+                        @Html.ActionLink("Delete", "DeleteProduct", new { id = item.Id })
                     </div>
                 }
 

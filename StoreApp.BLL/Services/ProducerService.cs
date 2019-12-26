@@ -72,7 +72,7 @@ namespace StoreApp.BLL.Services
             return DataBase.Products.GetAll().Count(p => p.ProducerId.Equals(id));
         }
 
-        public bool CheckExistProducer(ProducerDTO producerDTO)
+        public bool IsExistProducer(ProducerDTO producerDTO)
         {
             var producers = DataBase.Producers.GetAll();
 
