@@ -8,7 +8,7 @@
 
 @if (TempData["Message"] != null)
 {
-    <span class="badge badge-success">@TempData["Message"]</span>
+    <span class="badge badge-@TempData["StatusMessage"]">@TempData["Message"]</span>
 }
 
 @using (Html.BeginForm("EditProduct", "Store", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -63,6 +63,7 @@
                 {
                     <img src="/Pictures/Products/@Model.Id/@Model.Picture" />
                 }
+                <br />
                 <input type="file" name="file" id="file" />
             </div>
         </div>

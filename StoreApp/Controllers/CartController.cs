@@ -1,5 +1,6 @@
 ﻿using StoreApp.BLL.DTO;
 using StoreApp.BLL.Services;
+using StoreApp.Enums;
 using StoreApp.Models.Store;
 using System.Collections.Generic;
 using System.Linq;
@@ -108,18 +109,16 @@ namespace StoreApp.Controllers
 
             if (cart == null || !cart.Any())
             {
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
                 TempData["Message"] = "The order wasn't created. Cart is empty";
                 return RedirectToAction("Index", "Store");
             }
 
-            string username;
-            if (User.Identity.Name == "") username = "user1";
-            else username = User.Identity.Name;
-
-            var userId = userService.GetAll().First(u => u.UserName.Equals(username))?.Id;
+            var userId = userService.GetAll().First(u => u.UserName.Equals(User.Identity.Name))?.Id;
 
             if (!userId.HasValue)
             {
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
                 TempData["Message"] = $"The user wasn't found by name '{User.Identity.Name}'";
                 return RedirectToAction("Index", "Store");
             }
@@ -129,7 +128,8 @@ namespace StoreApp.Controllers
             cart.ForEach(p => orderDetailService.Create(new OrderDetailDTO(orderId, p.Id, p.Price, p.Quantity)));
 
             TempData["Сart"] = null;
-            TempData["Message"] = "Order was created success";
+            TempData["StatusMessage"] = StateMessage.success.ToString();
+            TempData["Message"] = "Order was created successful";
 
             return RedirectToAction("Index");
         }

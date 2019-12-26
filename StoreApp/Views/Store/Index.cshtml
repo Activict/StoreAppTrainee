@@ -1,22 +1,26 @@
-﻿@model IEnumerable<StoreApp.Models.Store.ProductViewModel>
+﻿@using StoreApp.Enums;
+@model IEnumerable<StoreApp.Models.Store.ProductViewModel>
 
 @{
     ViewBag.Title = "Index";
     string role = Session["Role"] as String;
 }
 
-@if (TempData["Message"] != null)
-{
-    <span class="badge badge-success">@TempData["Message"]</span>
-}
-
-@if (role != null && role.Equals("admin"))
+@if (role != null && role.Equals(UserRoles.Admin.ToString()))
 {
     <div class="ol-md-2 offset-2 mb-1">
         @Html.ActionLink("New product", "CreateProduct", "Store", null, new { @class = "btn btn-success" })
     </div>
 }
-<br />
+
+@if (TempData["Message"] != null)
+{
+    <span class="offset-2 badge badge-@TempData["StatusMessage"]">@TempData["Message"]</span>
+}
+else
+{
+    <br />
+}
 <div class="row">
     <div class="col-md-2">
         @Html.Action("FilterMenuPartial", "Store")
@@ -101,16 +105,27 @@
                 <div class="col-1">
                     @Html.DisplayFor(modelItem => item.Producer)
                 </div>
-                <div class="col-1">
-                    @Html.ActionLink("Buy", "Buy", new { id = item.Id }, new { @class = "btn btn-success " })
-                </div>
-                <div class="col-1">
-                    @if (role != null && role.Equals("admin"))
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    if (role.Equals(UserRoles.User.ToString()))
                     {
-                        <div>@Html.ActionLink("Edit", "EditProduct", new { id = item.Id })</div>
-                        <div>@Html.ActionLink("Del", "DeleteProduct", new { id = item.Id })</div>
+                        <div class="col-2">@Html.ActionLink("Buy", "Buy", new { id = item.Id }, new { @class = "btn btn-success " })</div>
                     }
-                </div>
+                }
+                else
+                {
+                    <div class="col-2">@Html.ActionLink("Buy", "Login", "Account", new { id = item.Id }, new { @class = "btn btn-success " })</div>
+                }
+
+                @if (role != null && role.Equals(UserRoles.Admin.ToString()))
+                {
+                    <div class="col-2">
+                        @Html.ActionLink("Edit", "EditProduct", new { id = item.Id })
+                        @Html.ActionLink("Delete", "DeleteProduct", new { id = item.Id })
+                    </div>
+                }
+
             </div>
             <hr />
         }

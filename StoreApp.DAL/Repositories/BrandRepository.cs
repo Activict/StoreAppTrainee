@@ -4,6 +4,7 @@ using StoreApp.DAL.Intefaces;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
 
 namespace StoreApp.DAL.Repositories
 {
@@ -31,12 +32,12 @@ namespace StoreApp.DAL.Repositories
 
         public void Detach(Brand item)
         {
-            db.Entry(item).State = EntityState.Modified;
+            db.Entry(item).State = EntityState.Detached;
         }
 
         public IEnumerable<Brand> Find(Func<Brand, bool> predicate)
         {
-            throw new NotImplementedException();
+            return db.Brands.Where(predicate).ToList();
         }
 
         public Brand Get(int id)
@@ -46,7 +47,7 @@ namespace StoreApp.DAL.Repositories
 
         public IEnumerable<Brand> GetAll()
         {
-            return db.Brands;
+            return db.Brands.ToList();
         }
 
         public void Update(Brand item)

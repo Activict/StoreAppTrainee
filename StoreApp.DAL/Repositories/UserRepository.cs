@@ -32,7 +32,7 @@ namespace StoreApp.DAL.Repositories
 
         public void Detach(User item)
         {
-            db.Entry(item).State = EntityState.Modified;
+            db.Entry(item).State = EntityState.Detached;
         }
 
         public IEnumerable<User> Find(Func<User, bool> predicate)

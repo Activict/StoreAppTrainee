@@ -27,7 +27,7 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            if ((Session["Role"] as string).Equals(UserRoles.admin.ToString()))
+            if ((Session["Role"] as string).Equals(UserRoles.Admin.ToString()))
             {
                 var users = webMapper.config.Map<IEnumerable<UserDTO>, IEnumerable<UserViewModel>>(userService.GetAll());
                 return View(users);
@@ -55,10 +55,10 @@ namespace StoreApp.Controllers
                 !userValidateService.CheckUserName(model.UserName))
             {
                 UserDTO userDTO = webMapper.config.Map<UserRegistrationViewModel, UserDTO>(model);
-                userDTO.Role = "user";
+                userDTO.Role = UserRoles.User.ToString();
 
                 userService.Create(userDTO);
-
+                TempData["StatusMessage"] = StateMessage.success.ToString();
                 TempData["Message"] = "Your registration successful!";
             }
             else
@@ -95,6 +95,7 @@ namespace StoreApp.Controllers
             {
                 FormsAuthentication.SetAuthCookie(model.UserName, false);
                 Session["Role"] = userValidateService.GetRole(userDTO);
+                TempData["StatusMessage"] = StateMessage.success.ToString();
                 TempData["Message"] = "You login successful!";
                 return RedirectToAction("Index", "Home");
             }
@@ -147,17 +148,17 @@ namespace StoreApp.Controllers
 
             UserDTO userDTO = webMapper.config.Map<UserEditViewModel, UserDTO>(userEdit);
 
-            if (!userValidateService.CheckTruePassword(userDTO))
+            if (!userValidateService.IsTruePassword(userDTO))
             {
                 ModelState.AddModelError("", "Your enter wrong password!");
                 return View(userEdit);
             }
 
-            if (userValidateService.CheckForEditUser(userDTO))
+            if (userValidateService.IsExistUser(userDTO))
             {
                 userService.Edit(userDTO);
-
-                TempData["Message"] = "Your edit account successful!";
+                TempData["StatusMessage"] = StateMessage.success.ToString();
+                TempData["Message"] = "The user was updated successfully";
 
                 return RedirectToAction("Account");
             }
@@ -172,7 +173,7 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult DetailsUser(int id)
         {
-            if ((Session["Role"] as string).Equals(UserRoles.admin.ToString()))
+            if ((Session["Role"] as string).Equals(UserRoles.Admin.ToString()))
             {
                 var user = webMapper.config.Map<UserDTO, UserViewModel>(userService.Get(id));
                 return View(user);
@@ -185,15 +186,15 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult EditUserAdmin(int id)
         {
-            if ((Session["Role"] as string).Equals(UserRoles.admin.ToString()))
+            if ((Session["Role"] as string).Equals(UserRoles.Admin.ToString()))
             {
                 UserViewModel user = webMapper.config.Map<UserDTO, UserViewModel>(userService.Get(id));
 
                 if (user != null)
                 {
                     List<SelectListItem> ListOfRoles = new List<SelectListItem>();
-                    ListOfRoles.Add(new SelectListItem() { Text = UserRoles.user.ToString(), Value = ((int)UserRoles.user).ToString() });
-                    ListOfRoles.Add(new SelectListItem() { Text = UserRoles.admin.ToString(), Value = ((int)UserRoles.admin).ToString() });
+                    ListOfRoles.Add(new SelectListItem() { Text = UserRoles.User.ToString(), Value = ((int)UserRoles.User).ToString() });
+                    ListOfRoles.Add(new SelectListItem() { Text = UserRoles.Admin.ToString(), Value = ((int)UserRoles.Admin).ToString() });
 
                     ViewBag.ListOfRoles = new SelectList(ListOfRoles, "Value", "Text");
 
@@ -210,21 +211,23 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult EditUserAdmin(UserViewModel user)
         {
-            if ((Session["Role"] as string).Equals(UserRoles.admin.ToString()))
+            if ((Session["Role"] as string).Equals(UserRoles.Admin.ToString()))
             {
-                user.Role = user.Role.Equals((int)UserRoles.user) ? UserRoles.user.ToString() 
-                                                                  : UserRoles.admin.ToString();
+                user.Role = int.Parse(user.Role) == (int)(UserRoles.User) ? UserRoles.User.ToString() 
+                                                                          : UserRoles.Admin.ToString();
 
                 UserDTO userDTO = webMapper.config.Map<UserViewModel, UserDTO>(user);
 
                 userService.Edit(userDTO);
 
-                TempData["Message"] = $"{user.UserName} edit success";
+                TempData["StatusMessage"] = StateMessage.success.ToString();
+                TempData["Message"] = $"{user.UserName} edit successfully";
 
                 return RedirectToAction("DetailsUser", "Account", new { id = user.Id });
             }
 
-            TempData["Message"] = $"{user.UserName} don't edited";
+            TempData["StatusMessage"] = StateMessage.danger.ToString();
+            TempData["Message"] = $"{user.UserName} wasn't edit";
 
             return RedirectToAction("Account", "Account");
         }
@@ -233,7 +236,7 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult DeleteUser(int id)
         {
-            if ((Session["Role"] as string).Equals(UserRoles.admin.ToString()))
+            if ((Session["Role"] as string).Equals(UserRoles.Admin.ToString()))
             {
                 UserViewModel user = webMapper.config.Map<UserDTO, UserViewModel>(userService.Get(id));
 
@@ -252,17 +255,18 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult DeleteUser(UserViewModel user)
         {
-            if ((Session["Role"] as string).Equals(UserRoles.admin.ToString()))
+            if ((Session["Role"] as string).Equals(UserRoles.Admin.ToString()))
             {
                 if (user != null)
                 {
                     userService.Delete(user.Id);
-
-                    TempData["Message"] = $"{user.UserName} deleted success";
+                    TempData["StatusMessage"] = StateMessage.success.ToString();
+                    TempData["Message"] = $"{user.UserName} deleted successfully";
                 }
                 else
                 {
-                    TempData["Message"] = $"{user.UserName} don't deleted";
+                    TempData["StatusMessage"] = StateMessage.danger.ToString();
+                    TempData["Message"] = $"{user.UserName} wasn't delete";
                 }
             }
 
@@ -273,8 +277,10 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult Logout()
         {
+            TempData["StatusMessage"] = null;
             TempData["Message"] = null;
-            TempData["Role"] = null;
+            Session["Role"] = null;
+            TempData["Cart"] = null;
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");
         }

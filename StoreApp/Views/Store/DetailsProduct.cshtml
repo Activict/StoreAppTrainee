@@ -1,4 +1,5 @@
-﻿@model StoreApp.Models.Store.ProductViewModel
+﻿@using StoreApp.Enums;
+@model StoreApp.Models.Store.ProductViewModel
 
 @{
     ViewBag.Title = "Details product";
@@ -98,7 +99,16 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Buy", "Buy", new { id = Model.Id }, new { @class = "btn btn-success" })
-    @Html.ActionLink("Edit", "EditProduct", new { id = Model.Id }, new { @class = "btn btn-success" }) |
+    @if (User.Identity.IsAuthenticated)
+    {
+        if (Session["Role"].Equals(UserRoles.User.ToString()))
+        {
+            @Html.ActionLink("Buy", "Buy", new { id = Model.Id }, new { @class = "btn btn-success" })
+        }
+        if (Session["Role"].Equals(UserRoles.Admin.ToString()))
+        {
+            @Html.ActionLink("Edit", "EditProduct", new { id = Model.Id }, new { @class = "btn btn-success" })
+        }
+    }
     @Html.ActionLink("Back to products", "Index")
 </p>

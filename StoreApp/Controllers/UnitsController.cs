@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using StoreApp.BLL.DTO;
 using StoreApp.BLL.Services;
+using StoreApp.Enums;
 using StoreApp.Models.Unit;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace StoreApp.Controllers
 {
+    [Authorize]
     public class UnitsController : Controller
     {
         private UnitService unitService;
@@ -46,10 +48,17 @@ namespace StoreApp.Controllers
                 return View(unit);
             }
 
+            if (!unitService.IsExistUnit(config.Map<UnitViewModel, UnitDTO>(unit)))
+            {
+                ModelState.AddModelError("", "Such unit already exist!");
+                return View(unit);
+            }
+
             UnitDTO unitDTO = config.Map<UnitViewModel, UnitDTO>(unit);
 
             unitService.Create(unitDTO);
 
+            TempData["StatusMessage"] = StateMessage.success.ToString();
             TempData["Message"] = "Unit created success";
 
             return RedirectToAction("Index");
@@ -77,8 +86,15 @@ namespace StoreApp.Controllers
                 return View(unit);
             }
 
+            if (!unitService.IsExistUnit(config.Map<UnitViewModel, UnitDTO>(unit)))
+            {
+                ModelState.AddModelError("", "Such unit already exist!");
+                return View(unit);
+            }
+
             unitService.Edit(config.Map<UnitViewModel, UnitDTO>(unit));
 
+            TempData["StatusMessage"] = StateMessage.success.ToString();
             TempData["Message"] = "Unit edited success";
 
             return RedirectToAction("Index");
@@ -91,6 +107,7 @@ namespace StoreApp.Controllers
 
             if (unit == null)
             {
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
                 TempData["Message"] = "This unit isn't exist";
                 return RedirectToAction("Index");
             }
@@ -105,6 +122,7 @@ namespace StoreApp.Controllers
 
             if (unit == null)
             {
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
                 TempData["Message"] = "This unit isn't exist";
                 return RedirectToAction("Index");
             }
@@ -119,12 +137,14 @@ namespace StoreApp.Controllers
         {
             if (unit == null)
             {
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
                 TempData["Message"] = "This unit isn't exist";
                 return RedirectToAction("Index");
             }
 
             unitService.Delete(unit.Id);
 
+            TempData["StatusMessage"] = StateMessage.danger.ToString();
             TempData["Message"] = "Unit deleted success!";
 
             return RedirectToAction("Index");

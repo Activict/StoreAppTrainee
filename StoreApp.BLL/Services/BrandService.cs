@@ -70,6 +70,16 @@ namespace StoreApp.BLL.Services
             return DataBase.Products.GetAll().Count(p => p.BrandId.Equals(id));
         }
 
+        public bool IsExistBrand(BrandDTO brandDTO)
+        {
+            var brands = DataBase.Brands.GetAll();
+
+            brands.ToList().ForEach(b => DataBase.Brands.Detach(b));
+
+            return !brands.Any(b => b.Id != brandDTO.Id &&
+                                    b.Name.Equals(brandDTO.Name));
+        }
+
         public void Dispose()
         {
             DataBase.Dispose();

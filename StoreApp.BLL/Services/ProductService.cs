@@ -68,8 +68,8 @@ namespace StoreApp.BLL.Services
         public bool ValidateNewProduct(ProductDTO product)
         {
             return !DataBase.Products.Find(p => p.Name.Equals(product.Name) &&
-                                                       p.BrandId.Equals(product.BrandId) &&
-                                                       p.ProducerId.Equals(product.ProducerId)).Any();
+                                                p.BrandId.Equals(product.BrandId) &&
+                                                p.ProducerId.Equals(product.ProducerId)).Any();
         }
 
         public bool ValidateEditProduct(ProductDTO productDTO)
@@ -78,17 +78,8 @@ namespace StoreApp.BLL.Services
 
             products.ToList().ForEach(p => DataBase.Products.Detach(p));
 
-            bool existProduct = products.Any(p => p.Id.Equals(productDTO.Id) &&
-                                                  p.Name.Equals(productDTO.Name) &&
-                                                  p.BrandId.Equals(productDTO.BrandId) &&
-                                                  p.ProducerId.Equals(productDTO.ProducerId));
-
-            if (existProduct)
-            {
-                return true;
-            }
-
-            return !products.Any(p => p.Name.Equals(productDTO.Name) &&
+            return !products.Any(p => p.Id != productDTO.Id &&
+                                      p.Name.Equals(productDTO.Name) &&
                                       p.BrandId.Equals(productDTO.BrandId) &&
                                       p.ProducerId.Equals(productDTO.ProducerId));
         }

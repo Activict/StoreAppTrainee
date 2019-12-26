@@ -72,6 +72,16 @@ namespace StoreApp.BLL.Services
             return DataBase.Products.GetAll().Count(p => p.ProducerId.Equals(id));
         }
 
+        public bool IsExistProducer(ProducerDTO producerDTO)
+        {
+            var producers = DataBase.Producers.GetAll();
+
+            producers.ToList().ForEach(p => DataBase.Producers.Detach(p));
+
+            return !producers.Any(p => p.Id != producerDTO.Id &&
+                                       p.Name.Equals(producerDTO.Name));
+        }
+
         public void Dispose()
         {
             DataBase.Dispose();

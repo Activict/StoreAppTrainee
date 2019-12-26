@@ -4,6 +4,7 @@ using StoreApp.DAL.Intefaces;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
 
 namespace StoreApp.DAL.Repositories
 {
@@ -30,7 +31,7 @@ namespace StoreApp.DAL.Repositories
 
         public IEnumerable<Unit> Find(Func<Unit, bool> predicate)
         {
-            throw new NotImplementedException();
+            return db.Units.Where(predicate).ToList();
         }
 
         public Unit Get(int id)
@@ -40,7 +41,7 @@ namespace StoreApp.DAL.Repositories
 
         public IEnumerable<Unit> GetAll()
         {
-            return db.Units;
+            return db.Units.ToList();
         }
 
         public void Update(Unit item)
