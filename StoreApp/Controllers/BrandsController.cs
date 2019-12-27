@@ -4,7 +4,9 @@ using StoreApp.BLL.Services;
 using StoreApp.Enums;
 using StoreApp.Models.Brands;
 using System.Collections.Generic;
+using System.Web;
 using System.Web.Mvc;
+using System.Xml;
 
 namespace StoreApp.Controllers
 {
@@ -48,7 +50,7 @@ namespace StoreApp.Controllers
                 return View(brand);
             }
 
-            if (!brandService.IsExistBrand(config.Map<BrandViewModel, BrandDTO>(brand)))
+            if (brandService.IsExistBrand(config.Map<BrandViewModel, BrandDTO>(brand)))
             {
                 ModelState.AddModelError("", "Such category already exist!");
                 return View(brand);
@@ -103,7 +105,7 @@ namespace StoreApp.Controllers
                 return View(brand);
             }
 
-            if (!brandService.IsExistBrand(config.Map<BrandViewModel, BrandDTO>(brand)))
+            if (brandService.IsExistBrand(config.Map<BrandViewModel, BrandDTO>(brand)))
             {
                 ModelState.AddModelError("", "Such brand already exist!");
                 return View(brand);
@@ -148,6 +150,51 @@ namespace StoreApp.Controllers
 
             TempData["StatusMessage"] = StateMessage.success.ToString();
             TempData["Message"] = "Brand deleted successful!";
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult UploadXML(HttpPostedFileBase file)
+        {
+            if (file == null || file.ContentLength <= 0 || file.ContentType != "text/xml")
+            {
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
+                TempData["Message"] = "File empty or isn't XML";
+                return RedirectToAction("Index");
+            }
+
+            XmlDocument xmlFile = new XmlDocument();
+
+            xmlFile.Load(file.InputStream);
+
+            XmlElement brands = xmlFile.DocumentElement;
+
+            if (brands.Name != "brands")
+            {
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
+                TempData["Message"] = "File XML don't exist brands root";
+                return RedirectToAction("Index");
+            }
+
+            int countUpload = 0;
+            int countNotUpload = 0;
+            
+            foreach (XmlNode brand in brands)
+            {
+                if (!brandService.IsExistBrand(brand.InnerText))
+                {
+                    brandService.Create(brand.InnerText);
+                    countUpload++;
+                }
+                else
+                {
+                    countNotUpload++;
+                } 
+            }
+
+            TempData["StatusMessage"] = StateMessage.info.ToString();
+            TempData["Message"] = $"{countUpload} brand's upload successful and {countNotUpload} is not";
 
             return RedirectToAction("Index");
         }

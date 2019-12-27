@@ -3,6 +3,7 @@
     public enum StateMessage
     {
         success = 0,
-        danger
+        danger,
+        info
     }
 }

@@ -42,6 +42,13 @@ namespace StoreApp.BLL.Services
             DataBase.Save();
         }
 
+        public void Create(string brand)
+        {
+            Brand brandDAL = new Brand() { Name = brand };
+            DataBase.Brands.Create(brandDAL);
+            DataBase.Save();
+        }
+
         public void Delete(int id)
         {
             DataBase.Brands.Delete(id);
@@ -76,8 +83,13 @@ namespace StoreApp.BLL.Services
 
             brands.ToList().ForEach(b => DataBase.Brands.Detach(b));
 
-            return !brands.Any(b => b.Id != brandDTO.Id &&
+            return brands.Any(b => b.Id != brandDTO.Id &&
                                     b.Name.Equals(brandDTO.Name));
+        }
+
+        public bool IsExistBrand(string brandDTO)
+        {
+            return DataBase.Brands.GetAll().Any(b => b.Name.Equals(brandDTO));
         }
 
         public void Dispose()
