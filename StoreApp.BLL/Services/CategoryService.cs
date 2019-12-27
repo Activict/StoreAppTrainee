@@ -37,12 +37,15 @@ namespace StoreApp.BLL.Services
 
         public void Create(CategoryDTO category)
         {
-            var categoryBL = new Category()
-            {
-                Id = category.Id,
-                Name = category.Name
-            };
+            var categoryBL = new Category() { Name = category.Name };
             DataBase.Categories.Create(categoryBL);
+            DataBase.Save();
+        }
+
+        public void Create(string category)
+        {
+            Category categoryDAL = new Category() { Name = category };
+            DataBase.Categories.Create(categoryDAL);
             DataBase.Save();
         }
 
@@ -80,8 +83,13 @@ namespace StoreApp.BLL.Services
 
             categories.ToList().ForEach(c => DataBase.Categories.Detach(c));
 
-            return !categories.Any(c => c.Id != categoryDTO.Id &&
+            return categories.Any(c => c.Id != categoryDTO.Id &&
                                         c.Name.Equals(categoryDTO.Name));
+        }
+
+        public bool IsExistCategory(string category)
+        {
+            return DataBase.Categories.GetAll().Any(c => c.Name.Equals(category));
         }
 
         public void Dispose()
