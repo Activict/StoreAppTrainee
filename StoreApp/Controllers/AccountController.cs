@@ -140,18 +140,20 @@ namespace StoreApp.Controllers
         {
             var orders = webMapper.config.Map<IEnumerable<OrderDTO>, IEnumerable<OrderViewModel>>(orderService.GetAll().Where(o => id == null ? o.UserId != id : o.UserId == id));
 
-            foreach (var order in orders)
-            {
-                order.OrderDetails = webMapper.config.Map<IEnumerable<OrderDetailDTO>, IEnumerable<OrderDetailsViewModel>>(orderDetailService.GetAll().Where(o => o.OrderId == order.Id));
-
-                foreach (var details in order.OrderDetails)
-                {
-                    details.Product = webMapper.config.Map<ProductDTO, ProductViewModel>(productService.Get(details.ProductId));
-                    details.Product.Unit = unitService.Get(details.Product.UnitId).Name;
-                }
-            }
+            orders.ToList().ForEach(o => GetOrderDatails(o));
 
             return View(orders);
+        }
+
+        private void GetOrderDatails(OrderViewModel order)
+        {
+            order.OrderDetails = webMapper.config.Map<IEnumerable<OrderDetailDTO>, IEnumerable<OrderDetailsViewModel>>(orderDetailService.GetAll().Where(o => o.OrderId == order.Id));
+            
+            foreach (var orderDetail in order.OrderDetails)
+            {
+                orderDetail.Product = webMapper.config.Map<ProductDTO, ProductViewModel>(productService.Get(orderDetail.ProductId));
+                orderDetail.Product.Unit = unitService.Get(orderDetail.Product.UnitId).Name;
+            }
         }
 
         [HttpGet]
