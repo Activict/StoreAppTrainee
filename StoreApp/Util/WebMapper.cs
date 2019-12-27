@@ -91,7 +91,12 @@ namespace StoreApp.Util
             {
                 return null;
             }
-            product.UnitId = unitService.GetAll().FirstOrDefault(u => u.Name.Equals(productXML["unit"].InnerText)).Id;
+            var unit = unitService.GetAll().FirstOrDefault(u => u.Name.Equals(productXML["unit"].InnerText));
+            if (unit == null)
+            {
+                return null;
+            }
+            product.UnitId = unit.Id;
             
             product.Picture = productXML["picture"]?.InnerText;
             product.Quality = productXML["quality"]?.InnerText;
@@ -106,19 +111,35 @@ namespace StoreApp.Util
             {
                 return null;
             }
-            product.CategoryId = categoryService.GetAll().FirstOrDefault(c => c.Name.Equals(productXML["category"].InnerText)).Id;
+            var category = categoryService.GetAll().FirstOrDefault(c => c.Name.Equals(productXML["category"].InnerText));
+            if (category == null)
+            {
+                return null;
+            }
+            product.CategoryId = category.Id;
 
             if (productXML["brand"] == null && productXML["brand"].IsEmpty)
             {
                 return null;
             }
-            product.BrandId = brandService.GetAll().FirstOrDefault(b => b.Name.Equals(productXML["brand"].InnerText)).Id;
+
+            var brand = brandService.GetAll().FirstOrDefault(b => b.Name.Equals(productXML["brand"].InnerText));
+            if (brand == null)
+            {
+                return null;
+            }
+            product.BrandId = brand.Id;
 
             if (productXML["producer"] == null && productXML["producer"].IsEmpty)
             {
                 return null;
             }
-            product.ProducerId = producerService.GetAll().FirstOrDefault(p => p.Name.Equals(productXML["producer"].InnerText)).Id;
+            var producer = producerService.GetAll().FirstOrDefault(p => p.Name.Equals(productXML["producer"].InnerText));
+            if (producer == null)
+            {
+                return null;
+            }
+            product.ProducerId = producer.Id;
 
             return product;
         }
