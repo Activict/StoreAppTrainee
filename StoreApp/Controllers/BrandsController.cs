@@ -13,11 +13,13 @@ namespace StoreApp.Controllers
     [Authorize]
     public class BrandsController : Controller
     {
+        private SaveXMLService saveXMLService;
         private BrandService brandService;
         private IMapper config;
 
         public BrandsController()
         {
+            saveXMLService = new SaveXMLService();
             brandService = new BrandService();
             config = new MapperConfiguration(cfg =>
             {
@@ -192,6 +194,8 @@ namespace StoreApp.Controllers
                     countNotUpload++;
                 } 
             }
+
+            saveXMLService.SaveXML(file, "Brands");
 
             TempData["StatusMessage"] = StateMessage.info.ToString();
             TempData["Message"] = $"{countUpload} brand's upload successful and {countNotUpload} is not";

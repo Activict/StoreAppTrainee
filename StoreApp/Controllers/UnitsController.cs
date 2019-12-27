@@ -13,11 +13,13 @@ namespace StoreApp.Controllers
     [Authorize]
     public class UnitsController : Controller
     {
+        private SaveXMLService saveXMLService;
         private UnitService unitService;
         private IMapper config;
 
         public UnitsController()
         {
+            saveXMLService = new SaveXMLService();
             unitService = new UnitService();
 
             config = new MapperConfiguration(cfg =>
@@ -190,6 +192,8 @@ namespace StoreApp.Controllers
                     countNotUpload++;
                 }
             }
+
+            saveXMLService.SaveXML(file, "Units");
 
             TempData["StatusMessage"] = StateMessage.info.ToString();
             TempData["Message"] = $"{countUpload} unit's upload successful and {countNotUpload} is not";

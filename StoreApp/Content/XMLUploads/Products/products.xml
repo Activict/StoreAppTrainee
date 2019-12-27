@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<products>
+  <product>
+    <name>product10</name>
+    <price>12</price>
+    <quantity>2</quantity>
+    <unit>Unit1</unit>
+    <enable>true</enable>
+    <category>Cat1</category>
+    <brand>Brand1</brand>
+    <producer>Producer1</producer>
+  </product>
+  <product>
+    <name>product11</name>
+    <price>12</price>
+    <quantity>2</quantity>
+    <unit>Unit1</unit>
+    <enable>true</enable>
+    <category>Cat12</category>
+    <brand>Brand1</brand>
+    <producer>Producer1</producer>
+  </product>
+  <product>
+    <name>product12</name>
+    <price>10</price>
+    <quantity>32</quantity>
+    <unit>Unit1</unit>
+    <enable>false</enable>
+    <category>Cat2</category>
+    <brand>Brand2</brand>
+    <producer>Producer1</producer>
+  </product>
+  <product>
+    <name>product121</name>
+    <price>10</price>
+    <quantity>32</quantity>
+    <unit>Unit1</unit>
+    <enable>false</enable>
+    <category>Cat2</category>
+    <brand>Brand2</brand>
+    <producer>Producer</producer>
+  </product>
+</products>

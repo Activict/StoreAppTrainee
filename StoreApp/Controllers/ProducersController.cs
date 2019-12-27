@@ -13,11 +13,13 @@ namespace StoreApp.Controllers
     [Authorize]
     public class ProducersController : Controller
     {
+        private SaveXMLService saveXMLService;
         private ProducerService producerService;
         private IMapper config;
 
         public ProducersController()
         {
+            saveXMLService = new SaveXMLService();
             producerService = new ProducerService();
 
             config = new MapperConfiguration(cfg =>
@@ -189,6 +191,8 @@ namespace StoreApp.Controllers
                     countNotUpload++;
                 }
             }
+
+            saveXMLService.SaveXML(file, "Producers");
 
             TempData["StatusMessage"] = StateMessage.info.ToString();
             TempData["Message"] = $"{countUpload} producer's upload successful and {countNotUpload} is not";
