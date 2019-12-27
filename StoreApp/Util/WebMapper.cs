@@ -6,6 +6,9 @@ using StoreApp.Models.Filter;
 using StoreApp.Models.Account;
 using StoreApp.Models.Orders;
 using StoreApp.Models.OrderDetails;
+using System.Xml;
+using System;
+using System.Linq;
 
 namespace StoreApp.Util
 {
@@ -60,6 +63,64 @@ namespace StoreApp.Util
                 Brand = brandService.Get(productDTO.BrandId)?.Name,
                 Producer = producerService.Get(productDTO.ProducerId)?.Name
             };
+        }
+
+        public ProductDTO Map(XmlElement productXML)
+        {
+            ProductDTO product = new ProductDTO();
+
+            if (productXML["name"] == null && productXML["name"].IsEmpty)
+            {
+                return null;
+            }
+            product.Name = productXML["name"].InnerText;
+
+            if (productXML["price"] == null && productXML["price"].IsEmpty)
+            {
+                return null;
+            }
+            product.Price = decimal.Parse(productXML["price"].InnerText);
+
+            if (productXML["quantity"] == null && productXML["quantity"].IsEmpty)
+            {
+                return null;
+            }
+            product.Quantity = int.Parse(productXML["quantity"].InnerText);
+            
+            if (productXML["unit"] == null && productXML["unit"].IsEmpty)
+            {
+                return null;
+            }
+            product.UnitId = unitService.GetAll().FirstOrDefault(u => u.Name.Equals(productXML["unit"].InnerText)).Id;
+            
+            product.Picture = productXML["picture"]?.InnerText;
+            product.Quality = productXML["quality"]?.InnerText;
+
+            if (productXML["enable"] == null && productXML["enable"].IsEmpty)
+            {
+                return null;
+            }
+            product.Enable = Convert.ToBoolean(productXML["enable"].InnerText);
+
+            if (productXML["category"] == null && productXML["category"].IsEmpty)
+            {
+                return null;
+            }
+            product.CategoryId = categoryService.GetAll().FirstOrDefault(c => c.Name.Equals(productXML["category"].InnerText)).Id;
+
+            if (productXML["brand"] == null && productXML["brand"].IsEmpty)
+            {
+                return null;
+            }
+            product.BrandId = brandService.GetAll().FirstOrDefault(b => b.Name.Equals(productXML["brand"].InnerText)).Id;
+
+            if (productXML["producer"] == null && productXML["producer"].IsEmpty)
+            {
+                return null;
+            }
+            product.ProducerId = producerService.GetAll().FirstOrDefault(p => p.Name.Equals(productXML["producer"].InnerText)).Id;
+
+            return product;
         }
     }
 }

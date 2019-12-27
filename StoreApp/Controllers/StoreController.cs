@@ -11,6 +11,7 @@ using StoreApp.Models.Filter;
 using StoreApp.Models.Store;
 using StoreApp.Util;
 using StoreApp.Enums;
+using System.Xml;
 
 namespace StoreApp.Controllers
 {
@@ -284,6 +285,58 @@ namespace StoreApp.Controllers
             TempData["Сart"] = cart;
             TempData["StatusMessage"] = StateMessage.success.ToString();
             TempData["Message"] = "The product was added to the cart";
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult UploadXML(HttpPostedFileBase file)
+        {
+            if (file == null || file.ContentLength <= 0 || file.ContentType != "text/xml")
+            {
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
+                TempData["Message"] = "File empty or isn't XML";
+                return RedirectToAction("Index");
+            }
+
+            XmlDocument xmlFile = new XmlDocument();
+
+            xmlFile.Load(file.InputStream);
+
+            XmlElement products = xmlFile.DocumentElement;
+
+            if (products.Name != "products")
+            {
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
+                TempData["Message"] = "File XML don't exist products root";
+                return RedirectToAction("Index");
+            }
+
+            int countUpload = 0;
+            int countNotUpload = 0;
+
+            foreach (XmlElement productXML in products)
+            {
+                ProductDTO productDTO = webMapper.Map(productXML);
+
+
+                if (productDTO != null && productService.ValidateNewProduct(productDTO))
+                {
+                    if (productDTO.Quantity.Equals(0))
+                    {
+                        productDTO.Enable = false;
+                    }
+                    productService.Create(productDTO);
+                    countUpload++;
+                }
+                else
+                {
+                    countNotUpload++;
+                }
+            }
+
+            TempData["StatusMessage"] = StateMessage.info.ToString();
+            TempData["Message"] = $"{countUpload} product's upload successful and {countNotUpload} is not";
 
             return RedirectToAction("Index");
         }
