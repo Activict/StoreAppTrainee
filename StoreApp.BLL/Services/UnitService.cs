@@ -43,6 +43,13 @@ namespace StoreApp.BLL.Services
             DataBase.Save();
         }
 
+        public void Create(string unit)
+        {
+            Unit unitDAL = new Unit() { Name = unit };
+            DataBase.Units.Create(unitDAL);
+            DataBase.Save();
+        }
+
         public void Delete(int id)
         {
             DataBase.Units.Delete(id);
@@ -82,8 +89,13 @@ namespace StoreApp.BLL.Services
 
             units.ToList().ForEach(p => DataBase.Units.Detach(p));
 
-            return !units.Any(p => p.Id != unitDTO.Id &&
+            return units.Any(p => p.Id != unitDTO.Id &&
                                    p.Name.Equals(unitDTO.Name));
+        }
+
+        public bool IsExistUnit(string unit)
+        {
+            return DataBase.Units.GetAll().Any(p => p.Name.Equals(unit));
         }
 
         public void Dispose()

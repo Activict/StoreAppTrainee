@@ -4,7 +4,9 @@ using StoreApp.BLL.Services;
 using StoreApp.Enums;
 using StoreApp.Models.Unit;
 using System.Collections.Generic;
+using System.Web;
 using System.Web.Mvc;
+using System.Xml;
 
 namespace StoreApp.Controllers
 {
@@ -48,7 +50,7 @@ namespace StoreApp.Controllers
                 return View(unit);
             }
 
-            if (!unitService.IsExistUnit(config.Map<UnitViewModel, UnitDTO>(unit)))
+            if (unitService.IsExistUnit(config.Map<UnitViewModel, UnitDTO>(unit)))
             {
                 ModelState.AddModelError("", "Such unit already exist!");
                 return View(unit);
@@ -86,7 +88,7 @@ namespace StoreApp.Controllers
                 return View(unit);
             }
 
-            if (!unitService.IsExistUnit(config.Map<UnitViewModel, UnitDTO>(unit)))
+            if (unitService.IsExistUnit(config.Map<UnitViewModel, UnitDTO>(unit)))
             {
                 ModelState.AddModelError("", "Such unit already exist!");
                 return View(unit);
@@ -146,6 +148,51 @@ namespace StoreApp.Controllers
 
             TempData["StatusMessage"] = StateMessage.danger.ToString();
             TempData["Message"] = "Unit deleted success!";
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult UploadXML(HttpPostedFileBase file)
+        {
+            if (file == null || file.ContentLength <= 0 || file.ContentType != "text/xml")
+            {
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
+                TempData["Message"] = "File empty or isn't XML";
+                return RedirectToAction("Index");
+            }
+
+            XmlDocument xmlFile = new XmlDocument();
+
+            xmlFile.Load(file.InputStream);
+
+            XmlElement units = xmlFile.DocumentElement;
+
+            if (units.Name != "units")
+            {
+                TempData["StatusMessage"] = StateMessage.danger.ToString();
+                TempData["Message"] = "File XML don't exist units root";
+                return RedirectToAction("Index");
+            }
+
+            int countUpload = 0;
+            int countNotUpload = 0;
+
+            foreach (XmlNode unit in units)
+            {
+                if (!unitService.IsExistUnit(unit.InnerText))
+                {
+                    unitService.Create(unit.InnerText);
+                    countUpload++;
+                }
+                else
+                {
+                    countNotUpload++;
+                }
+            }
+
+            TempData["StatusMessage"] = StateMessage.info.ToString();
+            TempData["Message"] = $"{countUpload} unit's upload successful and {countNotUpload} is not";
 
             return RedirectToAction("Index");
         }
