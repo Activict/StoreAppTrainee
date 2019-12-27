@@ -43,6 +43,12 @@ namespace StoreApp.BLL.Services
             DataBase.Producers.Create(producerDAL);
             DataBase.Save();
         }
+        public void Create(string producer)
+        {
+            Producer producerDAL = new Producer() { Name = producer};
+            DataBase.Producers.Create(producerDAL);
+            DataBase.Save();
+        }
 
         public void Delete(int id)
         {
@@ -78,8 +84,13 @@ namespace StoreApp.BLL.Services
 
             producers.ToList().ForEach(p => DataBase.Producers.Detach(p));
 
-            return !producers.Any(p => p.Id != producerDTO.Id &&
+            return producers.Any(p => p.Id != producerDTO.Id &&
                                        p.Name.Equals(producerDTO.Name));
+        }
+
+        public bool IsExistProducer(string producer)
+        {
+            return DataBase.Producers.GetAll().Any(p => p.Name.Equals(producer));
         }
 
         public void Dispose()
