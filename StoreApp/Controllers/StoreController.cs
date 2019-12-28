@@ -294,53 +294,28 @@ namespace StoreApp.Controllers
         [HttpPost]
         public ActionResult UploadXML(HttpPostedFileBase file)
         {
-            if (file == null || file.ContentLength <= 0 || file.ContentType != "text/xml")
+            var productsXML = new UploadXMLProducts(file);
+
+            if (!productsXML.IsValidateFile())
             {
                 TempData["StatusMessage"] = StateMessage.danger.ToString();
                 TempData["Message"] = "File empty or isn't XML";
                 return RedirectToAction("Index");
             }
 
-            XmlDocument xmlFile = new XmlDocument();
-
-            xmlFile.Load(file.InputStream);
-
-            XmlElement products = xmlFile.DocumentElement;
-
-            if (products.Name != "products")
+            if (!productsXML.IsValidateRoot())
             {
                 TempData["StatusMessage"] = StateMessage.danger.ToString();
                 TempData["Message"] = "File XML don't exist products root";
                 return RedirectToAction("Index");
             }
 
-            int countUpload = 0;
-            int countNotUpload = 0;
+            productsXML.SaveToDB();
 
-            foreach (XmlElement productXML in products)
-            {
-                ProductDTO productDTO = webMapper.Map(productXML);
-
-
-                if (productDTO != null && productService.ValidateNewProduct(productDTO))
-                {
-                    if (productDTO.Quantity.Equals(0))
-                    {
-                        productDTO.Enable = false;
-                    }
-                    productService.Create(productDTO);
-                    countUpload++;
-                }
-                else
-                {
-                    countNotUpload++;
-                }
-            }
-
-            saveXMLService.SaveXML(file, "Products");
+            productsXML.SaveXML();
 
             TempData["StatusMessage"] = StateMessage.info.ToString();
-            TempData["Message"] = $"{countUpload} product's upload successful and {countNotUpload} is not";
+            TempData["Message"] = $"{productsXML.countUpload} product's upload successful and {productsXML.countNotUpload} is not";
 
             return RedirectToAction("Index");
         }

@@ -179,6 +179,8 @@
     <Compile Include="Models\Store\ReferenceProducts.cs" />
     <Compile Include="Models\Unit\UnitViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\UploadXML.cs" />
+    <Compile Include="Util\UploadXMLProducts.cs" />
     <Compile Include="Util\WebMapper.cs" />
   </ItemGroup>
   <ItemGroup>

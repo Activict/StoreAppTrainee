@@ -69,28 +69,17 @@ namespace StoreApp.Util
         {
             ProductDTO product = new ProductDTO();
 
-            if (productXML["name"] == null && productXML["name"].IsEmpty)
+            if (string.IsNullOrEmpty(productXML["name"].ToString()) || string.IsNullOrEmpty(productXML["price"].ToString()) ||
+                string.IsNullOrEmpty(productXML["quantity"].ToString()) || string.IsNullOrEmpty(productXML["unit"].ToString()) ||
+                string.IsNullOrEmpty(productXML["enable"].ToString()) || string.IsNullOrEmpty(productXML["category"].ToString()) ||
+                string.IsNullOrEmpty(productXML["brand"].ToString()) || string.IsNullOrEmpty(productXML["producer"].ToString()))
             {
                 return null;
             }
             product.Name = productXML["name"].InnerText;
-
-            if (productXML["price"] == null && productXML["price"].IsEmpty)
-            {
-                return null;
-            }
             product.Price = decimal.Parse(productXML["price"].InnerText);
-
-            if (productXML["quantity"] == null && productXML["quantity"].IsEmpty)
-            {
-                return null;
-            }
             product.Quantity = int.Parse(productXML["quantity"].InnerText);
-            
-            if (productXML["unit"] == null && productXML["unit"].IsEmpty)
-            {
-                return null;
-            }
+
             var unit = unitService.GetAll().FirstOrDefault(u => u.Name.Equals(productXML["unit"].InnerText));
             if (unit == null)
             {
@@ -100,28 +89,14 @@ namespace StoreApp.Util
             
             product.Picture = productXML["picture"]?.InnerText;
             product.Quality = productXML["quality"]?.InnerText;
-
-            if (productXML["enable"] == null && productXML["enable"].IsEmpty)
-            {
-                return null;
-            }
             product.Enable = Convert.ToBoolean(productXML["enable"].InnerText);
 
-            if (productXML["category"] == null && productXML["category"].IsEmpty)
-            {
-                return null;
-            }
             var category = categoryService.GetAll().FirstOrDefault(c => c.Name.Equals(productXML["category"].InnerText));
             if (category == null)
             {
                 return null;
             }
             product.CategoryId = category.Id;
-
-            if (productXML["brand"] == null && productXML["brand"].IsEmpty)
-            {
-                return null;
-            }
 
             var brand = brandService.GetAll().FirstOrDefault(b => b.Name.Equals(productXML["brand"].InnerText));
             if (brand == null)
@@ -130,10 +105,6 @@ namespace StoreApp.Util
             }
             product.BrandId = brand.Id;
 
-            if (productXML["producer"] == null && productXML["producer"].IsEmpty)
-            {
-                return null;
-            }
             var producer = producerService.GetAll().FirstOrDefault(p => p.Name.Equals(productXML["producer"].InnerText));
             if (producer == null)
             {
