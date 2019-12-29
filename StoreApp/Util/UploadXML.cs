@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using System.Web;
 using System.Xml;
@@ -28,16 +29,20 @@ namespace StoreApp.Util
                 return false;
             }
 
+            InitializeRoot();
+
             return true;
         }
 
         protected void InitializeRoot()
         {
-            xmlFile = new XmlDocument();
-
-            xmlFile.Load(File.InputStream);
-
-            Root = xmlFile.DocumentElement;
+            if (xmlFile == null)
+            {
+                xmlFile = new XmlDocument();
+                xmlFile.Load(File.InputStream);
+                
+                Root = xmlFile.DocumentElement;
+            }
         }
 
         abstract public bool IsValidateRoot();
@@ -46,15 +51,14 @@ namespace StoreApp.Util
 
         public void SaveXML()
         {
-            var pathStringContent = new DirectoryInfo(string.Format($"{AppDomain.CurrentDomain.BaseDirectory}Content\\"));
-            var pathStringContentXML = Path.Combine(pathStringContent.ToString(), "XMLUploads");
-
-            if (!Directory.Exists(pathStringContentXML))
+            var path = ConfigurationManager.AppSettings.Get("pathUploadXML");
+            
+            if (!Directory.Exists(path))
             {
-                Directory.CreateDirectory(pathStringContentXML);
+                Directory.CreateDirectory(path);
             }
 
-            var pathSaveXMLFile = string.Format($"{pathStringContentXML}\\{File.FileName}");
+            var pathSaveXMLFile = string.Format($"{path}\\{File.FileName}");
 
             File.SaveAs(pathSaveXMLFile);
         }

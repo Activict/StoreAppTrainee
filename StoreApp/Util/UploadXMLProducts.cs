@@ -15,17 +15,7 @@ namespace StoreApp.Util
         
         public override bool IsValidateRoot()
         {
-            if (IsValidateFile())
-            {
-                InitializeRoot();
-
-                if (Root.Name == "products")
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return IsValidateFile() && Root.Name.Equals("products");
         }
 
         public override void SaveToDB()
