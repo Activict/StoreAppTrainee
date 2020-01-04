@@ -294,28 +294,28 @@ namespace StoreApp.Controllers
         [HttpPost]
         public ActionResult UploadXML(HttpPostedFileBase file)
         {
-            var productsXML = new UploadXMLProducts(file);
+            var fileManager = new FileManager(file, RootNames.products);
 
-            if (!productsXML.IsValidateFile())
+            if (!fileManager.IsValidateFile())
             {
-                TempData["StatusMessage"] = StateMessage.danger.ToString();
-                TempData["Message"] = "File empty or isn't XML";
+                TempData["StatusMessage"] = fileManager.StatusMessage;
+                TempData["Message"] = fileManager.Message;
                 return RedirectToAction("Index");
             }
 
-            if (!productsXML.IsValidateRoot())
+            if (!fileManager.IsValidateRequirements())
             {
-                TempData["StatusMessage"] = StateMessage.danger.ToString();
-                TempData["Message"] = "File XML don't exist products root";
+                TempData["StatusMessage"] = fileManager.StatusMessage;
+                TempData["Message"] = fileManager.Message;
                 return RedirectToAction("Index");
             }
 
-            productsXML.SaveToDB();
+            fileManager.SaveData();
 
-            productsXML.SaveXML();
+            fileManager.SaveFile();
 
             TempData["StatusMessage"] = StateMessage.info.ToString();
-            TempData["Message"] = $"{productsXML.countUpload} product's upload successful and {productsXML.countNotUpload} is not";
+            TempData["Message"] = fileManager.Message;
 
             return RedirectToAction("Index");
         }

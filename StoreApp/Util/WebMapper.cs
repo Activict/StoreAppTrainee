@@ -86,7 +86,7 @@ namespace StoreApp.Util
                 return null;
             }
             product.UnitId = unit.Id;
-            
+
             product.Picture = productXML["picture"]?.InnerText;
             product.Quality = productXML["quality"]?.InnerText;
             product.Enable = Convert.ToBoolean(productXML["enable"].InnerText);
@@ -113,6 +113,60 @@ namespace StoreApp.Util
             product.ProducerId = producer.Id;
 
             return product;
+        }
+
+        public ProductDTO Map(ProductViewModel product)
+        {
+            if (string.IsNullOrEmpty(product.Name) ||
+                product.Quantity < 0 || product.Price < 0 ||
+                string.IsNullOrEmpty(product.Unit) || string.IsNullOrEmpty(product.Category) ||
+                string.IsNullOrEmpty(product.Brand) || string.IsNullOrEmpty(product.Producer))
+            {
+                return null;
+            }
+
+            UnitDTO unit = unitService.GetAll().FirstOrDefault(u => u.Name.Equals(product.Unit));
+
+            if (unit == null)
+            {
+                return null;
+            }
+
+            CategoryDTO category = categoryService.GetAll().FirstOrDefault(c => c.Name.Equals(product.Category));
+
+            if (category == null)
+            {
+                return null;
+            }
+
+            BrandDTO brand = brandService.GetAll().FirstOrDefault(b => b.Name.Equals(product.Brand));
+
+            if (brand == null)
+            {
+                return null;
+            }
+
+            ProducerDTO producer = producerService.GetAll().FirstOrDefault(p => p.Name.Equals(product.Producer));
+
+            if (producer == null)
+            {
+                return null;
+            }
+
+            return new ProductDTO()
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                Quantity = product.Quantity,
+                Picture = product.Picture,
+                Quality = product.Quality,
+                Enable = product.Enable,
+                UnitId = unit.Id,
+                CategoryId = category.Id,
+                BrandId = brand.Id,
+                ProducerId = producer.Id
+            };
         }
     }
 }

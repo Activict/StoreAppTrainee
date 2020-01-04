@@ -3,6 +3,7 @@ using StoreApp.BLL.DTO;
 using StoreApp.BLL.Services;
 using StoreApp.Enums;
 using StoreApp.Models.Brands;
+using StoreApp.Util;
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
@@ -159,46 +160,28 @@ namespace StoreApp.Controllers
         [HttpPost]
         public ActionResult UploadXML(HttpPostedFileBase file)
         {
-            if (file == null || file.ContentLength <= 0 || file.ContentType != "text/xml")
+            var fileManager = new FileManager(file, RootNames.brands);
+
+            if (!fileManager.IsValidateFile())
             {
-                TempData["StatusMessage"] = StateMessage.danger.ToString();
-                TempData["Message"] = "File empty or isn't XML";
+                TempData["StatusMessage"] = fileManager.StatusMessage;
+                TempData["Message"] = fileManager.Message;
                 return RedirectToAction("Index");
             }
 
-            XmlDocument xmlFile = new XmlDocument();
-
-            xmlFile.Load(file.InputStream);
-
-            XmlElement brands = xmlFile.DocumentElement;
-
-            if (brands.Name != "brands")
+            if (!fileManager.IsValidateRequirements())
             {
-                TempData["StatusMessage"] = StateMessage.danger.ToString();
-                TempData["Message"] = "File XML don't exist brands root";
+                TempData["StatusMessage"] = fileManager.StatusMessage;
+                TempData["Message"] = fileManager.Message;
                 return RedirectToAction("Index");
             }
 
-            int countUpload = 0;
-            int countNotUpload = 0;
-            
-            foreach (XmlNode brand in brands)
-            {
-                if (!brandService.IsExistBrand(brand.InnerText))
-                {
-                    brandService.Create(brand.InnerText);
-                    countUpload++;
-                }
-                else
-                {
-                    countNotUpload++;
-                } 
-            }
+            fileManager.SaveData();
 
-            saveXMLService.SaveXML(file, "Brands");
+            fileManager.SaveFile();
 
             TempData["StatusMessage"] = StateMessage.info.ToString();
-            TempData["Message"] = $"{countUpload} brand's upload successful and {countNotUpload} is not";
+            TempData["Message"] = fileManager.Message;
 
             return RedirectToAction("Index");
         }

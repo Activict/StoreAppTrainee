@@ -3,6 +3,7 @@ using StoreApp.BLL.DTO;
 using StoreApp.BLL.Services;
 using StoreApp.Enums;
 using StoreApp.Models.Producers;
+using StoreApp.Util;
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
@@ -156,46 +157,28 @@ namespace StoreApp.Controllers
         [HttpPost]
         public ActionResult UploadXML(HttpPostedFileBase file)
         {
-            if (file == null || file.ContentLength <= 0 || file.ContentType != "text/xml")
+            var fileManager = new FileManager(file, RootNames.producers);
+
+            if (!fileManager.IsValidateFile())
             {
-                TempData["StatusMessage"] = StateMessage.danger.ToString();
-                TempData["Message"] = "File empty or isn't XML";
+                TempData["StatusMessage"] = fileManager.StatusMessage;
+                TempData["Message"] = fileManager.Message;
                 return RedirectToAction("Index");
             }
 
-            XmlDocument xmlFile = new XmlDocument();
-
-            xmlFile.Load(file.InputStream);
-
-            XmlElement producers = xmlFile.DocumentElement;
-
-            if (producers.Name != "producers")
+            if (!fileManager.IsValidateRequirements())
             {
-                TempData["StatusMessage"] = StateMessage.danger.ToString();
-                TempData["Message"] = "File XML don't exist producers root";
+                TempData["StatusMessage"] = fileManager.StatusMessage;
+                TempData["Message"] = fileManager.Message;
                 return RedirectToAction("Index");
             }
 
-            int countUpload = 0;
-            int countNotUpload = 0;
+            fileManager.SaveData();
 
-            foreach (XmlNode producer in producers)
-            {
-                if (!producerService.IsExistProducer(producer.InnerText))
-                {
-                    producerService.Create(producer.InnerText);
-                    countUpload++;
-                }
-                else
-                {
-                    countNotUpload++;
-                }
-            }
-
-            saveXMLService.SaveXML(file, "Producers");
+            fileManager.SaveFile();
 
             TempData["StatusMessage"] = StateMessage.info.ToString();
-            TempData["Message"] = $"{countUpload} producer's upload successful and {countNotUpload} is not";
+            TempData["Message"] = fileManager.Message;
 
             return RedirectToAction("Index");
         }
