@@ -27,7 +27,7 @@ namespace StoreApp.Util
 
             if (IsValidateRequirements())
             {
-                Saver = InitializeSaver();
+                Saver = GetSaver();
             }
         }
 
@@ -44,7 +44,7 @@ namespace StoreApp.Util
             return false;
         }
 
-        private ISaver InitializeSaver()
+        private ISaver GetSaver()
         {
             switch (type)
             {

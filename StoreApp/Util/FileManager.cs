@@ -17,7 +17,7 @@ namespace StoreApp.Util
 
             if (File != null && File.ContentLength > 0)
             {
-                Parser = InitializeParser(type);
+                Parser = GetParser(type);
             }
         }
 
@@ -52,7 +52,7 @@ namespace StoreApp.Util
             return false;
         }
 
-        private IFileParser InitializeParser(RootNames type)
+        private IFileParser GetParser(RootNames type)
         {
             if (File.ContentType == "text/xml")
             {
