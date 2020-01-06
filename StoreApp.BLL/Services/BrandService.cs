@@ -44,7 +44,7 @@ namespace StoreApp.BLL.Services
 
         public void Create(string brand)
         {
-            Brand brandDAL = new Brand() { Name = brand };
+            var brandDAL = new Brand() { Name = brand };
             DataBase.Brands.Create(brandDAL);
             DataBase.Save();
         }

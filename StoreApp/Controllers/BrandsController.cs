@@ -14,13 +14,11 @@ namespace StoreApp.Controllers
     [Authorize]
     public class BrandsController : Controller
     {
-        private SaveXMLService saveXMLService;
         private BrandService brandService;
         private IMapper config;
 
         public BrandsController()
         {
-            saveXMLService = new SaveXMLService();
             brandService = new BrandService();
             config = new MapperConfiguration(cfg =>
             {

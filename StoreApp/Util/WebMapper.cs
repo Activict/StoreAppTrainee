@@ -126,28 +126,24 @@ namespace StoreApp.Util
             }
 
             UnitDTO unit = unitService.GetAll().FirstOrDefault(u => u.Name.Equals(product.Unit));
-
             if (unit == null)
             {
                 return null;
             }
 
             CategoryDTO category = categoryService.GetAll().FirstOrDefault(c => c.Name.Equals(product.Category));
-
             if (category == null)
             {
                 return null;
             }
 
             BrandDTO brand = brandService.GetAll().FirstOrDefault(b => b.Name.Equals(product.Brand));
-
             if (brand == null)
             {
                 return null;
             }
 
             ProducerDTO producer = producerService.GetAll().FirstOrDefault(p => p.Name.Equals(product.Producer));
-
             if (producer == null)
             {
                 return null;

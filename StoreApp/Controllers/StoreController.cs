@@ -17,7 +17,6 @@ namespace StoreApp.Controllers
 {
     public class StoreController : Controller
     {
-        private SaveXMLService saveXMLService;
         private UnitService unitservice;
         private SaveProductImageService saveProductImage;
         private ProductService productService;
@@ -29,7 +28,6 @@ namespace StoreApp.Controllers
 
         public StoreController()
         {
-            saveXMLService = new SaveXMLService();
             unitservice = new UnitService();
             saveProductImage = new SaveProductImageService();
             productService = new ProductService();

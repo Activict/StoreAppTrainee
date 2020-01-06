@@ -14,13 +14,11 @@ namespace StoreApp.Controllers
     [Authorize]
     public class ProducersController : Controller
     {
-        private SaveXMLService saveXMLService;
         private ProducerService producerService;
         private IMapper config;
 
         public ProducersController()
         {
-            saveXMLService = new SaveXMLService();
             producerService = new ProducerService();
 
             config = new MapperConfiguration(cfg =>

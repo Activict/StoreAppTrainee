@@ -14,13 +14,11 @@ namespace StoreApp.Controllers
     [Authorize]
     public class UnitsController : Controller
     {
-        private SaveXMLService saveXMLService;
         private UnitService unitService;
         private IMapper config;
 
         public UnitsController()
         {
-            saveXMLService = new SaveXMLService();
             unitService = new UnitService();
 
             config = new MapperConfiguration(cfg =>

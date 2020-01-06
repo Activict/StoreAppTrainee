@@ -147,7 +147,8 @@ namespace StoreApp.Controllers
 
         private void GetOrderDatails(OrderViewModel order)
         {
-            order.OrderDetails = webMapper.config.Map<IEnumerable<OrderDetailDTO>, IEnumerable<OrderDetailsViewModel>>(orderDetailService.GetAll().Where(o => o.OrderId == order.Id));
+            var orderDetailsDTOs = orderDetailService.GetAll().Where(o => o.OrderId == order.Id);
+            order.OrderDetails = webMapper.config.Map<IEnumerable<OrderDetailDTO>, IEnumerable<OrderDetailsViewModel>>(orderDetailsDTOs);
             
             foreach (var orderDetail in order.OrderDetails)
             {

@@ -121,7 +121,6 @@
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\ProducerService.cs" />
     <Compile Include="Services\ProductService.cs" />
-    <Compile Include="Services\SaveXMLService.cs" />
     <Compile Include="Services\UnitService.cs" />
     <Compile Include="Services\SaveProductImageService.cs" />
     <Compile Include="Services\UserService.cs" />

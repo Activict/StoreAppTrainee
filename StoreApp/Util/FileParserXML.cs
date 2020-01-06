@@ -9,7 +9,7 @@ namespace StoreApp.Util
 {
     public class FileParserXML : IFileParser
     {
-        private RootNames type;
+        private RootNames Type;
         private XmlElement XmlDocument { get; set; }
         protected HttpPostedFileBase File { get; set; }
         public ISaver Saver { get; set; }
@@ -19,7 +19,7 @@ namespace StoreApp.Util
         public FileParserXML(HttpPostedFileBase file, RootNames type)
         {
             File = file;
-            this.type = type;
+            Type = type;
 
             XmlDocument xmlFile = new XmlDocument();
             xmlFile.Load(File.InputStream);
@@ -33,7 +33,7 @@ namespace StoreApp.Util
 
         public bool IsValidateRequirements()
         {
-            if (Enum.IsDefined(typeof(RootNames), XmlDocument.Name) && XmlDocument.Name.Contains(type.ToString()))
+            if (Enum.IsDefined(typeof(RootNames), XmlDocument.Name) && XmlDocument.Name.Contains(Type.ToString()))
             {
                 return true;
             }
@@ -46,7 +46,7 @@ namespace StoreApp.Util
 
         private ISaver GetSaver()
         {
-            switch (type)
+            switch (Type)
             {
                 case RootNames.products:
                     return new ParserProduct(XmlDocument).GetSaver();
@@ -72,7 +72,7 @@ namespace StoreApp.Util
                 Directory.CreateDirectory(path);
             }
 
-            var pathSaveXMLFile = string.Format($"{path}\\{File.FileName}");
+            var pathSaveXMLFile = $"{path}\\{File.FileName}";
 
             File.SaveAs(pathSaveXMLFile);
         }

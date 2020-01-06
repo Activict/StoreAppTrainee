@@ -14,13 +14,11 @@ namespace StoreApp.Controllers
     [Authorize]
     public class CategoryController : Controller
     {
-        private SaveXMLService saveXMLService;
         private CategoryService categoryService;
 
         private IMapper config;
         public CategoryController()
         {
-            saveXMLService = new SaveXMLService();
             categoryService = new CategoryService();
 
             config = new MapperConfiguration(cfg =>
