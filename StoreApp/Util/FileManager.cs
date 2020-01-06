@@ -59,6 +59,11 @@ namespace StoreApp.Util
                 return new FileParserXML(File, type);
             }
 
+            if (File.ContentType == "application/json")
+            {
+                return new FileParserJSON(File, type);
+            }
+
             return null;
         }
 

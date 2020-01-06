@@ -1,5 +1,9 @@
-﻿using StoreApp.Enums;
+﻿using Newtonsoft.Json;
+using StoreApp.BLL.DTO;
+using StoreApp.Enums;
+using StoreApp.Models.Store;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Web;
@@ -7,57 +11,59 @@ using System.Xml;
 
 namespace StoreApp.Util
 {
-    public class FileParserXML : IFileParser
+    public class FileParserJSON : IFileParser
     {
         private RootNames Type { get; set; }
-        private XmlElement XmlDocument { get; set; }
+        private string Json { get; set; }
         private HttpPostedFileBase File { get; set; }
         public ISaver Saver { get; set; }
         public string Message { get; set; }
         public string StatusMessage { get; set; }
 
-        public FileParserXML(HttpPostedFileBase file, RootNames type)
+        public FileParserJSON(HttpPostedFileBase file, RootNames type)
         {
             File = file;
             Type = type;
 
-            XmlDocument xmlFile = new XmlDocument();
-            xmlFile.Load(File.InputStream);
-            XmlDocument = xmlFile.DocumentElement;
+            StreamReader streamFile = new StreamReader(file.InputStream);
+            Json = streamFile.ReadToEnd();
 
             if (IsValidateRequirements())
             {
-                Saver = GetSaver();
+                Saver = InitializeSaver();
             }
         }
 
         public bool IsValidateRequirements()
         {
-            if (Enum.IsDefined(typeof(RootNames), XmlDocument.Name) && XmlDocument.Name.Contains(Type.ToString()))
+            foreach (var rootName in Enum.GetValues(typeof(RootNames)))
             {
-                return true;
+                if (File.FileName.StartsWith(rootName.ToString()) && File.FileName.StartsWith(Type.ToString()))
+                {
+                    return true;
+                }
             }
 
             StatusMessage = StateMessage.danger.ToString();
-            Message = "File XML does not meet requirements";
+            Message = "File JSON does not meet requirements";
 
             return false;
         }
 
-        private ISaver GetSaver()
+        private ISaver InitializeSaver()
         {
             switch (Type)
             {
                 case RootNames.products:
-                    return new ParserProduct(XmlDocument).GetSaver();
+                    return new ParserProduct(Json).GetSaver();
                 case RootNames.units:
-                    return new ParserUnit(XmlDocument).GetSaver();
+                    return new ParserUnit(Json).GetSaver();
                 case RootNames.categories:
-                    return new ParserCategory(XmlDocument).GetSaver();
+                    return new ParserCategory(Json).GetSaver();
                 case RootNames.brands:
-                    return new ParserBrand(XmlDocument).GetSaver();
+                    return new ParserBrand(Json).GetSaver();
                 case RootNames.producers:
-                    return new ParserProducer(XmlDocument).GetSaver();
+                    return new ParserProducer(Json).GetSaver();
                 default:
                     return null;
             }
@@ -65,7 +71,7 @@ namespace StoreApp.Util
 
         public void Save()
         {
-            var path = ConfigurationManager.AppSettings.Get("pathUploadXML");
+            var path = ConfigurationManager.AppSettings.Get("pathUploadJSON");
 
             if (!Directory.Exists(path))
             {

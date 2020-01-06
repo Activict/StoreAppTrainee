@@ -11,10 +11,10 @@
     <div class="row container">
         @Html.ActionLink("New product", "CreateProduct", "Store", null, new { @class = "btn btn-success ol-md-2 offset-2 mb-1" })
 
-        @using (Html.BeginForm("UploadXML", "Store", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        @using (Html.BeginForm("Upload", "Store", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             <div class="offset-1 row">
-                <div class="col-4"> <input type="submit" value="Upload XML" class="btn btn-outline-info" /> </div>
+                <div class="col-3"> <input type="submit" value="Upload" class="btn btn-outline-info" /> </div>
                 <div class="col-3"> <input type="file" name="file" class="btn btn-outline-info btn-sm" /> </div>
             </div>
         }

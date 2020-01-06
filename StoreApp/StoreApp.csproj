@@ -183,6 +183,7 @@
     <Compile Include="Util\BrandSaver.cs" />
     <Compile Include="Util\CategorySaver.cs" />
     <Compile Include="Util\FileManager.cs" />
+    <Compile Include="Util\FileParserJSON.cs" />
     <Compile Include="Util\FileParserXML.cs" />
     <Compile Include="Util\IParser.cs" />
     <Compile Include="Util\ISaver.cs" />

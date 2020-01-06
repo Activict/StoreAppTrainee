@@ -290,7 +290,7 @@ namespace StoreApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult UploadXML(HttpPostedFileBase file)
+        public ActionResult Upload(HttpPostedFileBase file)
         {
             var fileManager = new FileManager(file, RootNames.products);
 
