@@ -44,7 +44,7 @@ namespace StoreApp.BLL.Services
 
         public void Create(string category)
         {
-            Category categoryDAL = new Category() { Name = category };
+            var categoryDAL = new Category() { Name = category };
             DataBase.Categories.Create(categoryDAL);
             DataBase.Save();
         }
@@ -57,7 +57,7 @@ namespace StoreApp.BLL.Services
 
         public void Edit(CategoryDTO category)
         {
-            Category categoryDAL = config.Map<CategoryDTO, Category>(category);
+            var categoryDAL = config.Map<CategoryDTO, Category>(category);
             DataBase.Categories.Update(categoryDAL);
             DataBase.Save();
         }

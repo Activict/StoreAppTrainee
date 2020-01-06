@@ -39,14 +39,14 @@ namespace StoreApp.BLL.Services
 
         public void Create(OrderDTO order)
         {
-            Order orderDAL = config.Map<OrderDTO, Order>(order);
+            var orderDAL = config.Map<OrderDTO, Order>(order);
             DataBase.Orders.Create(orderDAL);
             DataBase.Save();
         }
 
         public int Create(int userId, decimal totalPrice, int discount = 0, string status = "done")
         {
-            OrderDTO orderDTO = new OrderDTO()
+            var orderDTO = new OrderDTO()
             {
                 UserId = userId,
                 TotalCost = totalPrice,
@@ -55,7 +55,7 @@ namespace StoreApp.BLL.Services
                 OrderDate = DateTime.Now
             };
 
-            Order orderDAL = config.Map<OrderDTO, Order>(orderDTO);
+            var orderDAL = config.Map<OrderDTO, Order>(orderDTO);
             DataBase.Orders.Create(orderDAL);
             DataBase.Save();
             return orderDAL.Id;
@@ -69,7 +69,7 @@ namespace StoreApp.BLL.Services
 
         public void Edit(OrderDTO order)
         {
-            Order orderDAL = config.Map<OrderDTO, Order>(order);
+            var orderDAL = config.Map<OrderDTO, Order>(order);
             DataBase.Orders.Update(orderDAL);
             DataBase.Save();
         }

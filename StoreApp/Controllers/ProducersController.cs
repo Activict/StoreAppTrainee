@@ -172,7 +172,6 @@ namespace StoreApp.Controllers
             }
 
             fileManager.SaveData();
-
             fileManager.SaveFile();
 
             TempData["StatusMessage"] = StateMessage.info.ToString();

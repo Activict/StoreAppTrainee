@@ -37,7 +37,7 @@ namespace StoreApp.BLL.Services
 
         public void Create(BrandDTO brand)
         {
-            Brand brandDAL = config.Map<BrandDTO, Brand>(brand);
+            var brandDAL = config.Map<BrandDTO, Brand>(brand);
             DataBase.Brands.Create(brandDAL);
             DataBase.Save();
         }
@@ -57,7 +57,7 @@ namespace StoreApp.BLL.Services
 
         public void Edit(BrandDTO brand)
         {
-            Brand brandDAL = config.Map<BrandDTO, Brand>(brand);
+            var brandDAL = config.Map<BrandDTO, Brand>(brand);
             DataBase.Brands.Update(brandDAL);
             DataBase.Save();
         }

@@ -37,7 +37,7 @@ namespace StoreApp.BLL.Services
 
         public void Create(ProductDTO product)
         {
-            Product productDAL = config.Map<ProductDTO, Product>(product);
+            var productDAL = config.Map<ProductDTO, Product>(product);
             DataBase.Products.Create(productDAL);
             DataBase.Save();
         }
@@ -50,7 +50,7 @@ namespace StoreApp.BLL.Services
 
         public void Edit(ProductDTO product)
         {
-            Product productDAL = config.Map<ProductDTO, Product>(product);
+            var productDAL = config.Map<ProductDTO, Product>(product);
             DataBase.Products.Update(productDAL);
             DataBase.Save();
         }

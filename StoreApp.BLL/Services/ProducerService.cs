@@ -39,13 +39,13 @@ namespace StoreApp.BLL.Services
 
         public void Create(ProducerDTO producer)
         {
-            Producer producerDAL = config.Map<ProducerDTO, Producer>(producer);
+            var producerDAL = config.Map<ProducerDTO, Producer>(producer);
             DataBase.Producers.Create(producerDAL);
             DataBase.Save();
         }
         public void Create(string producer)
         {
-            Producer producerDAL = new Producer() { Name = producer};
+            var producerDAL = new Producer() { Name = producer};
             DataBase.Producers.Create(producerDAL);
             DataBase.Save();
         }
@@ -58,7 +58,7 @@ namespace StoreApp.BLL.Services
 
         public void Edit(ProducerDTO producer)
         {
-            Producer producerDAL = config.Map<ProducerDTO, Producer>(producer);
+            var producerDAL = config.Map<ProducerDTO, Producer>(producer);
             DataBase.Producers.Update(producerDAL);
             DataBase.Save();
         }

@@ -38,14 +38,14 @@ namespace StoreApp.BLL.Services
 
         public void Create(UnitDTO unit)
         {
-            Unit unitDAL = config.Map<UnitDTO, Unit>(unit);
+            var unitDAL = config.Map<UnitDTO, Unit>(unit);
             DataBase.Units.Create(unitDAL);
             DataBase.Save();
         }
 
         public void Create(string unit)
         {
-            Unit unitDAL = new Unit() { Name = unit };
+            var unitDAL = new Unit() { Name = unit };
             DataBase.Units.Create(unitDAL);
             DataBase.Save();
         }
@@ -63,7 +63,7 @@ namespace StoreApp.BLL.Services
 
         public void Edit(UnitDTO unit)
         {
-            Unit unitDAL = config.Map<UnitDTO, Unit>(unit);
+            var unitDAL = config.Map<UnitDTO, Unit>(unit);
             DataBase.Units.Update(unitDAL);
             DataBase.Save();
         }

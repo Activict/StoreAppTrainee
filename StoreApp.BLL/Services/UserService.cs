@@ -51,7 +51,7 @@ namespace StoreApp.BLL.Services
 
         public void Edit(UserDTO user)
         {
-            User userDTO = config.Map<UserDTO, User>(user);
+            var userDTO = config.Map<UserDTO, User>(user);
             DataBase.Users.Update(userDTO);
             DataBase.Save();
         }

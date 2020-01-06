@@ -51,7 +51,7 @@ namespace StoreApp.BLL.Services
 
         public void Edit(OrderDetailDTO orderDetail)
         {
-            OrderDetail orderDetailDAL = config.Map<OrderDetailDTO, OrderDetail>(orderDetail);
+            var orderDetailDAL = config.Map<OrderDetailDTO, OrderDetail>(orderDetail);
             DataBase.OrderDetails.Update(orderDetailDAL);
             DataBase.Save();
         }
