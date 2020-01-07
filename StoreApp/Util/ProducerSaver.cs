@@ -6,33 +6,33 @@ namespace StoreApp.Util
 {
     public class ProducerSaver : ISaver
     {
-        private ProducerService ProducerService { get; set; }
-        private IEnumerable<ProducerDTO> Producers { get; set; }
-        private int CountNotUpload { get; set; }
-        private int CountUpload { get; set; }
+        private ProducerService producerService;
+        private IEnumerable<ProducerDTO> producers;
+        private int countNotUpload;
+        private int countUpload;
         public string Message
         {
-            get { return $"{CountUpload} producer's upload successful and {CountNotUpload} is not"; }
+            get { return $"{countUpload} producer's upload successful and {countNotUpload} is not"; }
         }
 
         public ProducerSaver(IEnumerable<ProducerDTO> producers)
         {
-            Producers = producers;
-            ProducerService = new ProducerService();
+            this.producers = producers;
+            producerService = new ProducerService();
         }
 
         public void Save()
         {
-            foreach (var producer in Producers)
+            foreach (var producer in producers)
             {
-                if (!ProducerService.IsExistProducer(producer))
+                if (!producerService.IsExistProducer(producer))
                 {
-                    ProducerService.Create(producer);
-                    CountUpload++;
+                    producerService.Create(producer);
+                    countUpload++;
                 }
                 else
                 {
-                    CountNotUpload++;
+                    countNotUpload++;
                 }
             }
         }

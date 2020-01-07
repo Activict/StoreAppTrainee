@@ -9,7 +9,7 @@ namespace StoreApp.Util
 {
     public class ParserProduct : IParser
     {
-        private WebMapper WebMapper = new WebMapper();
+        private WebMapper webMapper = new WebMapper();
 
         private List<ProductDTO> productsDTO = new List<ProductDTO>();
 
@@ -17,7 +17,7 @@ namespace StoreApp.Util
         {
             foreach (XmlElement node in xmlDocument)
             {
-                productsDTO.Add(WebMapper.Map(node));
+                productsDTO.Add(webMapper.Map(node));
             }
         }
 
@@ -25,7 +25,7 @@ namespace StoreApp.Util
         {
             var products = JsonConvert.DeserializeObject<IEnumerable<ProductViewModel>>(json);
 
-            products.ToList().ForEach(p => productsDTO.Add(WebMapper.Map(p)));
+            products.ToList().ForEach(p => productsDTO.Add(webMapper.Map(p)));
         }
 
         public ISaver GetSaver()

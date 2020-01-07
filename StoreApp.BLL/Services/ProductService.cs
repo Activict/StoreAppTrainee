@@ -11,8 +11,7 @@ namespace StoreApp.BLL.Services
 {
     public class ProductService : IProductService
     {
-        private IUnitOfWork DataBase { get; set; }
-
+        private IUnitOfWork database;
         private IMapper config;
 
         public ProductService(IUnitOfWork uof)
@@ -22,7 +21,7 @@ namespace StoreApp.BLL.Services
                 cfg.CreateMap<Product, ProductDTO>();
                 cfg.CreateMap<ProductDTO, Product>();
             }).CreateMapper();
-            DataBase = uof;
+            database = uof;
         }
 
         public ProductService()
@@ -32,51 +31,51 @@ namespace StoreApp.BLL.Services
                 cfg.CreateMap<Product, ProductDTO>();
                 cfg.CreateMap<ProductDTO, Product>();
             }).CreateMapper();
-            DataBase = new EFUnitOfWork("DefaultConnection");
+            database = new EFUnitOfWork("DefaultConnection");
         }
 
         public void Create(ProductDTO product)
         {
             var productDAL = config.Map<ProductDTO, Product>(product);
-            DataBase.Products.Create(productDAL);
-            DataBase.Save();
+            database.Products.Create(productDAL);
+            database.Save();
         }
 
         public void Delete(int id)
         {
-            DataBase.Products.Delete(id);
-            DataBase.Save();
+            database.Products.Delete(id);
+            database.Save();
         }
 
         public void Edit(ProductDTO product)
         {
             var productDAL = config.Map<ProductDTO, Product>(product);
-            DataBase.Products.Update(productDAL);
-            DataBase.Save();
+            database.Products.Update(productDAL);
+            database.Save();
         }
 
         public ProductDTO Get(int id)
         {
-            return config.Map<Product, ProductDTO>(DataBase.Products.Get(id));
+            return config.Map<Product, ProductDTO>(database.Products.Get(id));
         }
 
         public IEnumerable<ProductDTO> GetAll()
         {
-            return config.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(DataBase.Products.GetAll());
+            return config.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(database.Products.GetAll());
         }
 
         public bool ValidateNewProduct(ProductDTO product)
         {
-            return !DataBase.Products.Find(p => p.Name.Equals(product.Name) &&
+            return !database.Products.Find(p => p.Name.Equals(product.Name) &&
                                                 p.BrandId.Equals(product.BrandId) &&
                                                 p.ProducerId.Equals(product.ProducerId)).Any();
         }
 
         public bool ValidateEditProduct(ProductDTO productDTO)
         {
-            var products = DataBase.Products.GetAll();
+            var products = database.Products.GetAll();
 
-            products.ToList().ForEach(p => DataBase.Products.Detach(p));
+            products.ToList().ForEach(p => database.Products.Detach(p));
 
             return !products.Any(p => p.Id != productDTO.Id &&
                                       p.Name.Equals(productDTO.Name) &&
@@ -86,7 +85,7 @@ namespace StoreApp.BLL.Services
 
         public void Dispose()
         {
-            DataBase.Dispose();
+            database.Dispose();
         }
     }
 }

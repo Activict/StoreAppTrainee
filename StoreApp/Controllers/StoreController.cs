@@ -1,17 +1,15 @@
-﻿using System.Configuration;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Helpers;
-using System.Web.Mvc;
-using StoreApp.BLL.DTO;
+﻿using StoreApp.BLL.DTO;
 using StoreApp.BLL.Services;
+using StoreApp.Enums;
 using StoreApp.Models.Filter;
 using StoreApp.Models.Store;
 using StoreApp.Util;
-using StoreApp.Enums;
-using System.Xml;
+using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
 
 namespace StoreApp.Controllers
 {

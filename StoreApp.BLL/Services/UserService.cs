@@ -10,8 +10,7 @@ namespace StoreApp.BLL.Services
 {
     public class UserService : IUserService
     {
-        private IUnitOfWork DataBase { get; set; }
-
+        private IUnitOfWork database;
         private IMapper config;
 
         public UserService(IUnitOfWork uof)
@@ -22,7 +21,7 @@ namespace StoreApp.BLL.Services
                     cfg.CreateMap<UserDTO, User>();
                     cfg.CreateMap<User, UserDTO>();
                 }).CreateMapper();
-            DataBase = uof;
+            database = uof;
         }
 
         public UserService()
@@ -33,42 +32,42 @@ namespace StoreApp.BLL.Services
                     cfg.CreateMap<UserDTO, User>();
                     cfg.CreateMap<User, UserDTO>();
                 }).CreateMapper();
-            DataBase = new EFUnitOfWork("DefaultConnection");
+            database = new EFUnitOfWork("DefaultConnection");
         }
 
         public void Create(UserDTO user)
         {
             User userDAL = config.Map<UserDTO, User>(user);
-            DataBase.Users.Create(userDAL);
-            DataBase.Save();
+            database.Users.Create(userDAL);
+            database.Save();
         }
 
         public void Delete(int id)
         {
-            DataBase.Users.Delete(id);
-            DataBase.Save();
+            database.Users.Delete(id);
+            database.Save();
         }
 
         public void Edit(UserDTO user)
         {
             var userDTO = config.Map<UserDTO, User>(user);
-            DataBase.Users.Update(userDTO);
-            DataBase.Save();
+            database.Users.Update(userDTO);
+            database.Save();
         }
 
         public UserDTO Get(int id)
         {
-            return config.Map<User, UserDTO>(DataBase.Users.Get(id));
+            return config.Map<User, UserDTO>(database.Users.Get(id));
         }
 
         public IEnumerable<UserDTO> GetAll()
         {
-            return config.Map<IEnumerable<User>, IEnumerable<UserDTO>>(DataBase.Users.GetAll());
+            return config.Map<IEnumerable<User>, IEnumerable<UserDTO>>(database.Users.GetAll());
         }
 
         public void Dispose()
         {
-            DataBase.Dispose();
+            database.Dispose();
         }
     }
 }

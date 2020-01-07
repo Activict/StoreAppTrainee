@@ -1,32 +1,27 @@
-﻿using Newtonsoft.Json;
-using StoreApp.BLL.DTO;
-using StoreApp.Enums;
-using StoreApp.Models.Store;
+﻿using StoreApp.Enums;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Web;
-using System.Xml;
 
 namespace StoreApp.Util
 {
     public class FileParserJSON : IFileParser
     {
-        private RootNames Type { get; set; }
-        private string Json { get; set; }
-        private HttpPostedFileBase File { get; set; }
+        private RootNames type;
+        private string json;
+        private HttpPostedFileBase file;
         public ISaver Saver { get; set; }
         public string Message { get; set; }
         public string StatusMessage { get; set; }
 
         public FileParserJSON(HttpPostedFileBase file, RootNames type)
         {
-            File = file;
-            Type = type;
+            this.file = file;
+            this.type = type;
 
             StreamReader streamFile = new StreamReader(file.InputStream);
-            Json = streamFile.ReadToEnd();
+            json = streamFile.ReadToEnd();
 
             if (IsValidateRequirements())
             {
@@ -38,7 +33,7 @@ namespace StoreApp.Util
         {
             foreach (var rootName in Enum.GetValues(typeof(RootNames)))
             {
-                if (File.FileName.StartsWith(rootName.ToString()) && File.FileName.StartsWith(Type.ToString()))
+                if (file.FileName.StartsWith(rootName.ToString()) && file.FileName.StartsWith(type.ToString()))
                 {
                     return true;
                 }
@@ -52,18 +47,18 @@ namespace StoreApp.Util
 
         private ISaver InitializeSaver()
         {
-            switch (Type)
+            switch (type)
             {
                 case RootNames.products:
-                    return new ParserProduct(Json).GetSaver();
+                    return new ParserProduct(json).GetSaver();
                 case RootNames.units:
-                    return new ParserUnit(Json).GetSaver();
+                    return new ParserUnit(json).GetSaver();
                 case RootNames.categories:
-                    return new ParserCategory(Json).GetSaver();
+                    return new ParserCategory(json).GetSaver();
                 case RootNames.brands:
-                    return new ParserBrand(Json).GetSaver();
+                    return new ParserBrand(json).GetSaver();
                 case RootNames.producers:
-                    return new ParserProducer(Json).GetSaver();
+                    return new ParserProducer(json).GetSaver();
                 default:
                     return null;
             }
@@ -78,9 +73,9 @@ namespace StoreApp.Util
                 Directory.CreateDirectory(path);
             }
 
-            var pathSaveXMLFile = $"{path}\\{File.FileName}";
+            var pathSaveXMLFile = $"{path}\\{file.FileName}";
 
-            File.SaveAs(pathSaveXMLFile);
+            file.SaveAs(pathSaveXMLFile);
         }
     }
 }

@@ -10,8 +10,7 @@ namespace StoreApp.BLL.Services
 {
     public class OrderDetailService : IOrderDetailService
     {
-        private IUnitOfWork DataBase { get; set; }
-
+        private IUnitOfWork database;
         private IMapper config;
 
         public OrderDetailService(IUnitOfWork eof)
@@ -22,7 +21,7 @@ namespace StoreApp.BLL.Services
                     cfg.CreateMap<OrderDetailDTO, OrderDetail>();
                     cfg.CreateMap<OrderDetail, OrderDetailDTO>();
                 }).CreateMapper();
-            DataBase = eof;
+            database = eof;
         }
 
         public OrderDetailService()
@@ -33,42 +32,42 @@ namespace StoreApp.BLL.Services
                     cfg.CreateMap<OrderDetailDTO, OrderDetail>();
                     cfg.CreateMap<OrderDetail, OrderDetailDTO>();
                 }).CreateMapper();
-            DataBase = new EFUnitOfWork("DefaultConnection");
+            database = new EFUnitOfWork("DefaultConnection");
         }
 
         public void Create(OrderDetailDTO orderDetail)
         {
             OrderDetail orderDetailDAL = config.Map<OrderDetailDTO, OrderDetail>(orderDetail);
-            DataBase.OrderDetails.Create(orderDetailDAL);
-            DataBase.Save();
+            database.OrderDetails.Create(orderDetailDAL);
+            database.Save();
         }
 
         public void Delete(int id)
         {
-            DataBase.OrderDetails.Delete(id);
-            DataBase.Save();
+            database.OrderDetails.Delete(id);
+            database.Save();
         }
 
         public void Edit(OrderDetailDTO orderDetail)
         {
             var orderDetailDAL = config.Map<OrderDetailDTO, OrderDetail>(orderDetail);
-            DataBase.OrderDetails.Update(orderDetailDAL);
-            DataBase.Save();
+            database.OrderDetails.Update(orderDetailDAL);
+            database.Save();
         }
 
         public OrderDetailDTO Get(int id)
         {
-            return config.Map<OrderDetail, OrderDetailDTO>(DataBase.OrderDetails.Get(id));
+            return config.Map<OrderDetail, OrderDetailDTO>(database.OrderDetails.Get(id));
         }
 
         public IEnumerable<OrderDetailDTO> GetAll()
         {
-            return config.Map<IEnumerable<OrderDetail>, IEnumerable<OrderDetailDTO>>(DataBase.OrderDetails.GetAll());
+            return config.Map<IEnumerable<OrderDetail>, IEnumerable<OrderDetailDTO>>(database.OrderDetails.GetAll());
         }
 
         public void Dispose()
         {
-            DataBase.Dispose();
+            database.Dispose();
         }
     }
 }

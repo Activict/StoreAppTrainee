@@ -9,21 +9,21 @@ namespace StoreApp.Util
 {
     public class FileParserXML : IFileParser
     {
-        private RootNames Type { get; set; }
-        private XmlElement XmlDocument { get; set; }
-        private HttpPostedFileBase File { get; set; }
+        private RootNames type;
+        private XmlElement xmlDocument;
+        private HttpPostedFileBase file;
         public ISaver Saver { get; set; }
         public string Message { get; set; }
         public string StatusMessage { get; set; }
 
         public FileParserXML(HttpPostedFileBase file, RootNames type)
         {
-            File = file;
-            Type = type;
+            this.file = file;
+            this.type = type;
 
             XmlDocument xmlFile = new XmlDocument();
-            xmlFile.Load(File.InputStream);
-            XmlDocument = xmlFile.DocumentElement;
+            xmlFile.Load(this.file.InputStream);
+            xmlDocument = xmlFile.DocumentElement;
 
             if (IsValidateRequirements())
             {
@@ -33,7 +33,7 @@ namespace StoreApp.Util
 
         public bool IsValidateRequirements()
         {
-            if (Enum.IsDefined(typeof(RootNames), XmlDocument.Name) && XmlDocument.Name.Contains(Type.ToString()))
+            if (Enum.IsDefined(typeof(RootNames), xmlDocument.Name) && xmlDocument.Name.Contains(type.ToString()))
             {
                 return true;
             }
@@ -46,18 +46,18 @@ namespace StoreApp.Util
 
         private ISaver GetSaver()
         {
-            switch (Type)
+            switch (type)
             {
                 case RootNames.products:
-                    return new ParserProduct(XmlDocument).GetSaver();
+                    return new ParserProduct(xmlDocument).GetSaver();
                 case RootNames.units:
-                    return new ParserUnit(XmlDocument).GetSaver();
+                    return new ParserUnit(xmlDocument).GetSaver();
                 case RootNames.categories:
-                    return new ParserCategory(XmlDocument).GetSaver();
+                    return new ParserCategory(xmlDocument).GetSaver();
                 case RootNames.brands:
-                    return new ParserBrand(XmlDocument).GetSaver();
+                    return new ParserBrand(xmlDocument).GetSaver();
                 case RootNames.producers:
-                    return new ParserProducer(XmlDocument).GetSaver();
+                    return new ParserProducer(xmlDocument).GetSaver();
                 default:
                     return null;
             }
@@ -72,9 +72,9 @@ namespace StoreApp.Util
                 Directory.CreateDirectory(path);
             }
 
-            var pathSaveXMLFile = $"{path}\\{File.FileName}";
+            var pathSaveXMLFile = $"{path}\\{file.FileName}";
 
-            File.SaveAs(pathSaveXMLFile);
+            file.SaveAs(pathSaveXMLFile);
         }
     }
 }

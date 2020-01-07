@@ -6,33 +6,33 @@ namespace StoreApp.Util
 {
     public class BrandSaver : ISaver
     {
-        private BrandService BrandService { get; set; }
-        private IEnumerable<BrandDTO> Brands { get; set; }
-        private int CountNotUpload { get; set; }
-        private int CountUpload { get; set; }
+        private BrandService brandService;
+        private IEnumerable<BrandDTO> brands;
+        private int countNotUpload;
+        private int countUpload;
         public string Message
         {
-            get { return $"{CountUpload} brand's upload successful and {CountNotUpload} is not"; }
+            get { return $"{countUpload} brand's upload successful and {countNotUpload} is not"; }
         }
 
         public BrandSaver(IEnumerable<BrandDTO> brands)
         {
-            Brands = brands;
-            BrandService = new BrandService();
+            this.brands = brands;
+            brandService = new BrandService();
         }
 
         public void Save()
         {
-            foreach (var brand in Brands)
+            foreach (var brand in brands)
             {
-                if (!BrandService.IsExistBrand(brand))
+                if (!brandService.IsExistBrand(brand))
                 {
-                    BrandService.Create(brand);
-                    CountUpload++;
+                    brandService.Create(brand);
+                    countUpload++;
                 }
                 else
                 {
-                    CountNotUpload++;
+                    countNotUpload++;
                 }
             }
         }

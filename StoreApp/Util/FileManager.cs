@@ -5,32 +5,31 @@ namespace StoreApp.Util
 {
     public class FileManager
     {
-        private HttpPostedFileBase File { get; set; }
-        public string StatusMessage;
-        public string Message;
-
-        private IFileParser Parser { get; set; }
+        private HttpPostedFileBase file;
+        private IFileParser parser;
+        public string StatusMessage { get; private set; }
+        public string Message { get; private set; }
 
         public FileManager(HttpPostedFileBase file, RootNames type)
         {
-            File = file;
+            this.file = file;
 
-            if (File != null && File.ContentLength > 0)
+            if (this.file != null && this.file.ContentLength > 0)
             {
-                Parser = GetParser(type);
+                parser = GetParser(type);
             }
         }
 
         public bool IsValidateFile()
         {
-            if (File == null || File.ContentLength <= 0)
+            if (file == null || file.ContentLength <= 0)
             {
                 StatusMessage = StateMessage.danger.ToString();
                 Message = "File empty!";
                 return false;
             }
 
-            if (Parser == null)
+            if (parser == null)
             {
                 Message = "File isn't XML";
                 StatusMessage = StateMessage.danger.ToString();
@@ -42,11 +41,11 @@ namespace StoreApp.Util
 
         public bool IsValidateRequirements()
         {
-            if (Parser != null)
+            if (parser != null)
             {
-                StatusMessage = Parser.StatusMessage;
-                Message = Parser.Message;
-                return Parser.IsValidateRequirements();
+                StatusMessage = parser.StatusMessage;
+                Message = parser.Message;
+                return parser.IsValidateRequirements();
             }
 
             return false;
@@ -54,14 +53,14 @@ namespace StoreApp.Util
 
         private IFileParser GetParser(RootNames type)
         {
-            if (File.ContentType == "text/xml")
+            if (file.ContentType == "text/xml")
             {
-                return new FileParserXML(File, type);
+                return new FileParserXML(file, type);
             }
 
-            if (File.ContentType == "application/json")
+            if (file.ContentType == "application/json")
             {
-                return new FileParserJSON(File, type);
+                return new FileParserJSON(file, type);
             }
 
             return null;
@@ -69,17 +68,17 @@ namespace StoreApp.Util
 
         public void SaveData()
         {
-            if (Parser != null)
+            if (parser != null)
             {
-                Parser.Saver.Save();
-                Message = Parser.Saver.Message;
+                parser.Saver.Save();
+                Message = parser.Saver.Message;
             }
         }
         public void SaveFile()
         {
-            if (Parser != null)
+            if (parser != null)
             {
-                Parser.Save();
+                parser.Save();
             }
         }
     }

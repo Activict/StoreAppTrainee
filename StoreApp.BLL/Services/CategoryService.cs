@@ -11,8 +11,7 @@ namespace StoreApp.BLL.Services
 {
     public class CategoryService : ICategoryService
     {
-        private IUnitOfWork DataBase { get; set; }
-
+        private IUnitOfWork database;
         private IMapper config;
 
         public CategoryService(IUnitOfWork uow)
@@ -22,7 +21,7 @@ namespace StoreApp.BLL.Services
                 cfg.CreateMap<Category, CategoryDTO>();
                 cfg.CreateMap<CategoryDTO, Category>();
             }).CreateMapper();
-            DataBase = uow;
+            database = uow;
         }
 
         public CategoryService()
@@ -32,56 +31,56 @@ namespace StoreApp.BLL.Services
                 cfg.CreateMap<Category, CategoryDTO>();
                 cfg.CreateMap<CategoryDTO, Category>();
             }).CreateMapper();
-            DataBase = new EFUnitOfWork("DefaultConnection");
+            database = new EFUnitOfWork("DefaultConnection");
         }
 
         public void Create(CategoryDTO category)
         {
             var categoryBL = new Category() { Name = category.Name };
-            DataBase.Categories.Create(categoryBL);
-            DataBase.Save();
+            database.Categories.Create(categoryBL);
+            database.Save();
         }
 
         public void Create(string category)
         {
             var categoryDAL = new Category() { Name = category };
-            DataBase.Categories.Create(categoryDAL);
-            DataBase.Save();
+            database.Categories.Create(categoryDAL);
+            database.Save();
         }
 
         public void Delete(int id)
         {
-            DataBase.Categories.Delete(id);
-            DataBase.Save();
+            database.Categories.Delete(id);
+            database.Save();
         }
 
         public void Edit(CategoryDTO category)
         {
             var categoryDAL = config.Map<CategoryDTO, Category>(category);
-            DataBase.Categories.Update(categoryDAL);
-            DataBase.Save();
+            database.Categories.Update(categoryDAL);
+            database.Save();
         }
 
         public CategoryDTO Get(int id)
         {
-            return config.Map<Category, CategoryDTO>(DataBase.Categories.Get(id));
+            return config.Map<Category, CategoryDTO>(database.Categories.Get(id));
         }
 
         public IEnumerable<CategoryDTO> GetAll()
         {
-            return config.Map<IEnumerable<Category>, List<CategoryDTO>>(DataBase.Categories.GetAll());
+            return config.Map<IEnumerable<Category>, List<CategoryDTO>>(database.Categories.GetAll());
         }
 
         public int GetCountProductsByCategoryId(int id)
         {
-            return DataBase.Products.GetAll().Count(p => p.CategoryId.Equals(id));
+            return database.Products.GetAll().Count(p => p.CategoryId.Equals(id));
         }
 
         public bool IsExistCategory(CategoryDTO categoryDTO)
         {
-            var categories = DataBase.Categories.GetAll();
+            var categories = database.Categories.GetAll();
 
-            categories.ToList().ForEach(c => DataBase.Categories.Detach(c));
+            categories.ToList().ForEach(c => database.Categories.Detach(c));
 
             return categories.Any(c => c.Id != categoryDTO.Id &&
                                         c.Name.Equals(categoryDTO.Name));
@@ -89,12 +88,12 @@ namespace StoreApp.BLL.Services
 
         public bool IsExistCategory(string category)
         {
-            return DataBase.Categories.GetAll().Any(c => c.Name.Equals(category));
+            return database.Categories.GetAll().Any(c => c.Name.Equals(category));
         }
 
         public void Dispose()
         {
-            DataBase.Dispose();
+            database.Dispose();
         }
     }
 }

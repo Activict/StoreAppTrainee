@@ -15,7 +15,6 @@ namespace StoreApp.Util
     public class WebMapper
     {
         private UnitService unitService;
-        private ProductService productService;
         private CategoryService categoryService;
         private BrandService brandService;
         private ProducerService producerService;
@@ -24,7 +23,6 @@ namespace StoreApp.Util
         public WebMapper()
         {
             unitService = new UnitService();
-            productService = new ProductService();
             categoryService = new CategoryService();
             brandService = new BrandService();
             producerService = new ProducerService();
