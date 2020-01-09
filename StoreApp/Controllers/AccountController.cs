@@ -1,21 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using StoreApp.BLL.DTO;
+using StoreApp.BLL.Services;
+using StoreApp.Enums;
+using StoreApp.Models.Account;
+using StoreApp.Models.Orders;
+using StoreApp.Util;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web.Mvc;
 using System.Web.Security;
-using StoreApp.BLL.DTO;
-using StoreApp.BLL.Services;
-using StoreApp.Models.Account;
-using StoreApp.Util;
-using StoreApp.Models.Orders;
-using StoreApp.Models.OrderDetails;
-using StoreApp.Models.Store;
-using StoreApp.Enums;
+using System.Xml.Linq;
 
 namespace StoreApp.Controllers
 {
     public class AccountController : Controller
     {
+        private OrderXMLManager orderXMLManager;
         private UnitService unitService;
+        private BrandService brandService;
         private ProductService productService;
         private OrderService orderService;
         private OrderDetailService orderDetailService;
@@ -25,7 +27,9 @@ namespace StoreApp.Controllers
 
         public AccountController()
         {
+            orderXMLManager = new OrderXMLManager();
             unitService = new UnitService();
+            brandService = new BrandService();
             productService = new ProductService();
             orderService = new OrderService();
             orderDetailService = new OrderDetailService();
@@ -140,21 +144,22 @@ namespace StoreApp.Controllers
         {
             var orders = webMapper.config.Map<IEnumerable<OrderDTO>, IEnumerable<OrderViewModel>>(orderService.GetAll().Where(o => id == null ? o.UserId != id : o.UserId == id));
 
-            orders.ToList().ForEach(o => GetOrderDatails(o));
+            orders.ToList().ForEach(o => orderXMLManager.GetOrderDatails(o));
 
             return View(orders);
         }
 
-        private void GetOrderDatails(OrderViewModel order)
+        
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult SaveOrderXML(int id)
         {
-            var orderDetailsDTOs = orderDetailService.GetAll().Where(o => o.OrderId == order.Id);
-            order.OrderDetails = webMapper.config.Map<IEnumerable<OrderDetailDTO>, IEnumerable<OrderDetailsViewModel>>(orderDetailsDTOs);
-            
-            foreach (var orderDetail in order.OrderDetails)
-            {
-                orderDetail.Product = webMapper.config.Map<ProductDTO, ProductViewModel>(productService.Get(orderDetail.ProductId));
-                orderDetail.Product.Unit = unitService.Get(orderDetail.Product.UnitId).Name;
-            }
+            XDocument document = orderXMLManager.GetOrderById(id);
+
+            byte[] bytes = Encoding.ASCII.GetBytes($"{document.Declaration.ToString()}\n{document.ToString()}");
+
+            return File(bytes, "application/xml", "order" + id + ".xml");
         }
 
         [HttpGet]
@@ -247,7 +252,7 @@ namespace StoreApp.Controllers
         {
             if ((Session["Role"] as string).Equals(UserRoles.Admin.ToString()))
             {
-                user.Role = int.Parse(user.Role) == (int)(UserRoles.User) ? UserRoles.User.ToString() 
+                user.Role = int.Parse(user.Role) == (int)(UserRoles.User) ? UserRoles.User.ToString()
                                                                           : UserRoles.Admin.ToString();
 
                 UserDTO userDTO = webMapper.config.Map<UserViewModel, UserDTO>(user);

@@ -187,6 +187,7 @@
     <Compile Include="Util\IParser.cs" />
     <Compile Include="Util\ISaver.cs" />
     <Compile Include="Util\IFileParser.cs" />
+    <Compile Include="Util\OrderXMLManager.cs" />
     <Compile Include="Util\ParserBrand.cs" />
     <Compile Include="Util\ParserCategory.cs" />
     <Compile Include="Util\ParserProducer.cs" />

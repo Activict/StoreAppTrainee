@@ -1,5 +1,8 @@
 ﻿@model IEnumerable<StoreApp.Models.Orders.OrderViewModel>
-
+@using StoreApp.Enums;
+@{
+    string role = Session["Role"] as String;
+}
 @{
     ViewBag.Title = User.Identity.Name + " orders";
 }
@@ -50,7 +53,12 @@
         <div class="col-1">
             @Html.DisplayFor(modelItem => item.Discount)
         </div>
-
+        @if (Request.IsAuthenticated && !Session["Role"].ToString().Equals(UserRoles.Admin.ToString()))
+        {
+            <div class="offset-5">
+                @Html.ActionLink("Save as xml", "SaveOrderXML", "Account", new { id = item.Id }, new { @class = "btn btn-outline-info btn-sm" })
+            </div>
+        }
     </div>
 
     foreach (var details in item.OrderDetails)
