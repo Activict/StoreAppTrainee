@@ -15,7 +15,7 @@ namespace StoreApp.Controllers
 {
     public class AccountController : Controller
     {
-        private OrderXMLManager orderXMLManager;
+        private OrderManager orderXMLManager;
         private UnitService unitService;
         private BrandService brandService;
         private ProductService productService;
@@ -27,7 +27,7 @@ namespace StoreApp.Controllers
 
         public AccountController()
         {
-            orderXMLManager = new OrderXMLManager();
+            orderXMLManager = new OrderManager();
             unitService = new UnitService();
             brandService = new BrandService();
             productService = new ProductService();

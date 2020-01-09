@@ -10,7 +10,7 @@ using System.Xml.Linq;
 
 namespace StoreApp.Util
 {
-    public class OrderXMLManager
+    public class OrderManager
     {
         private WebMapper webMapper;
         private OrderService orderService;
@@ -18,7 +18,7 @@ namespace StoreApp.Util
         private OrderDetailService orderDetailService;
         private ProductService productService;
 
-        public OrderXMLManager()
+        public OrderManager()
         {
             webMapper = new WebMapper();
             orderService = new OrderService();
