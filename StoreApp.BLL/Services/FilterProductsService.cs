@@ -11,23 +11,23 @@ namespace StoreApp.BLL.Services
 {
     public class FilterProductsService
     {
-        private IUnitOfWork DataBase { get; set; }
+        private IUnitOfWork database;
         private IMapper config;
 
         public FilterProductsService()
         {
-            DataBase = new EFUnitOfWork("DefaultConnection");
+            database = new EFUnitOfWork("DefaultConnection");
             config = new MapperConfiguration(cfg => { cfg.CreateMap<Product, ProductDTO>(); }).CreateMapper();
         }
         public FilterProductsService(IUnitOfWork uof)
         {
-            DataBase = uof;
+            database = uof;
             config = new MapperConfiguration(cfg => { cfg.CreateMap<Product, ProductDTO>(); }).CreateMapper();
         }
 
         public IEnumerable<ProductDTO> GetProductsDTOFiltered(FilterProductsDTO filter)
         {
-            var products = config.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(DataBase.Products.GetAll());
+            var products = config.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(database.Products.GetAll());
 
             if (!String.IsNullOrEmpty(filter.Name))
             {

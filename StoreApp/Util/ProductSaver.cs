@@ -6,33 +6,33 @@ namespace StoreApp.Util
 {
     public class ProductSaver : ISaver
     {
-        private ProductService ProductService { get; set; }
-        private IEnumerable<ProductDTO> Products { get; set; }
-        private int CountNotUpload { get; set; }
-        private int CountUpload { get; set; }
+        private ProductService productService;
+        private IEnumerable<ProductDTO> products;
+        private int countNotUpload;
+        private int countUpload;
         public string Message
         {
-            get { return $"{CountUpload} product's upload successful and {CountNotUpload} is not"; }
+            get { return $"{countUpload} product's upload successful and {countNotUpload} is not"; }
         }
 
         public ProductSaver(IEnumerable<ProductDTO> products)
         {
-            Products = products;
-            ProductService = new ProductService();
+            this.products = products;
+            productService = new ProductService();
         }
 
         public void Save()
         {
-            foreach (var productDTO in Products)
+            foreach (var productDTO in products)
             {
-                if (productDTO != null && ProductService.ValidateNewProduct(productDTO))
+                if (productDTO != null && productService.ValidateNewProduct(productDTO))
                 {
-                    ProductService.Create(productDTO);
-                    CountUpload++;
+                    productService.Create(productDTO);
+                    countUpload++;
                 }
                 else
                 {
-                    CountNotUpload++;
+                    countNotUpload++;
                 }
             }
         }

@@ -6,33 +6,33 @@ namespace StoreApp.Util
 {
     public class CategorySaver : ISaver
     {
-        private CategoryService CategoryService { get; set; }
-        private IEnumerable<CategoryDTO> Categories { get; set; }
-        private int CountNotUpload { get; set; }
-        private int CountUpload { get; set; }
+        private CategoryService categoryService;
+        private IEnumerable<CategoryDTO> categories;
+        private int countNotUpload;
+        private int countUpload;
         public string Message
         {
-            get { return $"{CountUpload} category's upload successful and {CountNotUpload} is not"; }
+            get { return $"{countUpload} category's upload successful and {countNotUpload} is not"; }
         }
 
         public CategorySaver(IEnumerable<CategoryDTO> categories)
         {
-            Categories = categories;
-            CategoryService = new CategoryService();
+            this.categories = categories;
+            categoryService = new CategoryService();
         }
 
         public void Save()
         {
-            foreach (var category in Categories)
+            foreach (var category in categories)
             {
-                if (!CategoryService.IsExistCategory(category))
+                if (!categoryService.IsExistCategory(category))
                 {
-                    CategoryService.Create(category);
-                    CountUpload++;
+                    categoryService.Create(category);
+                    countUpload++;
                 }
                 else
                 {
-                    CountNotUpload++;
+                    countNotUpload++;
                 }
             }
         }

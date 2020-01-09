@@ -6,33 +6,33 @@ namespace StoreApp.Util
 {
     public class UnitSaver : ISaver
     {
-        private UnitService UnitService { get; set; }
-        private IEnumerable<UnitDTO> Units { get; set; }
-        private int CountNotUpload { get; set; }
-        private int CountUpload { get; set; }
+        private UnitService unitService { get; set; }
+        private IEnumerable<UnitDTO> units { get; set; }
+        private int countNotUpload { get; set; }
+        private int countUpload { get; set; }
         public string Message
         {
-            get { return $"{CountUpload} unit's upload successful and {CountNotUpload} is not"; }
+            get { return $"{countUpload} unit's upload successful and {countNotUpload} is not"; }
         }
 
         public UnitSaver(IEnumerable<UnitDTO> units)
         {
-            Units = units;
-            UnitService = new UnitService();
+            this.units = units;
+            unitService = new UnitService();
         }
 
         public void Save()
         {
-            foreach (var unit in Units)
+            foreach (var unit in units)
             {
-                if (!UnitService.IsExistUnit(unit))
+                if (!unitService.IsExistUnit(unit))
                 {
-                    UnitService.Create(unit);
-                    CountUpload++;
+                    unitService.Create(unit);
+                    countUpload++;
                 }
                 else
                 {
-                    CountNotUpload++;
+                    countNotUpload++;
                 }
             }
         }

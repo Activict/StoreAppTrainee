@@ -1,4 +1,5 @@
-﻿using StoreApp.BLL.DTO;
+﻿using Newtonsoft.Json;
+using StoreApp.BLL.DTO;
 using System.Collections.Generic;
 using System.Xml;
 
@@ -15,6 +16,12 @@ namespace StoreApp.Util
                 producersDTO.Add(new ProducerDTO() { Name = producer["name"].InnerText });
             }
         }
+
+        public ParserProducer(string json)
+        {
+            producersDTO = JsonConvert.DeserializeObject<List<ProducerDTO>>(json);
+        }
+
         public ISaver GetSaver()
         {
             return new ProducerSaver(producersDTO);

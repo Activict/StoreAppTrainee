@@ -3,61 +3,62 @@ using System;
 using System.Configuration;
 using System.IO;
 using System.Web;
-using System.Xml;
 
 namespace StoreApp.Util
 {
-    public class FileParserXML : IFileParser
+    public class FileParserJSON : IFileParser
     {
         private RootNames type;
-        private XmlElement xmlDocument;
+        private string json;
         private HttpPostedFileBase file;
         public ISaver Saver { get; set; }
         public string Message { get; set; }
         public string StatusMessage { get; set; }
 
-        public FileParserXML(HttpPostedFileBase file, RootNames type)
+        public FileParserJSON(HttpPostedFileBase file, RootNames type)
         {
             this.file = file;
             this.type = type;
 
-            XmlDocument xmlFile = new XmlDocument();
-            xmlFile.Load(this.file.InputStream);
-            xmlDocument = xmlFile.DocumentElement;
+            StreamReader streamFile = new StreamReader(file.InputStream);
+            json = streamFile.ReadToEnd();
 
             if (IsValidateRequirements())
             {
-                Saver = GetSaver();
+                Saver = InitializeSaver();
             }
         }
 
         public bool IsValidateRequirements()
         {
-            if (Enum.IsDefined(typeof(RootNames), xmlDocument.Name) && xmlDocument.Name.Contains(type.ToString()))
+            foreach (var rootName in Enum.GetValues(typeof(RootNames)))
             {
-                return true;
+                if (file.FileName.StartsWith(rootName.ToString()) && file.FileName.StartsWith(type.ToString()))
+                {
+                    return true;
+                }
             }
 
             StatusMessage = StateMessage.danger.ToString();
-            Message = "File XML does not meet requirements";
+            Message = "File JSON does not meet requirements";
 
             return false;
         }
 
-        private ISaver GetSaver()
+        private ISaver InitializeSaver()
         {
             switch (type)
             {
                 case RootNames.products:
-                    return new ParserProduct(xmlDocument).GetSaver();
+                    return new ParserProduct(json).GetSaver();
                 case RootNames.units:
-                    return new ParserUnit(xmlDocument).GetSaver();
+                    return new ParserUnit(json).GetSaver();
                 case RootNames.categories:
-                    return new ParserCategory(xmlDocument).GetSaver();
+                    return new ParserCategory(json).GetSaver();
                 case RootNames.brands:
-                    return new ParserBrand(xmlDocument).GetSaver();
+                    return new ParserBrand(json).GetSaver();
                 case RootNames.producers:
-                    return new ParserProducer(xmlDocument).GetSaver();
+                    return new ParserProducer(json).GetSaver();
                 default:
                     return null;
             }
@@ -65,7 +66,7 @@ namespace StoreApp.Util
 
         public void Save()
         {
-            var path = ConfigurationManager.AppSettings.Get("pathUploadXML");
+            var path = ConfigurationManager.AppSettings.Get("pathUploadJSON");
 
             if (!Directory.Exists(path))
             {

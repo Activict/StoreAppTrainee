@@ -11,8 +11,7 @@ namespace StoreApp.BLL.Services
 {
     public class ProducerService : IProducerService
     {
-        private IUnitOfWork DataBase { get; set; }
-
+        private IUnitOfWork database;
         private IMapper config;
 
         public ProducerService(IUnitOfWork uof)
@@ -23,7 +22,7 @@ namespace StoreApp.BLL.Services
                 cfg.CreateMap<ProducerDTO, Producer>();
             }).CreateMapper();
 
-            DataBase = uof;
+            database = uof;
         }
 
         public ProducerService()
@@ -34,55 +33,55 @@ namespace StoreApp.BLL.Services
                 cfg.CreateMap<ProducerDTO, Producer>();
             }).CreateMapper();
 
-            DataBase = new EFUnitOfWork("DefaultConnection");
+            database = new EFUnitOfWork("DefaultConnection");
         }
 
         public void Create(ProducerDTO producer)
         {
             var producerDAL = config.Map<ProducerDTO, Producer>(producer);
-            DataBase.Producers.Create(producerDAL);
-            DataBase.Save();
+            database.Producers.Create(producerDAL);
+            database.Save();
         }
         public void Create(string producer)
         {
             var producerDAL = new Producer() { Name = producer};
-            DataBase.Producers.Create(producerDAL);
-            DataBase.Save();
+            database.Producers.Create(producerDAL);
+            database.Save();
         }
 
         public void Delete(int id)
         {
-            DataBase.Producers.Delete(id);
-            DataBase.Save();
+            database.Producers.Delete(id);
+            database.Save();
         }
 
         public void Edit(ProducerDTO producer)
         {
             var producerDAL = config.Map<ProducerDTO, Producer>(producer);
-            DataBase.Producers.Update(producerDAL);
-            DataBase.Save();
+            database.Producers.Update(producerDAL);
+            database.Save();
         }
 
         public ProducerDTO Get(int id)
         {
-            return config.Map<Producer, ProducerDTO>(DataBase.Producers.Get(id));
+            return config.Map<Producer, ProducerDTO>(database.Producers.Get(id));
         }
 
         public IEnumerable<ProducerDTO> GetAll()
         {
-            return config.Map<IEnumerable<Producer>, IEnumerable<ProducerDTO>>(DataBase.Producers.GetAll());
+            return config.Map<IEnumerable<Producer>, IEnumerable<ProducerDTO>>(database.Producers.GetAll());
         }
 
         public int GetCountProductsByProducerId(int id)
         {
-            return DataBase.Products.GetAll().Count(p => p.ProducerId.Equals(id));
+            return database.Products.GetAll().Count(p => p.ProducerId.Equals(id));
         }
 
         public bool IsExistProducer(ProducerDTO producerDTO)
         {
-            var producers = DataBase.Producers.GetAll();
+            var producers = database.Producers.GetAll();
 
-            producers.ToList().ForEach(p => DataBase.Producers.Detach(p));
+            producers.ToList().ForEach(p => database.Producers.Detach(p));
 
             return producers.Any(p => p.Id != producerDTO.Id &&
                                        p.Name.Equals(producerDTO.Name));
@@ -90,12 +89,12 @@ namespace StoreApp.BLL.Services
 
         public bool IsExistProducer(string producer)
         {
-            return DataBase.Producers.GetAll().Any(p => p.Name.Equals(producer));
+            return database.Producers.GetAll().Any(p => p.Name.Equals(producer));
         }
 
         public void Dispose()
         {
-            DataBase.Dispose();
+            database.Dispose();
         }
     }
 }

@@ -11,8 +11,7 @@ namespace StoreApp.BLL.Services
 {
     public class BrandService : IBrandService
     {
-        private IUnitOfWork DataBase { get; set; }
-
+        private IUnitOfWork database;
         private IMapper config;
 
         public BrandService(IUnitOfWork uof)
@@ -22,7 +21,7 @@ namespace StoreApp.BLL.Services
                 cfg.CreateMap<Brand, BrandDTO>();
                 cfg.CreateMap<BrandDTO, Brand>();
             }).CreateMapper();
-            DataBase = uof;
+            database = uof;
         }
 
         public BrandService()
@@ -32,56 +31,56 @@ namespace StoreApp.BLL.Services
                 cfg.CreateMap<Brand, BrandDTO>();
                 cfg.CreateMap<BrandDTO, Brand>();
             }).CreateMapper();
-            DataBase = new EFUnitOfWork("DefaultConnection");
+            database = new EFUnitOfWork("DefaultConnection");
         }
 
         public void Create(BrandDTO brand)
         {
             var brandDAL = config.Map<BrandDTO, Brand>(brand);
-            DataBase.Brands.Create(brandDAL);
-            DataBase.Save();
+            database.Brands.Create(brandDAL);
+            database.Save();
         }
 
         public void Create(string brand)
         {
             var brandDAL = new Brand() { Name = brand };
-            DataBase.Brands.Create(brandDAL);
-            DataBase.Save();
+            database.Brands.Create(brandDAL);
+            database.Save();
         }
 
         public void Delete(int id)
         {
-            DataBase.Brands.Delete(id);
-            DataBase.Save();
+            database.Brands.Delete(id);
+            database.Save();
         }
 
         public void Edit(BrandDTO brand)
         {
             var brandDAL = config.Map<BrandDTO, Brand>(brand);
-            DataBase.Brands.Update(brandDAL);
-            DataBase.Save();
+            database.Brands.Update(brandDAL);
+            database.Save();
         }
 
         public BrandDTO Get(int id)
         {
-            return config.Map<Brand, BrandDTO>(DataBase.Brands.Get(id));
+            return config.Map<Brand, BrandDTO>(database.Brands.Get(id));
         }
 
         public IEnumerable<BrandDTO> GetAll()
         {
-            return config.Map<IEnumerable<Brand>, List<BrandDTO>>(DataBase.Brands.GetAll());
+            return config.Map<IEnumerable<Brand>, List<BrandDTO>>(database.Brands.GetAll());
         }
 
         public int GetCountProductsByBrandId(int id)
         {
-            return DataBase.Products.GetAll().Count(p => p.BrandId.Equals(id));
+            return database.Products.GetAll().Count(p => p.BrandId.Equals(id));
         }
 
         public bool IsExistBrand(BrandDTO brandDTO)
         {
-            var brands = DataBase.Brands.GetAll();
+            var brands = database.Brands.GetAll();
 
-            brands.ToList().ForEach(b => DataBase.Brands.Detach(b));
+            brands.ToList().ForEach(b => database.Brands.Detach(b));
 
             return brands.Any(b => b.Id != brandDTO.Id &&
                                     b.Name.Equals(brandDTO.Name));
@@ -89,12 +88,12 @@ namespace StoreApp.BLL.Services
 
         public bool IsExistBrand(string brandDTO)
         {
-            return DataBase.Brands.GetAll().Any(b => b.Name.Equals(brandDTO));
+            return database.Brands.GetAll().Any(b => b.Name.Equals(brandDTO));
         }
 
         public void Dispose()
         {
-            DataBase.Dispose();
+            database.Dispose();
         }
     }
 }

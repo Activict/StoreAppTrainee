@@ -1,12 +1,15 @@
-﻿using StoreApp.BLL.DTO;
+﻿using Newtonsoft.Json;
+using StoreApp.BLL.DTO;
+using StoreApp.Models.Store;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 
 namespace StoreApp.Util
 {
     public class ParserProduct : IParser
     {
-        private WebMapper WebMapper = new WebMapper();
+        private WebMapper webMapper = new WebMapper();
 
         private List<ProductDTO> productsDTO = new List<ProductDTO>();
 
@@ -14,9 +17,17 @@ namespace StoreApp.Util
         {
             foreach (XmlElement node in xmlDocument)
             {
-                productsDTO.Add(WebMapper.Map(node));
+                productsDTO.Add(webMapper.Map(node));
             }
         }
+
+        public ParserProduct(string json)
+        {
+            var products = JsonConvert.DeserializeObject<IEnumerable<ProductViewModel>>(json);
+
+            products.ToList().ForEach(p => productsDTO.Add(webMapper.Map(p)));
+        }
+
         public ISaver GetSaver()
         {
             return new ProductSaver(productsDTO);

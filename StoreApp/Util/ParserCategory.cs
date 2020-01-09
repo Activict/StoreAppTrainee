@@ -1,4 +1,5 @@
-﻿using StoreApp.BLL.DTO;
+﻿using Newtonsoft.Json;
+using StoreApp.BLL.DTO;
 using System.Collections.Generic;
 using System.Xml;
 
@@ -15,6 +16,12 @@ namespace StoreApp.Util
                 categoriesDTO.Add(new CategoryDTO() { Name = category["name"].InnerText });
             }
         }
+
+        public ParserCategory(string json)
+        {
+            categoriesDTO = JsonConvert.DeserializeObject<List<CategoryDTO>>(json);
+        }
+
         public ISaver GetSaver()
         {
             return new CategorySaver(categoriesDTO);

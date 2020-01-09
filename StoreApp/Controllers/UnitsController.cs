@@ -7,7 +7,6 @@ using StoreApp.Util;
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
-using System.Xml;
 
 namespace StoreApp.Controllers
 {
@@ -154,7 +153,7 @@ namespace StoreApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult UploadXML(HttpPostedFileBase file)
+        public ActionResult Upload(HttpPostedFileBase file)
         {
             var fileManager = new FileManager(file, RootNames.units);
 

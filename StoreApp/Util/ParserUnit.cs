@@ -1,4 +1,5 @@
-﻿using StoreApp.BLL.DTO;
+﻿using Newtonsoft.Json;
+using StoreApp.BLL.DTO;
 using System.Collections.Generic;
 using System.Xml;
 
@@ -15,6 +16,12 @@ namespace StoreApp.Util
                 unitsDTO.Add(new UnitDTO() { Name = unit["name"].InnerText });
             }
         }
+
+        public ParserUnit(string json)
+        {
+            unitsDTO = JsonConvert.DeserializeObject<List<UnitDTO>>(json);
+        }
+
         public ISaver GetSaver()
         {
             return new UnitSaver(unitsDTO);
