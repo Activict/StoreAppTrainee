@@ -9,24 +9,37 @@ using StoreApp.Models.OrderDetails;
 using System.Xml;
 using System;
 using System.Linq;
+using StoreApp.BLL.Interfaces;
 
 namespace StoreApp.Util
 {
-    public class WebMapper
+    public interface IWebMapper
+    {
+        IMapper Config { get; set; }
+        IProductService productService { get; set; }
+
+        ProductViewModel Map(ProductDTO productDTO);
+        ProductDTO Map(XmlElement productXML);
+        ProductDTO Map(ProductViewModel product);
+    }
+
+    public class WebMapper : IWebMapper
     {
         private UnitService unitService;
         private CategoryService categoryService;
-        private BrandService brandService;
+        public IBrandService brandService { get; set; }
+        public IProductService productService { get; set; }
         private ProducerService producerService;
-        public IMapper config;
+        public IMapper Config { get; set; }
 
-        public WebMapper()
+        public WebMapper(IBrandService brand)
         {
+            productService = new ProductService();
+            brandService = brand;
             unitService = new UnitService();
             categoryService = new CategoryService();
-            brandService = new BrandService();
             producerService = new ProducerService();
-            config = new MapperConfiguration(
+            Config = new MapperConfiguration(
                 cfg =>
                 {
                     cfg.CreateMap<CreateProductViewModel, ProductDTO>();

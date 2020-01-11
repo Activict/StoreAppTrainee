@@ -1,12 +1,12 @@
 ﻿using StoreApp.BLL.DTO;
-using StoreApp.BLL.Services;
+using StoreApp.BLL.Interfaces;
 using System.Collections.Generic;
 
 namespace StoreApp.Util
 {
     public class ProductSaver : ISaver
     {
-        private ProductService productService;
+        private IProductService productService;
         private IEnumerable<ProductDTO> products;
         private int countNotUpload;
         private int countUpload;
@@ -15,10 +15,10 @@ namespace StoreApp.Util
             get { return $"{countUpload} product's upload successful and {countNotUpload} is not"; }
         }
 
-        public ProductSaver(IEnumerable<ProductDTO> products)
+        public ProductSaver(IEnumerable<ProductDTO> products, IWebMapper mapper)
         {
             this.products = products;
-            productService = new ProductService();
+            productService = mapper.productService;
         }
 
         public void Save()

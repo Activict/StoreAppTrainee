@@ -15,7 +15,7 @@ namespace StoreApp.Util
         public string Message { get; set; }
         public string StatusMessage { get; set; }
 
-        public FileParserJSON(HttpPostedFileBase file, RootNames type)
+        public FileParserJSON(HttpPostedFileBase file, RootNames type, IWebMapper mapper)
         {
             this.file = file;
             this.type = type;
@@ -25,7 +25,7 @@ namespace StoreApp.Util
 
             if (IsValidateRequirements())
             {
-                Saver = InitializeSaver();
+                Saver = InitializeSaver(mapper);
             }
         }
 
@@ -45,12 +45,12 @@ namespace StoreApp.Util
             return false;
         }
 
-        private ISaver InitializeSaver()
+        private ISaver InitializeSaver(IWebMapper mapper)
         {
             switch (type)
             {
                 case RootNames.products:
-                    return new ParserProduct(json).GetSaver();
+                    return new ParserProduct(json, mapper).GetSaver();
                 case RootNames.units:
                     return new ParserUnit(json).GetSaver();
                 case RootNames.categories:

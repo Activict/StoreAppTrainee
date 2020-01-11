@@ -16,7 +16,7 @@ namespace StoreApp.Util
         public string Message { get; set; }
         public string StatusMessage { get; set; }
 
-        public FileParserXML(HttpPostedFileBase file, RootNames type)
+        public FileParserXML(HttpPostedFileBase file, RootNames type, IWebMapper mapper)
         {
             this.file = file;
             this.type = type;
@@ -27,7 +27,7 @@ namespace StoreApp.Util
 
             if (IsValidateRequirements())
             {
-                Saver = GetSaver();
+                Saver = GetSaver(mapper);
             }
         }
 
@@ -44,12 +44,12 @@ namespace StoreApp.Util
             return false;
         }
 
-        private ISaver GetSaver()
+        private ISaver GetSaver(IWebMapper mapper)
         {
             switch (type)
             {
                 case RootNames.products:
-                    return new ParserProduct(xmlDocument).GetSaver();
+                    return new ParserProduct(xmlDocument, mapper).GetSaver();
                 case RootNames.units:
                     return new ParserUnit(xmlDocument).GetSaver();
                 case RootNames.categories:

@@ -13,11 +13,13 @@ namespace StoreApp.Controllers
     [Authorize]
     public class CategoryController : Controller
     {
+        private IWebMapper webMapper;
         private CategoryService categoryService;
 
         private IMapper config;
-        public CategoryController()
+        public CategoryController(IWebMapper mapper)
         {
+            webMapper = mapper;
             categoryService = new CategoryService();
 
             config = new MapperConfiguration(cfg =>
@@ -153,7 +155,7 @@ namespace StoreApp.Controllers
         [HttpPost]
         public ActionResult Upload(HttpPostedFileBase file)
         {
-            var fileManager = new FileManager(file, RootNames.categories);
+            var fileManager = new FileManager(file, RootNames.categories, webMapper);
 
             if (!fileManager.IsValidateFile())
             {

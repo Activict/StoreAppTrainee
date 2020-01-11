@@ -11,5 +11,6 @@ namespace StoreApp.BLL.Interfaces
         ProductDTO Get(int id);
         IEnumerable<ProductDTO> GetAll();
         void Dispose();
+        bool ValidateNewProduct(ProductDTO productDTO);
     }
 }

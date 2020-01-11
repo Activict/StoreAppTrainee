@@ -1,4 +1,5 @@
 ﻿using StoreApp.BLL.DTO;
+using StoreApp.BLL.Interfaces;
 using StoreApp.BLL.Services;
 using StoreApp.Enums;
 using StoreApp.Models.Filter;
@@ -14,33 +15,33 @@ using System.Web.Mvc;
 namespace StoreApp.Controllers
 {
     public class StoreController : Controller
-    {
+    { 
         private UnitService unitservice;
         private SaveProductImageService saveProductImage;
         private ProductService productService;
         private CategoryService categoryService;
-        private BrandService brandService;
+        public IBrandService brandService { get; set; }
         private ProducerService producerService;
         private FilterProductsService filterProductsService;
-        private readonly WebMapper webMapper;
+        private readonly IWebMapper webMapper;
 
-        public StoreController()
+        public StoreController(IBrandService brand, IWebMapper mapper)
         {
+            brandService = brand;
             unitservice = new UnitService();
             saveProductImage = new SaveProductImageService();
             productService = new ProductService();
             categoryService = new CategoryService();
-            brandService = new BrandService();
             producerService = new ProducerService();
             filterProductsService = new FilterProductsService();
-            webMapper = new WebMapper();
+            webMapper = mapper;
         }
 
         [HttpGet]
         public ActionResult Index()
         {
             var products = productService.GetAll().Select(p => webMapper.Map(p));
-
+            
             if (products == null)
             {
                 ViewBag.Message = "No products";
@@ -64,7 +65,7 @@ namespace StoreApp.Controllers
                 return View(products);
             }
 
-            FilterProductsDTO filterDTO = webMapper.config.Map<FilterProductsViewModel, FilterProductsDTO>(filter);
+            FilterProductsDTO filterDTO = webMapper.Config.Map<FilterProductsViewModel, FilterProductsDTO>(filter);
 
             var productsFiltered = filterProductsService.GetProductsDTOFiltered(filterDTO).Select(p => webMapper.Map(p));
 
@@ -89,7 +90,7 @@ namespace StoreApp.Controllers
         [HttpPost]
         public ActionResult CreateProduct(CreateProductViewModel product, HttpPostedFileBase file)
         {
-            ProductDTO productDTO = webMapper.config.Map<CreateProductViewModel, ProductDTO>(product);
+            ProductDTO productDTO = webMapper.Config.Map<CreateProductViewModel, ProductDTO>(product);
 
             bool validate = productService.ValidateNewProduct(productDTO);
 
@@ -143,7 +144,7 @@ namespace StoreApp.Controllers
         [HttpGet]
         public ActionResult EditProduct(int id)
         {
-            EditProductViewModel product = webMapper.config.Map<ProductDTO, EditProductViewModel>(productService.Get(id));
+            EditProductViewModel product = webMapper.Config.Map<ProductDTO, EditProductViewModel>(productService.Get(id));
 
             if (product == null)
             {
@@ -160,7 +161,7 @@ namespace StoreApp.Controllers
         {
             ViewBag.References = GetReferences();
 
-            ProductDTO productDTO = webMapper.config.Map<EditProductViewModel, ProductDTO>(product);
+            ProductDTO productDTO = webMapper.Config.Map<EditProductViewModel, ProductDTO>(product);
 
             bool validate = productService.ValidateEditProduct(productDTO);
 
@@ -204,7 +205,7 @@ namespace StoreApp.Controllers
                 productService.Edit(productDTO);
             }
 
-            product = webMapper.config.Map<ProductDTO, EditProductViewModel>(productDTO);
+            product = webMapper.Config.Map<ProductDTO, EditProductViewModel>(productDTO);
 
             TempData["StatusMessage"] = StateMessage.success.ToString();
             TempData["Message"] = "Product edited successful";
@@ -258,7 +259,7 @@ namespace StoreApp.Controllers
         [HttpGet]
         public ActionResult Buy(int id)
         {
-            ProductViewModel productVM = webMapper.config.Map<ProductDTO, ProductViewModel>(productService.Get(id));
+            ProductViewModel productVM = webMapper.Config.Map<ProductDTO, ProductViewModel>(productService.Get(id));
 
             if (productVM == null)
             {
@@ -290,7 +291,7 @@ namespace StoreApp.Controllers
         [HttpPost]
         public ActionResult Upload(HttpPostedFileBase file)
         {
-            var fileManager = new FileManager(file, RootNames.products);
+            var fileManager = new FileManager(file, RootNames.products, webMapper);
 
             if (!fileManager.IsValidateFile())
             {

@@ -12,15 +12,15 @@ namespace StoreApp.Util
 {
     public class OrderManager
     {
-        private WebMapper webMapper;
+        private IWebMapper webMapper;
         private OrderService orderService;
         private UserService userService;
         private OrderDetailService orderDetailService;
         private ProductService productService;
 
-        public OrderManager()
+        public OrderManager(IWebMapper mapper)
         {
-            webMapper = new WebMapper();
+            webMapper = mapper;
             orderService = new OrderService();
             userService = new UserService();
             orderDetailService = new OrderDetailService();
@@ -30,7 +30,7 @@ namespace StoreApp.Util
         public void GetOrderDatails(OrderViewModel order)
         {
             var orderDetailsDTOs = orderDetailService.GetAll().Where(o => o.OrderId == order.Id);
-            order.OrderDetails = webMapper.config.Map<IEnumerable<OrderDetailDTO>, IEnumerable<OrderDetailsViewModel>>(orderDetailsDTOs);
+            order.OrderDetails = webMapper.Config.Map<IEnumerable<OrderDetailDTO>, IEnumerable<OrderDetailsViewModel>>(orderDetailsDTOs);
 
             foreach (var orderDetail in order.OrderDetails)
             {
@@ -40,7 +40,7 @@ namespace StoreApp.Util
 
         public XDocument GetOrderById(int id)
         {
-            var order = webMapper.config.Map<OrderDTO, OrderViewModel>(orderService.Get(id));
+            var order = webMapper.Config.Map<OrderDTO, OrderViewModel>(orderService.Get(id));
             GetOrderDatails(order);
 
             var user = userService.Get(order.UserId);

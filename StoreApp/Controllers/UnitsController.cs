@@ -13,11 +13,13 @@ namespace StoreApp.Controllers
     [Authorize]
     public class UnitsController : Controller
     {
+        private IWebMapper webMapper;
         private UnitService unitService;
         private IMapper config;
 
-        public UnitsController()
+        public UnitsController(IWebMapper mapper)
         {
+            webMapper = mapper;
             unitService = new UnitService();
 
             config = new MapperConfiguration(cfg =>
@@ -155,7 +157,7 @@ namespace StoreApp.Controllers
         [HttpPost]
         public ActionResult Upload(HttpPostedFileBase file)
         {
-            var fileManager = new FileManager(file, RootNames.units);
+            var fileManager = new FileManager(file, RootNames.units, webMapper);
 
             if (!fileManager.IsValidateFile())
             {

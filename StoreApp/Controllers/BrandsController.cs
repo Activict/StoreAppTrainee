@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using StoreApp.BLL.DTO;
+using StoreApp.BLL.Interfaces;
 using StoreApp.BLL.Services;
 using StoreApp.Enums;
 using StoreApp.Models.Brands;
@@ -13,12 +14,14 @@ namespace StoreApp.Controllers
     [Authorize]
     public class BrandsController : Controller
     {
-        private BrandService brandService;
+        private IWebMapper webMapper;
+        private IBrandService brandService;
         private IMapper config;
 
-        public BrandsController()
+        public BrandsController(IBrandService brand, IWebMapper mapper)
         {
-            brandService = new BrandService();
+            webMapper = mapper;
+            brandService = brand;
             config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<BrandDTO, BrandViewModel>();
@@ -157,7 +160,7 @@ namespace StoreApp.Controllers
         [HttpPost]
         public ActionResult Upload(HttpPostedFileBase file)
         {
-            var fileManager = new FileManager(file, RootNames.brands);
+            var fileManager = new FileManager(file, RootNames.brands, webMapper);
 
             if (!fileManager.IsValidateFile())
             {

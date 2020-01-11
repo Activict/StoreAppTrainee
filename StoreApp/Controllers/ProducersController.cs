@@ -13,11 +13,13 @@ namespace StoreApp.Controllers
     [Authorize]
     public class ProducersController : Controller
     {
+        private IWebMapper webMapper;
         private ProducerService producerService;
         private IMapper config;
 
-        public ProducersController()
+        public ProducersController(IWebMapper mapper)
         {
+            webMapper = mapper;
             producerService = new ProducerService();
 
             config = new MapperConfiguration(cfg =>
@@ -154,7 +156,7 @@ namespace StoreApp.Controllers
         [HttpPost]
         public ActionResult Upload(HttpPostedFileBase file)
         {
-            var fileManager = new FileManager(file, RootNames.producers);
+            var fileManager = new FileManager(file, RootNames.producers, webMapper);
 
             if (!fileManager.IsValidateFile())
             {
