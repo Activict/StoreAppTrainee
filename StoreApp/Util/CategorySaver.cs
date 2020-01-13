@@ -1,12 +1,12 @@
 ﻿using StoreApp.BLL.DTO;
-using StoreApp.BLL.Services;
+using StoreApp.BLL.Interfaces;
 using System.Collections.Generic;
 
 namespace StoreApp.Util
 {
     public class CategorySaver : ISaver
     {
-        private CategoryService categoryService;
+        private ICategoryService categoryService;
         private IEnumerable<CategoryDTO> categories;
         private int countNotUpload;
         private int countUpload;
@@ -15,10 +15,10 @@ namespace StoreApp.Util
             get { return $"{countUpload} category's upload successful and {countNotUpload} is not"; }
         }
 
-        public CategorySaver(IEnumerable<CategoryDTO> categories)
+        public CategorySaver(IEnumerable<CategoryDTO> categories, IWebMapper mapper)
         {
             this.categories = categories;
-            categoryService = new CategoryService();
+            categoryService = mapper.CategoryService;
         }
 
         public void Save()

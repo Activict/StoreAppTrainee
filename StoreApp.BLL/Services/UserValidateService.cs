@@ -1,19 +1,15 @@
 ﻿using StoreApp.BLL.DTO;
+using StoreApp.BLL.Interfaces;
 using StoreApp.DAL.Intefaces;
-using StoreApp.DAL.Repositories;
 using System.Linq;
 
 namespace StoreApp.BLL.Services
 {
-    public class UserValidateService
+    public class UserValidateService : IUserValidateService
     {
         private IUnitOfWork database;
 
-        public UserValidateService()
-        {
-            database = new EFUnitOfWork("DefaultConnection");
-        }
-        public UserValidateService(IUnitOfWork uof)
+        public UserValidateService(IUnitOfWork uof) 
         {
             database = uof;
         }

@@ -51,13 +51,13 @@ namespace StoreApp.Util
                 case RootNames.products:
                     return new ParserProduct(xmlDocument, mapper).GetSaver();
                 case RootNames.units:
-                    return new ParserUnit(xmlDocument).GetSaver();
+                    return new ParserUnit(xmlDocument, mapper).GetSaver();
                 case RootNames.categories:
-                    return new ParserCategory(xmlDocument).GetSaver();
+                    return new ParserCategory(xmlDocument, mapper).GetSaver();
                 case RootNames.brands:
-                    return new ParserBrand(xmlDocument).GetSaver();
+                    return new ParserBrand(xmlDocument, mapper).GetSaver();
                 case RootNames.producers:
-                    return new ParserProducer(xmlDocument).GetSaver();
+                    return new ParserProducer(xmlDocument, mapper).GetSaver();
                 default:
                     return null;
             }

@@ -1,12 +1,12 @@
 ﻿using StoreApp.BLL.DTO;
-using StoreApp.BLL.Services;
+using StoreApp.BLL.Interfaces;
 using System.Collections.Generic;
 
 namespace StoreApp.Util
 {
     public class UnitSaver : ISaver
     {
-        private UnitService unitService { get; set; }
+        private IUnitService unitService { get; set; }
         private IEnumerable<UnitDTO> units { get; set; }
         private int countNotUpload { get; set; }
         private int countUpload { get; set; }
@@ -15,10 +15,10 @@ namespace StoreApp.Util
             get { return $"{countUpload} unit's upload successful and {countNotUpload} is not"; }
         }
 
-        public UnitSaver(IEnumerable<UnitDTO> units)
+        public UnitSaver(IEnumerable<UnitDTO> units, IWebMapper mapper)
         {
             this.units = units;
-            unitService = new UnitService();
+            unitService = mapper.UnitService;
         }
 
         public void Save()

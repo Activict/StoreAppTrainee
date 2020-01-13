@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using StoreApp.BLL.DTO;
-using StoreApp.BLL.Services;
+using StoreApp.BLL.Interfaces;
 using StoreApp.Enums;
 using StoreApp.Models.Unit;
 using StoreApp.Util;
@@ -14,13 +14,13 @@ namespace StoreApp.Controllers
     public class UnitsController : Controller
     {
         private IWebMapper webMapper;
-        private UnitService unitService;
+        private IUnitService unitService;
         private IMapper config;
 
-        public UnitsController(IWebMapper mapper)
+        public UnitsController(IUnitService unit, IWebMapper mapper)
         {
             webMapper = mapper;
-            unitService = new UnitService();
+            unitService = unit;
 
             config = new MapperConfiguration(cfg =>
             {

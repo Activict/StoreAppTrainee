@@ -1,6 +1,5 @@
 ﻿using StoreApp.BLL.DTO;
 using StoreApp.BLL.Interfaces;
-using StoreApp.BLL.Services;
 using StoreApp.Enums;
 using StoreApp.Models.Filter;
 using StoreApp.Models.Store;
@@ -15,25 +14,33 @@ using System.Web.Mvc;
 namespace StoreApp.Controllers
 {
     public class StoreController : Controller
-    { 
-        private UnitService unitservice;
-        private SaveProductImageService saveProductImage;
-        private ProductService productService;
-        private CategoryService categoryService;
-        public IBrandService brandService { get; set; }
-        private ProducerService producerService;
-        private FilterProductsService filterProductsService;
+    {
+        private IUnitService unitService;
+        private ISaveProductImageService saveProductImage;
+        private IProductService productService;
+        private ICategoryService categoryService;
+        private IBrandService brandService;
+        private IProducerService producerService;
+        private IFilterProductsService filterProductsService;
         private readonly IWebMapper webMapper;
 
-        public StoreController(IBrandService brand, IWebMapper mapper)
+        public StoreController(
+            IBrandService brand,
+            IProductService product,
+            IUnitService unit,
+            ISaveProductImageService saveProductImage,
+            ICategoryService category,
+            IProducerService producer,
+            IFilterProductsService filterProducts,
+            IWebMapper mapper)
         {
             brandService = brand;
-            unitservice = new UnitService();
-            saveProductImage = new SaveProductImageService();
-            productService = new ProductService();
-            categoryService = new CategoryService();
-            producerService = new ProducerService();
-            filterProductsService = new FilterProductsService();
+            unitService = unit;
+            this.saveProductImage = saveProductImage;
+            productService = product;
+            categoryService = category;
+            producerService = producer;
+            filterProductsService = filterProducts;
             webMapper = mapper;
         }
 
@@ -41,7 +48,7 @@ namespace StoreApp.Controllers
         public ActionResult Index()
         {
             var products = productService.GetAll().Select(p => webMapper.Map(p));
-            
+
             if (products == null)
             {
                 ViewBag.Message = "No products";
@@ -117,7 +124,7 @@ namespace StoreApp.Controllers
             if (file != null && file.ContentLength > 0)
             {
                 bool isEnableImageExtension = ConfigurationManager.AppSettings.Get("imageExtension").Contains(file.ContentType.ToLower());
-                
+
                 if (!isEnableImageExtension)
                 {
                     ModelState.AddModelError("", "The image was not uploaded - wrong image extension");
@@ -320,7 +327,7 @@ namespace StoreApp.Controllers
         {
             return new ReferenceProducts()
             {
-                Units = new SelectList(unitservice.GetAll(), dataValueField: "Id", dataTextField: "Name"),
+                Units = new SelectList(unitService.GetAll(), dataValueField: "Id", dataTextField: "Name"),
                 Categories = new SelectList(categoryService.GetAll(), dataValueField: "Id", dataTextField: "Name"),
                 Brands = new SelectList(brandService.GetAll(), dataValueField: "Id", dataTextField: "Name"),
                 Producers = new SelectList(producerService.GetAll(), dataValueField: "Id", dataTextField: "Name")

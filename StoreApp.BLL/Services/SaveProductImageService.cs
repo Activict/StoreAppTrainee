@@ -1,4 +1,5 @@
 ﻿using StoreApp.BLL.DTO;
+using StoreApp.BLL.Interfaces;
 using System;
 using System.IO;
 using System.Linq;
@@ -7,13 +8,13 @@ using System.Web.Helpers;
 
 namespace StoreApp.BLL.Services
 {
-    public class SaveProductImageService
+    public class SaveProductImageService : ISaveProductImageService
     {
-        private ProductService productService;
+        private IProductService productService;
 
-        public SaveProductImageService()
+        public SaveProductImageService(IProductService product)
         {
-            productService = new ProductService();
+            productService = product;
         }
 
         public void SaveImage(ProductDTO productDTO, HttpPostedFileBase file)
@@ -47,6 +48,5 @@ namespace StoreApp.BLL.Services
             pic.Resize(30, 30).Crop(1, 1);
             pic.Save(pathSavePicturePreview);
         }
-
     }
 }

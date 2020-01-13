@@ -18,7 +18,7 @@ namespace StoreApp.Util
         public ProductSaver(IEnumerable<ProductDTO> products, IWebMapper mapper)
         {
             this.products = products;
-            productService = mapper.productService;
+            productService = mapper.ProductService;
         }
 
         public void Save()

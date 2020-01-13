@@ -1,10 +1,9 @@
-﻿using StoreApp.BLL.DTO;
+﻿using AutoMapper;
+using StoreApp.BLL.DTO;
 using StoreApp.BLL.Interfaces;
-using System.Collections.Generic;
-using StoreApp.DAL.Intefaces;
 using StoreApp.DAL.Entities;
-using AutoMapper;
-using StoreApp.DAL.Repositories;
+using StoreApp.DAL.Intefaces;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace StoreApp.BLL.Services
@@ -14,24 +13,14 @@ namespace StoreApp.BLL.Services
         private IUnitOfWork database;
         private IMapper config;
 
-        public CategoryService(IUnitOfWork uow)
+        public CategoryService(IUnitOfWork uof)
         {
+            database = uof;
             config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Category, CategoryDTO>();
                 cfg.CreateMap<CategoryDTO, Category>();
             }).CreateMapper();
-            database = uow;
-        }
-
-        public CategoryService()
-        {
-            config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Category, CategoryDTO>();
-                cfg.CreateMap<CategoryDTO, Category>();
-            }).CreateMapper();
-            database = new EFUnitOfWork("DefaultConnection");
         }
 
         public void Create(CategoryDTO category)

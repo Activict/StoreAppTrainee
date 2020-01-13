@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using StoreApp.BLL.DTO;
-using StoreApp.BLL.Services;
+using StoreApp.BLL.Interfaces;
 using StoreApp.Enums;
 using StoreApp.Models.Producers;
 using StoreApp.Util;
@@ -14,13 +14,13 @@ namespace StoreApp.Controllers
     public class ProducersController : Controller
     {
         private IWebMapper webMapper;
-        private ProducerService producerService;
+        private IProducerService producerService;
         private IMapper config;
 
-        public ProducersController(IWebMapper mapper)
+        public ProducersController(IWebMapper mapper, IProducerService producer)
         {
             webMapper = mapper;
-            producerService = new ProducerService();
+            producerService = producer;
 
             config = new MapperConfiguration(cfg =>
             {

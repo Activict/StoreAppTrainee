@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
 using StoreApp.BLL.DTO;
 using StoreApp.BLL.Interfaces;
 using StoreApp.DAL.Entities;
 using StoreApp.DAL.Intefaces;
-using StoreApp.DAL.Repositories;
+using System.Collections.Generic;
 
 namespace StoreApp.BLL.Services
 {
@@ -15,24 +14,13 @@ namespace StoreApp.BLL.Services
 
         public UserService(IUnitOfWork uof)
         {
-            config = new MapperConfiguration(
-                cfg =>
-                {
-                    cfg.CreateMap<UserDTO, User>();
-                    cfg.CreateMap<User, UserDTO>();
-                }).CreateMapper();
             database = uof;
-        }
-
-        public UserService()
-        {
             config = new MapperConfiguration(
                 cfg =>
                 {
                     cfg.CreateMap<UserDTO, User>();
                     cfg.CreateMap<User, UserDTO>();
                 }).CreateMapper();
-            database = new EFUnitOfWork("DefaultConnection");
         }
 
         public void Create(UserDTO user)

@@ -180,7 +180,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
     <Compile Include="Models\Account\UserEditViewModel.cs" />
     <Compile Include="Models\Account\UserLoginViewModel.cs" />
     <Compile Include="Models\Account\UserRegistrationViewModel.cs" />
@@ -202,9 +201,11 @@
     <Compile Include="Util\FileManager.cs" />
     <Compile Include="Util\FileParserJSON.cs" />
     <Compile Include="Util\FileParserXML.cs" />
+    <Compile Include="Util\IOrderManager.cs" />
     <Compile Include="Util\IParser.cs" />
     <Compile Include="Util\ISaver.cs" />
     <Compile Include="Util\IFileParser.cs" />
+    <Compile Include="Util\IWebMapper.cs" />
     <Compile Include="Util\OrderManager.cs" />
     <Compile Include="Util\ParserBrand.cs" />
     <Compile Include="Util\ParserCategory.cs" />

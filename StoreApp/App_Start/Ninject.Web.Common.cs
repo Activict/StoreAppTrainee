@@ -55,6 +55,19 @@ namespace StoreApp.App_Start
             kernel.Bind<IWebMapper>().To<WebMapper>();
 
             kernel.Bind<IBrandService>().To<BrandService>();
+            kernel.Bind<IProductService>().To<ProductService>();
+            kernel.Bind<IUnitService>().To<UnitService>();
+            kernel.Bind<ICategoryService>().To<CategoryService>();
+            kernel.Bind<IProducerService>().To<ProducerService>();
+
+            kernel.Bind<IUserService>().To<UserService>();
+            kernel.Bind<IOrderService>().To<OrderService>();
+            kernel.Bind<IOrderDetailService>().To<OrderDetailService>();
+
+            kernel.Bind<IOrderManager>().To<OrderManager>();
+            kernel.Bind<IFilterProductsService>().To<FilterProductsService>();
+            kernel.Bind<ISaveProductImageService>().To<SaveProductImageService>();
+            kernel.Bind<IUserValidateService>().To<UserValidateService>();
          }        
     }
 }

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Ninject;
 using StoreApp.BLL.DTO;
 using StoreApp.BLL.Interfaces;
 using StoreApp.DAL.Entities;
@@ -11,12 +10,12 @@ namespace StoreApp.BLL.Services
 {
     public class BrandService : IBrandService
     {
-        [Inject]
-        public IUnitOfWork database { get; set; }
+        private IUnitOfWork database;
         private IMapper config;
 
-        public BrandService()
+        public BrandService(IUnitOfWork uof)
         {
+            database = uof;
             config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Brand, BrandDTO>();

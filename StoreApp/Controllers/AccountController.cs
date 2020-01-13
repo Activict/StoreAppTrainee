@@ -1,6 +1,5 @@
 ﻿using StoreApp.BLL.DTO;
 using StoreApp.BLL.Interfaces;
-using StoreApp.BLL.Services;
 using StoreApp.Enums;
 using StoreApp.Models.Account;
 using StoreApp.Models.Orders;
@@ -16,26 +15,35 @@ namespace StoreApp.Controllers
 {
     public class AccountController : Controller
     {
-        private OrderManager orderXMLManager;
-        private UnitService unitService;
+        private IOrderManager orderManager;
+        private IUnitService unitService;
         private IBrandService brandService;
-        private ProductService productService;
-        private OrderService orderService;
-        private OrderDetailService orderDetailService;
-        private UserValidateService userValidateService;
-        private UserService userService;
+        private IProductService productService;
+        private IOrderService orderService;
+        private IOrderDetailService orderDetailService;
+        private IUserValidateService userValidateService;
+        private IUserService userService;
         private IWebMapper webMapper;
 
-        public AccountController(IBrandService brand, IWebMapper mapper)
+        public AccountController(
+            IOrderManager orderManager,
+            IBrandService brand,
+            IProductService product,
+            IUnitService unit,
+            IOrderService order,
+            IOrderDetailService orderDetail,
+            IUserValidateService userValidate,
+            IUserService user,
+            IWebMapper mapper)
         {
-            orderXMLManager = new OrderManager(mapper);
-            unitService = new UnitService();
+            this.orderManager = orderManager;
+            unitService = unit;
             brandService = brand;
-            productService = new ProductService();
-            orderService = new OrderService();
-            orderDetailService = new OrderDetailService();
-            userValidateService = new UserValidateService();
-            userService = new UserService();
+            productService = product;
+            orderService = order;
+            orderDetailService = orderDetail;
+            userValidateService = userValidate;
+            userService = user;
             webMapper = mapper;
         }
 
@@ -145,7 +153,7 @@ namespace StoreApp.Controllers
         {
             var orders = webMapper.Config.Map<IEnumerable<OrderDTO>, IEnumerable<OrderViewModel>>(orderService.GetAll().Where(o => id == null ? o.UserId != id : o.UserId == id));
 
-            orders.ToList().ForEach(o => orderXMLManager.GetOrderDatails(o));
+            orders.ToList().ForEach(o => orderManager.GetOrderDatails(o));
 
             return View(orders);
         }
@@ -156,7 +164,7 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult SaveOrderXML(int id)
         {
-            XDocument document = orderXMLManager.GetOrderById(id);
+            XDocument document = orderManager.GetOrderById(id);
 
             byte[] bytes = Encoding.ASCII.GetBytes($"{document.Declaration.ToString()}\n{document.ToString()}");
 

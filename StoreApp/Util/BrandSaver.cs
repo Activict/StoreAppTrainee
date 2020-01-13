@@ -1,12 +1,12 @@
 ﻿using StoreApp.BLL.DTO;
-using StoreApp.BLL.Services;
+using StoreApp.BLL.Interfaces;
 using System.Collections.Generic;
 
 namespace StoreApp.Util
 {
     public class BrandSaver : ISaver
     {
-        private BrandService brandService;
+        private IBrandService brandService;
         private IEnumerable<BrandDTO> brands;
         private int countNotUpload;
         private int countUpload;
@@ -15,10 +15,10 @@ namespace StoreApp.Util
             get { return $"{countUpload} brand's upload successful and {countNotUpload} is not"; }
         }
 
-        public BrandSaver(IEnumerable<BrandDTO> brands)
+        public BrandSaver(IEnumerable<BrandDTO> brands, IWebMapper mapper)
         {
             this.brands = brands;
-            brandService = new BrandService();
+            brandService = mapper.BrandService;
         }
 
         public void Save()

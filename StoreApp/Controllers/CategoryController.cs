@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using StoreApp.BLL.DTO;
-using StoreApp.BLL.Services;
+using StoreApp.BLL.Interfaces;
 using StoreApp.Enums;
 using StoreApp.Models.Categories;
 using StoreApp.Util;
@@ -14,13 +14,13 @@ namespace StoreApp.Controllers
     public class CategoryController : Controller
     {
         private IWebMapper webMapper;
-        private CategoryService categoryService;
-
+        private ICategoryService categoryService;
         private IMapper config;
-        public CategoryController(IWebMapper mapper)
+
+        public CategoryController(IWebMapper mapper, ICategoryService category)
         {
             webMapper = mapper;
-            categoryService = new CategoryService();
+            categoryService = category;
 
             config = new MapperConfiguration(cfg =>
             {

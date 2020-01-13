@@ -1,5 +1,5 @@
 ﻿using StoreApp.BLL.DTO;
-using StoreApp.BLL.Services;
+using StoreApp.BLL.Interfaces;
 using StoreApp.Models.OrderDetails;
 using StoreApp.Models.Orders;
 using System;
@@ -10,21 +10,26 @@ using System.Xml.Linq;
 
 namespace StoreApp.Util
 {
-    public class OrderManager
+    public class OrderManager : IOrderManager
     {
         private IWebMapper webMapper;
-        private OrderService orderService;
-        private UserService userService;
-        private OrderDetailService orderDetailService;
-        private ProductService productService;
+        private IOrderService orderService;
+        private IUserService userService;
+        private IOrderDetailService orderDetailService;
+        private IProductService productService;
 
-        public OrderManager(IWebMapper mapper)
+        public OrderManager(
+            IWebMapper mapper,
+            IOrderService order,
+            IUserService user,
+            IOrderDetailService orderDetail,
+            IProductService product)
         {
             webMapper = mapper;
-            orderService = new OrderService();
-            userService = new UserService();
-            orderDetailService = new OrderDetailService();
-            productService = new ProductService();
+            orderService = order;
+            userService = user;
+            orderDetailService = orderDetail;
+            productService = product;
         }
 
         public void GetOrderDatails(OrderViewModel order)
