@@ -16,11 +16,6 @@ namespace StoreApp
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            //NinjectModule registrations = new DIRegistration();
-            //var kernel = new StandardKernel(registrations);
-            //kernel.Unbind<ModelValidatorProvider>();
-            //DependencyResolver.SetResolver(new NinjectDependencyResolver(kernel));
         }
     }
 }
