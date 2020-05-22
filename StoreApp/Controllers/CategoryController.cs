@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using StoreApp.BLL.DTO;
-using StoreApp.BLL.Services;
+using StoreApp.BLL.Interfaces;
 using StoreApp.Enums;
 using StoreApp.Models.Categories;
 using StoreApp.Util;
@@ -13,12 +13,14 @@ namespace StoreApp.Controllers
     [Authorize]
     public class CategoryController : Controller
     {
-        private CategoryService categoryService;
-
+        private IWebMapper webMapper;
+        private ICategoryService categoryService;
         private IMapper config;
-        public CategoryController()
+
+        public CategoryController(IWebMapper mapper, ICategoryService category)
         {
-            categoryService = new CategoryService();
+            webMapper = mapper;
+            categoryService = category;
 
             config = new MapperConfiguration(cfg =>
             {
@@ -153,7 +155,7 @@ namespace StoreApp.Controllers
         [HttpPost]
         public ActionResult Upload(HttpPostedFileBase file)
         {
-            var fileManager = new FileManager(file, RootNames.categories);
+            var fileManager = new FileManager(file, RootNames.categories, webMapper);
 
             if (!fileManager.IsValidateFile())
             {

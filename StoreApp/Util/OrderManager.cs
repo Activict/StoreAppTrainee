@@ -1,5 +1,5 @@
 ﻿using StoreApp.BLL.DTO;
-using StoreApp.BLL.Services;
+using StoreApp.BLL.Interfaces;
 using StoreApp.Models.OrderDetails;
 using StoreApp.Models.Orders;
 using System;
@@ -10,27 +10,32 @@ using System.Xml.Linq;
 
 namespace StoreApp.Util
 {
-    public class OrderManager
+    public class OrderManager : IOrderManager
     {
-        private WebMapper webMapper;
-        private OrderService orderService;
-        private UserService userService;
-        private OrderDetailService orderDetailService;
-        private ProductService productService;
+        private IWebMapper webMapper;
+        private IOrderService orderService;
+        private IUserService userService;
+        private IOrderDetailService orderDetailService;
+        private IProductService productService;
 
-        public OrderManager()
+        public OrderManager(
+            IWebMapper mapper,
+            IOrderService order,
+            IUserService user,
+            IOrderDetailService orderDetail,
+            IProductService product)
         {
-            webMapper = new WebMapper();
-            orderService = new OrderService();
-            userService = new UserService();
-            orderDetailService = new OrderDetailService();
-            productService = new ProductService();
+            webMapper = mapper;
+            orderService = order;
+            userService = user;
+            orderDetailService = orderDetail;
+            productService = product;
         }
 
         public void GetOrderDatails(OrderViewModel order)
         {
             var orderDetailsDTOs = orderDetailService.GetAll().Where(o => o.OrderId == order.Id);
-            order.OrderDetails = webMapper.config.Map<IEnumerable<OrderDetailDTO>, IEnumerable<OrderDetailsViewModel>>(orderDetailsDTOs);
+            order.OrderDetails = webMapper.Config.Map<IEnumerable<OrderDetailDTO>, IEnumerable<OrderDetailsViewModel>>(orderDetailsDTOs);
 
             foreach (var orderDetail in order.OrderDetails)
             {
@@ -40,7 +45,7 @@ namespace StoreApp.Util
 
         public XDocument GetOrderById(int id)
         {
-            var order = webMapper.config.Map<OrderDTO, OrderViewModel>(orderService.Get(id));
+            var order = webMapper.Config.Map<OrderDTO, OrderViewModel>(orderService.Get(id));
             GetOrderDatails(order);
 
             var user = userService.Get(order.UserId);

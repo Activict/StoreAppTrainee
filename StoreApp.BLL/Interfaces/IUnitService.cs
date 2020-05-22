@@ -3,14 +3,16 @@ using System.Collections.Generic;
 
 namespace StoreApp.BLL.Interfaces
 {
-    interface IUnitService
+    public interface IUnitService
     {
-        void Create(UnitDTO unit);
+        void Create(UnitDTO unitDTO);
         void Delete(int id);
         void Edit(UnitDTO unit);
         UnitDTO Get(int id);
         IEnumerable<UnitDTO> GetAll();
         void Detach(UnitDTO unit);
         void Dispose();
+        bool IsExistUnit(UnitDTO unitDTO);
+        int GetCountProductsByUnitId(int id);
     }
 }

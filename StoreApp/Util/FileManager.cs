@@ -10,13 +10,13 @@ namespace StoreApp.Util
         public string StatusMessage { get; private set; }
         public string Message { get; private set; }
 
-        public FileManager(HttpPostedFileBase file, RootNames type)
+        public FileManager(HttpPostedFileBase file, RootNames type, IWebMapper mapper)
         {
             this.file = file;
 
             if (this.file != null && this.file.ContentLength > 0)
             {
-                parser = GetParser(type);
+                parser = GetParser(type, mapper);
             }
         }
 
@@ -51,16 +51,16 @@ namespace StoreApp.Util
             return false;
         }
 
-        private IFileParser GetParser(RootNames type)
+        private IFileParser GetParser(RootNames type, IWebMapper mapper)
         {
             if (file.ContentType == "text/xml")
             {
-                return new FileParserXML(file, type);
+                return new FileParserXML(file, type, mapper);
             }
 
             if (file.ContentType == "application/json")
             {
-                return new FileParserJSON(file, type);
+                return new FileParserJSON(file, type, mapper);
             }
 
             return null;

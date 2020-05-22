@@ -1,24 +1,19 @@
 ﻿using AutoMapper;
 using StoreApp.BLL.DTO;
+using StoreApp.BLL.Interfaces;
 using StoreApp.DAL.Entities;
 using StoreApp.DAL.Intefaces;
-using StoreApp.DAL.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace StoreApp.BLL.Services
 {
-    public class FilterProductsService
+    public class FilterProductsService : IFilterProductsService
     {
         private IUnitOfWork database;
         private IMapper config;
 
-        public FilterProductsService()
-        {
-            database = new EFUnitOfWork("DefaultConnection");
-            config = new MapperConfiguration(cfg => { cfg.CreateMap<Product, ProductDTO>(); }).CreateMapper();
-        }
         public FilterProductsService(IUnitOfWork uof)
         {
             database = uof;

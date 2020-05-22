@@ -1,5 +1,5 @@
 ﻿using StoreApp.BLL.DTO;
-using StoreApp.BLL.Services;
+using StoreApp.BLL.Interfaces;
 using StoreApp.Enums;
 using StoreApp.Models.Filter;
 using StoreApp.Models.Store;
@@ -15,25 +15,33 @@ namespace StoreApp.Controllers
 {
     public class StoreController : Controller
     {
-        private UnitService unitservice;
-        private SaveProductImageService saveProductImage;
-        private ProductService productService;
-        private CategoryService categoryService;
-        private BrandService brandService;
-        private ProducerService producerService;
-        private FilterProductsService filterProductsService;
-        private readonly WebMapper webMapper;
+        private IUnitService unitService;
+        private ISaveProductImageService saveProductImage;
+        private IProductService productService;
+        private ICategoryService categoryService;
+        private IBrandService brandService;
+        private IProducerService producerService;
+        private IFilterProductsService filterProductsService;
+        private readonly IWebMapper webMapper;
 
-        public StoreController()
+        public StoreController(
+            IBrandService brand,
+            IProductService product,
+            IUnitService unit,
+            ISaveProductImageService saveProductImage,
+            ICategoryService category,
+            IProducerService producer,
+            IFilterProductsService filterProducts,
+            IWebMapper mapper)
         {
-            unitservice = new UnitService();
-            saveProductImage = new SaveProductImageService();
-            productService = new ProductService();
-            categoryService = new CategoryService();
-            brandService = new BrandService();
-            producerService = new ProducerService();
-            filterProductsService = new FilterProductsService();
-            webMapper = new WebMapper();
+            brandService = brand;
+            unitService = unit;
+            this.saveProductImage = saveProductImage;
+            productService = product;
+            categoryService = category;
+            producerService = producer;
+            filterProductsService = filterProducts;
+            webMapper = mapper;
         }
 
         [HttpGet]
@@ -64,7 +72,7 @@ namespace StoreApp.Controllers
                 return View(products);
             }
 
-            FilterProductsDTO filterDTO = webMapper.config.Map<FilterProductsViewModel, FilterProductsDTO>(filter);
+            FilterProductsDTO filterDTO = webMapper.Config.Map<FilterProductsViewModel, FilterProductsDTO>(filter);
 
             var productsFiltered = filterProductsService.GetProductsDTOFiltered(filterDTO).Select(p => webMapper.Map(p));
 
@@ -89,7 +97,7 @@ namespace StoreApp.Controllers
         [HttpPost]
         public ActionResult CreateProduct(CreateProductViewModel product, HttpPostedFileBase file)
         {
-            ProductDTO productDTO = webMapper.config.Map<CreateProductViewModel, ProductDTO>(product);
+            ProductDTO productDTO = webMapper.Config.Map<CreateProductViewModel, ProductDTO>(product);
 
             bool validate = productService.ValidateNewProduct(productDTO);
 
@@ -116,7 +124,7 @@ namespace StoreApp.Controllers
             if (file != null && file.ContentLength > 0)
             {
                 bool isEnableImageExtension = ConfigurationManager.AppSettings.Get("imageExtension").Contains(file.ContentType.ToLower());
-                
+
                 if (!isEnableImageExtension)
                 {
                     ModelState.AddModelError("", "The image was not uploaded - wrong image extension");
@@ -143,7 +151,7 @@ namespace StoreApp.Controllers
         [HttpGet]
         public ActionResult EditProduct(int id)
         {
-            EditProductViewModel product = webMapper.config.Map<ProductDTO, EditProductViewModel>(productService.Get(id));
+            EditProductViewModel product = webMapper.Config.Map<ProductDTO, EditProductViewModel>(productService.Get(id));
 
             if (product == null)
             {
@@ -160,7 +168,7 @@ namespace StoreApp.Controllers
         {
             ViewBag.References = GetReferences();
 
-            ProductDTO productDTO = webMapper.config.Map<EditProductViewModel, ProductDTO>(product);
+            ProductDTO productDTO = webMapper.Config.Map<EditProductViewModel, ProductDTO>(product);
 
             bool validate = productService.ValidateEditProduct(productDTO);
 
@@ -204,7 +212,7 @@ namespace StoreApp.Controllers
                 productService.Edit(productDTO);
             }
 
-            product = webMapper.config.Map<ProductDTO, EditProductViewModel>(productDTO);
+            product = webMapper.Config.Map<ProductDTO, EditProductViewModel>(productDTO);
 
             TempData["StatusMessage"] = StateMessage.success.ToString();
             TempData["Message"] = "Product edited successful";
@@ -258,7 +266,7 @@ namespace StoreApp.Controllers
         [HttpGet]
         public ActionResult Buy(int id)
         {
-            ProductViewModel productVM = webMapper.config.Map<ProductDTO, ProductViewModel>(productService.Get(id));
+            ProductViewModel productVM = webMapper.Config.Map<ProductDTO, ProductViewModel>(productService.Get(id));
 
             if (productVM == null)
             {
@@ -290,7 +298,7 @@ namespace StoreApp.Controllers
         [HttpPost]
         public ActionResult Upload(HttpPostedFileBase file)
         {
-            var fileManager = new FileManager(file, RootNames.products);
+            var fileManager = new FileManager(file, RootNames.products, webMapper);
 
             if (!fileManager.IsValidateFile())
             {
@@ -319,7 +327,7 @@ namespace StoreApp.Controllers
         {
             return new ReferenceProducts()
             {
-                Units = new SelectList(unitservice.GetAll(), dataValueField: "Id", dataTextField: "Name"),
+                Units = new SelectList(unitService.GetAll(), dataValueField: "Id", dataTextField: "Name"),
                 Categories = new SelectList(categoryService.GetAll(), dataValueField: "Id", dataTextField: "Name"),
                 Brands = new SelectList(brandService.GetAll(), dataValueField: "Id", dataTextField: "Name"),
                 Producers = new SelectList(producerService.GetAll(), dataValueField: "Id", dataTextField: "Name")

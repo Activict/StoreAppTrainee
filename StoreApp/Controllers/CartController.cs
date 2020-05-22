@@ -1,5 +1,5 @@
 ﻿using StoreApp.BLL.DTO;
-using StoreApp.BLL.Services;
+using StoreApp.BLL.Interfaces;
 using StoreApp.Enums;
 using StoreApp.Models.Store;
 using System.Collections.Generic;
@@ -10,15 +10,18 @@ namespace StoreApp.Controllers
 {
     public class CartController : Controller
     {
-        private OrderService orderService;
-        private UserService userService;
-        private OrderDetailService orderDetailService;
+        private IOrderService orderService;
+        private IUserService userService;
+        private IOrderDetailService orderDetailService;
 
-        public CartController()
+        public CartController(
+            IOrderService order,
+            IUserService user,
+            IOrderDetailService orderDetail)
         {
-            orderService = new OrderService();
-            userService = new UserService();
-            orderDetailService = new OrderDetailService();
+            orderService = order;
+            userService = user;
+            orderDetailService = orderDetail;
         }
         
         public ActionResult Index()

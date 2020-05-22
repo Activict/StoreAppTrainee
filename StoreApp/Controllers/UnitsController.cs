@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using StoreApp.BLL.DTO;
-using StoreApp.BLL.Services;
+using StoreApp.BLL.Interfaces;
 using StoreApp.Enums;
 using StoreApp.Models.Unit;
 using StoreApp.Util;
@@ -13,12 +13,14 @@ namespace StoreApp.Controllers
     [Authorize]
     public class UnitsController : Controller
     {
-        private UnitService unitService;
+        private IWebMapper webMapper;
+        private IUnitService unitService;
         private IMapper config;
 
-        public UnitsController()
+        public UnitsController(IUnitService unit, IWebMapper mapper)
         {
-            unitService = new UnitService();
+            webMapper = mapper;
+            unitService = unit;
 
             config = new MapperConfiguration(cfg =>
             {
@@ -155,7 +157,7 @@ namespace StoreApp.Controllers
         [HttpPost]
         public ActionResult Upload(HttpPostedFileBase file)
         {
-            var fileManager = new FileManager(file, RootNames.units);
+            var fileManager = new FileManager(file, RootNames.units, webMapper);
 
             if (!fileManager.IsValidateFile())
             {

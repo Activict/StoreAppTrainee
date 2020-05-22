@@ -11,5 +11,7 @@ namespace StoreApp.BLL.Interfaces
         BrandDTO Get(int id);
         IEnumerable<BrandDTO> GetAll();
         void Dispose();
+        bool IsExistBrand(BrandDTO brandDTO);
+        int GetCountProductsByBrandId(int id);
     }
 }

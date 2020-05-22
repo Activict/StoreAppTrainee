@@ -11,5 +11,7 @@ namespace StoreApp.BLL.Interfaces
         CategoryDTO Get(int id);
         IEnumerable<CategoryDTO> GetAll();
         void Dispose();
+        int GetCountProductsByCategoryId(int id);
+        bool IsExistCategory(CategoryDTO categoryDTO);
     }
 }

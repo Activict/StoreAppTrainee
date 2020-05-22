@@ -1,32 +1,39 @@
-﻿using StoreApp.BLL.DTO;
-using StoreApp.Models.Store;
-using AutoMapper;
-using StoreApp.BLL.Services;
-using StoreApp.Models.Filter;
+﻿using AutoMapper;
+using StoreApp.BLL.DTO;
+using StoreApp.BLL.Interfaces;
 using StoreApp.Models.Account;
-using StoreApp.Models.Orders;
+using StoreApp.Models.Filter;
 using StoreApp.Models.OrderDetails;
-using System.Xml;
+using StoreApp.Models.Orders;
+using StoreApp.Models.Store;
 using System;
 using System.Linq;
+using System.Xml;
 
 namespace StoreApp.Util
 {
-    public class WebMapper
+    public class WebMapper : IWebMapper
     {
-        private UnitService unitService;
-        private CategoryService categoryService;
-        private BrandService brandService;
-        private ProducerService producerService;
-        public IMapper config;
+        public IUnitService UnitService { get; set; }
+        public ICategoryService CategoryService { get; set; }
+        public IBrandService BrandService { get; set; }
+        public IProductService ProductService { get; set; }
+        public IProducerService ProducerService { get; set; }
+        public IMapper Config { get; set; }
 
-        public WebMapper()
+        public WebMapper(
+            IBrandService brand, 
+            IProductService product,
+            IUnitService unit,
+            ICategoryService category,
+            IProducerService producer)
         {
-            unitService = new UnitService();
-            categoryService = new CategoryService();
-            brandService = new BrandService();
-            producerService = new ProducerService();
-            config = new MapperConfiguration(
+            ProductService = product;
+            BrandService = brand;
+            UnitService = unit;
+            CategoryService = category;
+            ProducerService = producer;
+            Config = new MapperConfiguration(
                 cfg =>
                 {
                     cfg.CreateMap<CreateProductViewModel, ProductDTO>();
@@ -56,10 +63,10 @@ namespace StoreApp.Util
                 Picture = productDTO.Picture,
                 Quality = productDTO.Quality,
                 Enable = productDTO.Enable,
-                Unit = unitService.Get(productDTO.UnitId)?.Name,
-                Category = categoryService.Get(productDTO.CategoryId)?.Name,
-                Brand = brandService.Get(productDTO.BrandId)?.Name,
-                Producer = producerService.Get(productDTO.ProducerId)?.Name
+                Unit = UnitService.Get(productDTO.UnitId)?.Name,
+                Category = CategoryService.Get(productDTO.CategoryId)?.Name,
+                Brand = BrandService.Get(productDTO.BrandId)?.Name,
+                Producer = ProducerService.Get(productDTO.ProducerId)?.Name
             };
         }
 
@@ -78,7 +85,7 @@ namespace StoreApp.Util
             product.Price = decimal.Parse(productXML["price"].InnerText);
             product.Quantity = int.Parse(productXML["quantity"].InnerText);
 
-            var unit = unitService.GetAll().FirstOrDefault(u => u.Name.Equals(productXML["unit"].InnerText));
+            var unit = UnitService.GetAll().FirstOrDefault(u => u.Name.Equals(productXML["unit"].InnerText));
             if (unit == null)
             {
                 return null;
@@ -89,21 +96,21 @@ namespace StoreApp.Util
             product.Quality = productXML["quality"]?.InnerText;
             product.Enable = Convert.ToBoolean(productXML["enable"].InnerText);
 
-            var category = categoryService.GetAll().FirstOrDefault(c => c.Name.Equals(productXML["category"].InnerText));
+            var category = CategoryService.GetAll().FirstOrDefault(c => c.Name.Equals(productXML["category"].InnerText));
             if (category == null)
             {
                 return null;
             }
             product.CategoryId = category.Id;
 
-            var brand = brandService.GetAll().FirstOrDefault(b => b.Name.Equals(productXML["brand"].InnerText));
+            var brand = BrandService.GetAll().FirstOrDefault(b => b.Name.Equals(productXML["brand"].InnerText));
             if (brand == null)
             {
                 return null;
             }
             product.BrandId = brand.Id;
 
-            var producer = producerService.GetAll().FirstOrDefault(p => p.Name.Equals(productXML["producer"].InnerText));
+            var producer = ProducerService.GetAll().FirstOrDefault(p => p.Name.Equals(productXML["producer"].InnerText));
             if (producer == null)
             {
                 return null;
@@ -123,25 +130,25 @@ namespace StoreApp.Util
                 return null;
             }
 
-            UnitDTO unit = unitService.GetAll().FirstOrDefault(u => u.Name.Equals(product.Unit));
+            UnitDTO unit = UnitService.GetAll().FirstOrDefault(u => u.Name.Equals(product.Unit));
             if (unit == null)
             {
                 return null;
             }
 
-            CategoryDTO category = categoryService.GetAll().FirstOrDefault(c => c.Name.Equals(product.Category));
+            CategoryDTO category = CategoryService.GetAll().FirstOrDefault(c => c.Name.Equals(product.Category));
             if (category == null)
             {
                 return null;
             }
 
-            BrandDTO brand = brandService.GetAll().FirstOrDefault(b => b.Name.Equals(product.Brand));
+            BrandDTO brand = BrandService.GetAll().FirstOrDefault(b => b.Name.Equals(product.Brand));
             if (brand == null)
             {
                 return null;
             }
 
-            ProducerDTO producer = producerService.GetAll().FirstOrDefault(p => p.Name.Equals(product.Producer));
+            ProducerDTO producer = ProducerService.GetAll().FirstOrDefault(p => p.Name.Equals(product.Producer));
             if (producer == null)
             {
                 return null;

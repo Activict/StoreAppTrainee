@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using StoreApp.BLL.DTO;
-using StoreApp.BLL.Services;
+using StoreApp.BLL.Interfaces;
 using StoreApp.Enums;
 using StoreApp.Models.Producers;
 using StoreApp.Util;
@@ -13,12 +13,14 @@ namespace StoreApp.Controllers
     [Authorize]
     public class ProducersController : Controller
     {
-        private ProducerService producerService;
+        private IWebMapper webMapper;
+        private IProducerService producerService;
         private IMapper config;
 
-        public ProducersController()
+        public ProducersController(IWebMapper mapper, IProducerService producer)
         {
-            producerService = new ProducerService();
+            webMapper = mapper;
+            producerService = producer;
 
             config = new MapperConfiguration(cfg =>
             {
@@ -154,7 +156,7 @@ namespace StoreApp.Controllers
         [HttpPost]
         public ActionResult Upload(HttpPostedFileBase file)
         {
-            var fileManager = new FileManager(file, RootNames.producers);
+            var fileManager = new FileManager(file, RootNames.producers, webMapper);
 
             if (!fileManager.IsValidateFile())
             {

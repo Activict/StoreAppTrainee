@@ -1,12 +1,12 @@
 ﻿using StoreApp.BLL.DTO;
-using StoreApp.BLL.Services;
+using StoreApp.BLL.Interfaces;
 using System.Collections.Generic;
 
 namespace StoreApp.Util
 {
     public class ProducerSaver : ISaver
     {
-        private ProducerService producerService;
+        private IProducerService producerService;
         private IEnumerable<ProducerDTO> producers;
         private int countNotUpload;
         private int countUpload;
@@ -15,10 +15,10 @@ namespace StoreApp.Util
             get { return $"{countUpload} producer's upload successful and {countNotUpload} is not"; }
         }
 
-        public ProducerSaver(IEnumerable<ProducerDTO> producers)
+        public ProducerSaver(IEnumerable<ProducerDTO> producers, IWebMapper mapper)
         {
             this.producers = producers;
-            producerService = new ProducerService();
+            producerService = mapper.ProducerService;
         }
 
         public void Save()

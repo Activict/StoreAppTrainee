@@ -1,5 +1,5 @@
 ﻿using StoreApp.BLL.DTO;
-using StoreApp.BLL.Services;
+using StoreApp.BLL.Interfaces;
 using StoreApp.Enums;
 using StoreApp.Models.Account;
 using StoreApp.Models.Orders;
@@ -15,27 +15,36 @@ namespace StoreApp.Controllers
 {
     public class AccountController : Controller
     {
-        private OrderManager orderXMLManager;
-        private UnitService unitService;
-        private BrandService brandService;
-        private ProductService productService;
-        private OrderService orderService;
-        private OrderDetailService orderDetailService;
-        private UserValidateService userValidateService;
-        private UserService userService;
-        private WebMapper webMapper;
+        private IOrderManager orderManager;
+        private IUnitService unitService;
+        private IBrandService brandService;
+        private IProductService productService;
+        private IOrderService orderService;
+        private IOrderDetailService orderDetailService;
+        private IUserValidateService userValidateService;
+        private IUserService userService;
+        private IWebMapper webMapper;
 
-        public AccountController()
+        public AccountController(
+            IOrderManager orderManager,
+            IBrandService brand,
+            IProductService product,
+            IUnitService unit,
+            IOrderService order,
+            IOrderDetailService orderDetail,
+            IUserValidateService userValidate,
+            IUserService user,
+            IWebMapper mapper)
         {
-            orderXMLManager = new OrderManager();
-            unitService = new UnitService();
-            brandService = new BrandService();
-            productService = new ProductService();
-            orderService = new OrderService();
-            orderDetailService = new OrderDetailService();
-            userValidateService = new UserValidateService();
-            userService = new UserService();
-            webMapper = new WebMapper();
+            this.orderManager = orderManager;
+            unitService = unit;
+            brandService = brand;
+            productService = product;
+            orderService = order;
+            orderDetailService = orderDetail;
+            userValidateService = userValidate;
+            userService = user;
+            webMapper = mapper;
         }
 
         [HttpGet]
@@ -44,7 +53,7 @@ namespace StoreApp.Controllers
         {
             if ((Session["Role"] as string).Equals(UserRoles.Admin.ToString()))
             {
-                var users = webMapper.config.Map<IEnumerable<UserDTO>, IEnumerable<UserViewModel>>(userService.GetAll());
+                var users = webMapper.Config.Map<IEnumerable<UserDTO>, IEnumerable<UserViewModel>>(userService.GetAll());
                 return View(users);
             }
 
@@ -69,7 +78,7 @@ namespace StoreApp.Controllers
             if (!userValidateService.CheckEmail(model.Email) &&
                 !userValidateService.CheckUserName(model.UserName))
             {
-                UserDTO userDTO = webMapper.config.Map<UserRegistrationViewModel, UserDTO>(model);
+                UserDTO userDTO = webMapper.Config.Map<UserRegistrationViewModel, UserDTO>(model);
                 userDTO.Role = UserRoles.User.ToString();
 
                 userService.Create(userDTO);
@@ -104,7 +113,7 @@ namespace StoreApp.Controllers
                 return View();
             }
 
-            UserDTO userDTO = webMapper.config.Map<UserLoginViewModel, UserDTO>(model);
+            UserDTO userDTO = webMapper.Config.Map<UserLoginViewModel, UserDTO>(model);
 
             if (userValidateService.CheckLogin(userDTO))
             {
@@ -128,7 +137,7 @@ namespace StoreApp.Controllers
             if (Request.IsAuthenticated)
             {
                 UserDTO userDTO = userService.GetAll().FirstOrDefault(u => u.UserName.Equals(User.Identity.Name));
-                UserViewModel user = webMapper.config.Map<UserDTO, UserViewModel>(userDTO);
+                UserViewModel user = webMapper.Config.Map<UserDTO, UserViewModel>(userDTO);
 
                 return View(user);
             }
@@ -142,9 +151,9 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult UserOrders(int? id)
         {
-            var orders = webMapper.config.Map<IEnumerable<OrderDTO>, IEnumerable<OrderViewModel>>(orderService.GetAll().Where(o => id == null ? o.UserId != id : o.UserId == id));
+            var orders = webMapper.Config.Map<IEnumerable<OrderDTO>, IEnumerable<OrderViewModel>>(orderService.GetAll().Where(o => id == null ? o.UserId != id : o.UserId == id));
 
-            orders.ToList().ForEach(o => orderXMLManager.GetOrderDatails(o));
+            orders.ToList().ForEach(o => orderManager.GetOrderDatails(o));
 
             return View(orders);
         }
@@ -155,7 +164,7 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult SaveOrderXML(int id)
         {
-            XDocument document = orderXMLManager.GetOrderById(id);
+            XDocument document = orderManager.GetOrderById(id);
 
             byte[] bytes = Encoding.ASCII.GetBytes($"{document.Declaration.ToString()}\n{document.ToString()}");
 
@@ -166,7 +175,7 @@ namespace StoreApp.Controllers
         [Authorize]
         public ActionResult EditUser(int id)
         {
-            UserEditViewModel user = webMapper.config.Map<UserDTO, UserEditViewModel>(userService.Get(id));
+            UserEditViewModel user = webMapper.Config.Map<UserDTO, UserEditViewModel>(userService.Get(id));
 
             if (user != null && user.UserName.Equals(User.Identity.Name))
             {
@@ -185,7 +194,7 @@ namespace StoreApp.Controllers
                 return View(userEdit);
             }
 
-            UserDTO userDTO = webMapper.config.Map<UserEditViewModel, UserDTO>(userEdit);
+            UserDTO userDTO = webMapper.Config.Map<UserEditViewModel, UserDTO>(userEdit);
 
             if (!userValidateService.IsTruePassword(userDTO))
             {
@@ -214,7 +223,7 @@ namespace StoreApp.Controllers
         {
             if ((Session["Role"] as string).Equals(UserRoles.Admin.ToString()))
             {
-                var user = webMapper.config.Map<UserDTO, UserViewModel>(userService.Get(id));
+                var user = webMapper.Config.Map<UserDTO, UserViewModel>(userService.Get(id));
                 return View(user);
             }
 
@@ -227,7 +236,7 @@ namespace StoreApp.Controllers
         {
             if ((Session["Role"] as string).Equals(UserRoles.Admin.ToString()))
             {
-                UserViewModel user = webMapper.config.Map<UserDTO, UserViewModel>(userService.Get(id));
+                UserViewModel user = webMapper.Config.Map<UserDTO, UserViewModel>(userService.Get(id));
 
                 if (user != null)
                 {
@@ -255,7 +264,7 @@ namespace StoreApp.Controllers
                 user.Role = int.Parse(user.Role) == (int)(UserRoles.User) ? UserRoles.User.ToString()
                                                                           : UserRoles.Admin.ToString();
 
-                UserDTO userDTO = webMapper.config.Map<UserViewModel, UserDTO>(user);
+                UserDTO userDTO = webMapper.Config.Map<UserViewModel, UserDTO>(user);
 
                 userService.Edit(userDTO);
 
@@ -277,7 +286,7 @@ namespace StoreApp.Controllers
         {
             if ((Session["Role"] as string).Equals(UserRoles.Admin.ToString()))
             {
-                UserViewModel user = webMapper.config.Map<UserDTO, UserViewModel>(userService.Get(id));
+                UserViewModel user = webMapper.Config.Map<UserDTO, UserViewModel>(userService.Get(id));
 
                 if (user != null)
                 {

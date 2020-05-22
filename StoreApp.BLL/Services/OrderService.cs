@@ -3,7 +3,6 @@ using StoreApp.BLL.DTO;
 using StoreApp.BLL.Interfaces;
 using StoreApp.DAL.Entities;
 using StoreApp.DAL.Intefaces;
-using StoreApp.DAL.Repositories;
 using System;
 using System.Collections.Generic;
 
@@ -14,26 +13,15 @@ namespace StoreApp.BLL.Services
         private IUnitOfWork database;
         private IMapper config;
 
-        public OrderService(IUnitOfWork eof)
+        public OrderService(IUnitOfWork uof)
         {
-            config = new MapperConfiguration(
-                cfg =>
-                {
-                    cfg.CreateMap<OrderDTO, Order>();
-                    cfg.CreateMap<Order, OrderDTO>();
-                }).CreateMapper();
-            database = eof;
-        }
-
-        public OrderService()
-        {
+            database = uof;
             config = new MapperConfiguration(
                 cfg =>
                 {
                     cfg.CreateMap<OrderDTO, Order>(); 
                     cfg.CreateMap<Order, OrderDTO>();
                 }).CreateMapper();
-            database = new EFUnitOfWork("DefaultConnection");
         }
 
         public void Create(OrderDTO order)
